@@ -220,7 +220,6 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vmonth { flex: 1; text-align: center; font-size: 1.1rem; font-weight: 700; }
 .vnav { flex: none; width: 44px; height: 44px; font: inherit; font-size: 1.5rem; line-height: 1; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
 .vcover { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 12px; padding: 12px 14px; color: var(--warn); background: var(--warn-bg); border: 1px solid var(--warn); border-radius: var(--r); font-weight: 500; }
-.vcover .btn { flex: none; }
 .vlegend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 10px; font-size: .8125rem; color: var(--mute); }
 .vdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
 .vlegend .vdot { margin-right: 6px; }
@@ -811,7 +810,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
     <div class="vcover" id="v-cover" role="alert" hidden>
       <span id="v-cover-text"></span>
-      <button type="button" class="btn sm" id="v-cover-add">+ เพิ่มนัดเยี่ยม</button>
     </div>
     <div class="vlegend"><span><i class="vdot bbn"></i>ภาคบางบอน</span><span><i class="vdot bkt"></i>ภาคบางขุนเทียน</span></div>
     <div class="vcal" id="v-cal" aria-label="ปฏิทินนัดเยี่ยม"></div>
@@ -3327,16 +3325,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("v-cover").hidden = !vMissing.length;
     $("v-cover-text").textContent = vMissing.length ? `เดือน${MONTH_FULL[m]}ยังไม่มีนัดเยี่ยมของ ${vMissing.map(p => "ภาค" + p).join(" และ ")}` : "";
   }
-  $("v-cover-add").onclick = () => {
-    const t = today();
-    vMonth = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1));
-    vSelDay = "";
-    renderVisits();
-    loadVisits();
-    openVisit(null);
-    if (vMissing[0]) $("vf-phak").value = vMissing[0];
-  };
-
   function visitCard(r) {
     const cls = VISIT_CLASS[r.phak] || "bbn";
     const li = el("li", "card vcard");
