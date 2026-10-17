@@ -1,0 +1,3433 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
+<meta name="description" content="ระบบสำหรับ Admin รภ.11 (รวมภาคกรุงเทพ 11)">
+<title>ระบบสำหรับ Admin รภ.11</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Admin รภ.11">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<script>try{var th=localStorage.getItem("bkk11-theme");if(th==="light"||th==="dark")document.documentElement.dataset.theme=th}catch(e){}</script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f3f6fb;
+  --card: #fff;
+  --ink: #14213d;
+  --mute: #5a6a85;
+  --line: #dbe3ef;
+  --brand: #1d4ed8;
+  --brand-ink: #fff;
+  --warn: #b45309;
+  --warn-bg: #fef3c7;
+  --bad: #b91c1c;
+  --bad-bg: #fee2e2;
+  --ok: #166534;
+  --ok-bg: #dcfce7;
+  --lv-bkk: #1d4ed8;
+  --lv-dept: #7c3aed;
+  --lv-all: #c2410c;
+  --v-bbn: #16a34a;
+  --v-bkt: #ca8a04;
+  --r: 14px;
+  --sat: env(safe-area-inset-top, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --bar: #0b2a6f;
+  --tabs-h: 59px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0d1320;
+    --card: #151d2e;
+    --ink: #e6ecf7;
+    --mute: #9fb0cc;
+    --line: #27324a;
+    --brand: #60a5fa;
+    --brand-ink: #0a1a33;
+    --warn: #fbbf24;
+    --warn-bg: #3a2c08;
+    --bad: #fca5a5;
+    --bad-bg: #3b1414;
+    --ok: #86efac;
+    --ok-bg: #10301c;
+    --lv-bkk: #60a5fa;
+    --lv-dept: #c4b5fd;
+    --lv-all: #fdba74;
+    --v-bbn: #4ade80;
+    --v-bkt: #facc15;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1320;
+  --card: #151d2e;
+  --ink: #e6ecf7;
+  --mute: #9fb0cc;
+  --line: #27324a;
+  --brand: #60a5fa;
+  --brand-ink: #0a1a33;
+  --warn: #fbbf24;
+  --warn-bg: #3a2c08;
+  --bad: #fca5a5;
+  --bad-bg: #3b1414;
+  --ok: #86efac;
+  --ok-bg: #10301c;
+  --lv-bkk: #60a5fa;
+  --lv-dept: #c4b5fd;
+  --lv-all: #fdba74;
+  --v-bbn: #4ade80;
+  --v-bkt: #facc15;
+}
+* { box-sizing: border-box; margin: 0; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+button { touch-action: manipulation; }
+body {
+  font-family: "Noto Sans Thai", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  font-size: 16px;
+  overscroll-behavior-y: none;
+}
+/* Status-bar strip: keeps content clear of the notch / Dynamic Island in standalone mode */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--sat);
+  background: var(--bar);
+  z-index: 10;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  padding: calc(var(--sat) + 12px) max(16px, var(--sar)) 12px max(16px, var(--sal));
+}
+header img { flex: none; width: 96px; height: auto; }
+main { padding: 0 max(16px, var(--sar)) calc(32px + var(--sab)) max(16px, var(--sal)); max-width: 640px; margin: 0 auto; }
+section { margin-top: 16px; }
+
+.tabs {
+  position: sticky;
+  top: var(--sat);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--sar) 0 var(--sal);
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  flex: 1;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 58px;
+  padding: 6px 2px 4px;
+  font: inherit;
+  font-size: .6875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--mute);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.tab { position: relative; }
+.hbtns { display: flex; flex: none; align-self: flex-start; gap: 2px; margin: -6px 0 0 auto; }
+.ibtn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--mute);
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.ibtn { position: relative; }
+.ibtn .bdg { position: absolute; top: 3px; left: auto; right: 3px; margin: 0; }
+.ibtn svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sdlg-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 6px 16px; background: var(--card); border-bottom: 1px solid var(--line); }
+.sdlg-head h3 { font-size: 1.05rem; }
+.sclose { display: grid; place-items: center; width: 44px; height: 44px; color: var(--mute); background: transparent; border: 0; border-radius: 12px; cursor: pointer; }
+.sclose svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; padding: 0; }
+.mc-bar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: calc(var(--sat) + 6px) 8px 8px; background: var(--card); border-bottom: 1px solid var(--line); }
+.mc-bar h3 { flex: 1; min-width: 0; font-size: 1.05rem; }
+.mc-modes { display: flex; flex: 1 0 100%; gap: 6px; }
+.mc-modes button, .mc-tools button { min-height: 38px; padding: 0 12px; font: inherit; color: var(--mute); background: transparent; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.mc-modes button { flex: 1; }
+.mc-modes button[aria-checked="true"] { color: var(--brand-ink); background: var(--brand); border-color: var(--brand); font-weight: 700; }
+.mc-tools { display: flex; flex: 1 0 100%; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mc-tools span { min-width: 3.2em; text-align: center; color: var(--mute); font-size: .875rem; }
+.mc-tools #mc-pdf { margin-left: auto; }
+.mc-tools #mc-wake[aria-pressed="true"] { color: var(--brand); border-color: var(--brand); }
+.mc-pane { max-width: 760px; margin: 0 auto; }
+.mc-pane.form { padding: 16px 16px calc(24px + var(--sab)); }
+.mc-fields { display: grid; gap: 14px; }
+.mc-fields .mc-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.mc-fields .lab { grid-column: 1 / -1; font-size: .8125rem; color: var(--mute); }
+#mc-tpl { min-height: 60dvh; font-size: 16px; line-height: 1.6; }
+.mc-doc { --mc-size: 24px; padding: 12px 18px calc(55dvh + var(--sab)); font-size: var(--mc-size); line-height: 1.95; }
+.mc-doc p, .mc-doc h2 { margin: 0 0 1.1em; white-space: pre-line; overflow-wrap: anywhere; }
+.mc-gap { height: 3.4em; }
+.mc-doc h2 { margin-top: 1.4em; text-align: center; font-size: 1.12em; font-weight: 700; text-decoration: underline; text-underline-offset: .22em; }
+#print-root { display: none; }
+@media print {
+  @page { size: A4; margin: 18mm 16mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body > :not(#print-root) { display: none !important; }
+  #print-root { display: block; font-size: 15pt; line-height: 1.85; color: #000; }
+  #print-root p, #print-root h2 { margin: 0 0 .9em; white-space: pre-line; overflow-wrap: anywhere; break-inside: avoid; }
+  #print-root .mc-gap { height: 1.4em; }
+  #print-root h2 { margin-top: 1.2em; text-align: center; font-size: 1.1em; text-decoration: underline; break-after: avoid; }
+  #print-root .mc-note { text-align: center; font-size: .85em; }
+  #print-root mark { padding: 0; color: #000; font-weight: 700; background: none; text-decoration: underline; text-underline-offset: .15em; }
+}
+.mc-doc .mc-note { margin-top: 1.6em; text-align: center; color: var(--mute); font-size: .82em; line-height: 1.7; }
+.mc-doc mark { padding: 0 .2em; color: var(--ink); font-weight: 700; background: color-mix(in srgb, var(--brand) 24%, transparent); border-radius: 6px; }
+.mc-doc mark.empty { color: var(--warn); background: var(--warn-bg); }
+#ms-q { margin-bottom: 4px; }
+.mslist { display: grid; gap: 8px; margin: 8px 0; padding: 0; list-style: none; max-height: 46dvh; overflow: auto; }
+.mslist button { display: grid; gap: 2px; width: 100%; padding: 10px 12px; text-align: left; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.mslist small { font-size: .8125rem; color: var(--mute); }
+.vhead { display: flex; align-items: center; gap: 8px; margin: 4px 0 10px; }
+.vmonth { flex: 1; text-align: center; font-size: 1.1rem; font-weight: 700; }
+.vnav { flex: none; width: 44px; height: 44px; font: inherit; font-size: 1.5rem; line-height: 1; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.vlegend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 10px; font-size: .8125rem; color: var(--mute); }
+.vdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.vlegend .vdot { margin-right: 6px; }
+.vdot.bbn { background: var(--v-bbn); }
+.vdot.bkt { background: var(--v-bkt); }
+.vcal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.vdow { padding: 4px 0; text-align: center; font-size: .75rem; color: var(--mute); }
+.vcell { display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 56px; padding: 6px 2px; font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.vcell.blank { visibility: hidden; border: 0; background: none; }
+.vcell.today { border-color: var(--brand); border-width: 2px; padding: 5px 1px; }
+.vcell.sel { background: color-mix(in srgb, var(--brand) 20%, var(--card)); border-color: var(--brand); }
+.vnum { font-size: .9375rem; font-weight: 500; }
+.vdots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; min-height: 10px; }
+.vdots small { font-size: .6875rem; line-height: 10px; color: var(--mute); }
+.vtop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 20px 0 0; }
+.vtop h3 { font-size: 1rem; }
+.vcard .pill { align-self: center; margin-right: 12px; font: inherit; font-size: .75rem; font-weight: 700; border: 0; cursor: pointer; }
+.vcard .chead { padding-left: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips button { padding: 4px 12px; font: inherit; font-size: .875rem; color: var(--brand); background: transparent; border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; }
+.vseg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.morelist { display: grid; gap: 12px; padding: 16px; }
+.morebtn { display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px 16px; text-align: left; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); cursor: pointer; }
+.moreico { flex: none; font-size: 1.75rem; line-height: 1; }
+.moretxt { display: grid; gap: 2px; min-width: 0; }
+.moretxt small { font-size: .8125rem; color: var(--mute); }
+#panel-settings { display: grid; gap: 14px; padding: 16px; }
+#panel-settings > details { margin-top: 0; }
+#panel-settings .mjson { margin-top: 0; }
+.mjson[open] { padding-bottom: 16px; }
+.mjson > summary + * { margin-top: 4px; }
+.mjson > :not(summary) + :not(summary) { margin-top: 12px; }
+.sbox { display: grid; gap: 10px; padding: 14px 16px 16px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.sbox .lab { font-weight: 500; }
+.sbox .meta, .sbox .warnline { margin: 0; }
+.sbox.stale { border-color: var(--warn); }
+.seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tablist { display: contents; }
+a.tab { text-decoration: none; }
+.bdg {
+  position: absolute;
+  top: 2px;
+  left: calc(50% + 6px);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: .6875rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  color: #fff;
+  background: #e11d48;
+  border-radius: 9px;
+}
+.tab svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tab { border-bottom: 3px solid transparent; }
+.tab[aria-selected="true"] { color: var(--brand); font-weight: 700; border-bottom-color: var(--brand); }
+
+.list { display: grid; gap: 12px; margin-top: 12px; list-style: none; padding: 0; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--lc, var(--brand));
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.card.past { opacity: .6; }
+.ctop { display: flex; align-items: stretch; }
+.tick {
+  flex: none;
+  position: relative;
+  width: 48px;
+  min-height: 52px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.tick::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 2px solid var(--mute);
+  border-radius: 50%;
+}
+.tick.on::before { background: var(--ok); border-color: var(--ok); }
+.tick.on::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 11px;
+  margin: -8px 0 0 -3px;
+  border: solid var(--card);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+.card.done { opacity: .75; }
+.card.done .ctitle { text-decoration: line-through; color: var(--mute); }
+.chead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  padding: 8px 12px 8px 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.cmain { flex: 1; min-width: 0; }
+.ctitle { font-size: .9375rem; font-weight: 500; line-height: 1.35; }
+.meta { font-size: .8125rem; color: var(--mute); margin-top: 2px; }
+.lvl { color: var(--lc); font-weight: 700; }
+.chev {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin: 0 3px 3px;
+  border-right: 2px solid var(--mute);
+  border-bottom: 2px solid var(--mute);
+  transform: rotate(45deg);
+  transition: transform .15s;
+}
+.chead[aria-expanded="true"] .chev { transform: rotate(-135deg); margin: 4px 3px 0; }
+.chead:disabled { cursor: default; }
+.chead:disabled .chev { visibility: hidden; }
+.pill {
+  flex: none;
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+.pill.mute { background: var(--line); color: var(--mute); }
+.pill.dot { width: 14px; height: 14px; padding: 0; }
+.pill.dot.ok { background: var(--ok); }
+.pill.dot.warn { background: var(--warn); }
+.body { padding: 0 14px 12px 48px; font-size: .9375rem; }
+.body p + p { margin-top: 4px; }
+.body a { color: var(--brand); word-break: break-all; }
+.verify { display: inline-block; margin-top: 8px; font-size: .75rem; color: var(--warn); background: var(--warn-bg); padding: 2px 8px; border-radius: 6px; }
+
+.cal {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 10px;
+  font: inherit;
+  font-size: .875rem;
+  font-weight: 500;
+  color: var(--brand);
+  background: transparent;
+  border: 1px solid var(--brand);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.ask {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  font-size: .875rem;
+  background: var(--card);
+  border: 1px dashed var(--line);
+  border-radius: var(--r);
+}
+.ask button {
+  flex: none;
+  min-height: 40px;
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 500;
+  color: var(--brand-ink);
+  background: var(--brand);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.chead.nt { padding-left: 14px; }
+.body.flush { padding-left: 14px; }
+.occ { border-top: 1px solid var(--line); }
+.occ-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  padding: 6px 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.occ-head .occ-date { flex: 1; min-width: 0; font-size: .9rem; font-weight: 700; color: var(--brand); }
+.occtop { display: flex; align-items: center; }
+.otick {
+  flex: none;
+  position: relative;
+  width: 34px;
+  min-height: 46px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.otick::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 19px;
+  height: 19px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--mute);
+  border-radius: 50%;
+}
+.otick.on::before { background: var(--ok); border-color: var(--ok); }
+.otick.on::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 9px;
+  margin: -6px 0 0 -2px;
+  border: solid var(--card);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.occtop .occ-head { flex: 1; }
+.occ.done .occ-date, .occ.done .mtitle { opacity: .65; }
+.occ-head[aria-expanded="true"] .chev { transform: rotate(-135deg); margin: 4px 3px 0; }
+.occ-body { padding: 0 0 12px; }
+.tag { font-size: .6875rem; font-weight: 500; color: var(--warn); background: var(--warn-bg); padding: 1px 6px; border-radius: 6px; white-space: nowrap; }
+.btns.top { margin: 0 0 6px; }
+.promo { margin: 0 0 8px; white-space: pre-wrap; word-break: break-word; }
+.warnline { font-size: .8125rem; color: var(--warn); margin-bottom: 8px; }
+.btn {
+  min-height: 44px;
+  padding: 0 16px;
+  font: inherit;
+  font-weight: 500;
+  color: var(--brand-ink);
+  background: var(--brand);
+  border: 1px solid var(--brand);
+  border-radius: 10px;
+  cursor: pointer;
+}
+a.btn { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+.hsec { margin-top: 24px; }
+.hsec:first-child { margin-top: 0; }
+.hsec + .hsec { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+#panel-items { margin-top: 0; }
+.subtabs { position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; display: flex; gap: 6px; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 10px max(16px, var(--sar)) 10px max(16px, var(--sal)); overflow-x: auto; scrollbar-width: none; background: var(--bg); }
+.subtabs::-webkit-scrollbar { display: none; }
+.subtab { flex: 1 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 40px; padding: 0 11px; font: inherit; font-size: .875rem; font-weight: 500; color: var(--mute); background: var(--card); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.subtab[aria-selected="true"] { color: var(--brand-ink); background: var(--brand); border-color: var(--brand); font-weight: 700; }
+.subtab .bdg { position: static; margin: 0; }
+.subpanel { padding-top: 6px; }
+.sech { font-size: 1rem; font-weight: 700; color: var(--ink); }
+.btn.ghost { color: var(--brand); background: transparent; }
+.btn.danger { color: var(--bad); background: transparent; border-color: var(--bad); }
+.btn.sm { min-height: 40px; }
+.btn.xs { flex: none; align-self: center; min-width: 72px; min-height: 34px; margin-right: 10px; padding: 0 10px; font-size: .75rem; }
+.btns { display: flex; gap: 10px; margin-top: 10px; }
+.occ .btns { margin-top: 6px; }
+.btns .btn { flex: 1; }
+.toprow { display: flex; gap: 10px; margin-bottom: 12px; }
+.addbtn { flex: 1; }
+.mjson {
+  margin-top: 16px;
+  padding: 0 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.mjson summary { color: var(--ink); font-weight: 500; }
+.mreader { display: grid; gap: 6px; margin: 10px 0 12px; }
+.mr { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; background: var(--bg); border-radius: 10px; }
+.mr-m { flex: none; width: 44px; font-weight: 700; color: var(--brand); }
+.mr-v { flex: 1; min-width: 0; display: grid; gap: 2px; font-size: .875rem; }
+.mr.blank { padding: 4px 10px; }
+.mr.blank .mr-v { color: var(--mute); }
+.kv { display: flex; gap: 8px; }
+.kv .k { flex: none; color: var(--mute); }
+.kv .k::after { content: ":"; }
+.kv .v { word-break: break-all; }
+.mjson textarea.plain { font-family: inherit; font-size: 16px; }
+.cpbtn { margin-top: 8px; }
+.btns .cpbtn { margin-top: 0; }
+.mbody .btns .btn { padding: 6px 8px; font-size: .875rem; line-height: 1.25; }
+.mlabel { display: block; margin: 4px 0; font-size: .8125rem; color: var(--mute); }
+.mjson .hint { margin: 8px 0; font-size: .8125rem; color: var(--mute); }
+#push-devices { padding-left: 18px; margin-top: 8px; }
+.field, .form input, .form select, .form textarea, .mjson textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.form textarea, .mjson textarea { min-height: 120px; resize: vertical; font-family: ui-monospace, Menlo, monospace; font-size: 14px; }
+.form textarea.plain { font-family: inherit; font-size: 16px; }
+dialog {
+  margin: auto;
+  overflow: auto;
+  width: min(92vw, 520px);
+  max-height: 90vh;
+  padding: 0;
+  color: var(--ink);
+  background: var(--card);
+  border: 0;
+  border-radius: var(--r);
+}
+dialog::backdrop { background: rgb(0 0 0 / .5); }
+.form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 16px; }
+.form h3 { font-size: 1.05rem; }
+.form label { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 4px; font-size: .8125rem; color: var(--mute); }
+.form .hint { font-size: .75rem; color: var(--mute); }
+.frow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.form input[type="date"], .form input[type="time"] { min-width: 0; max-width: 100%; min-height: 46px; -webkit-appearance: none; appearance: none; }
+.months { display: grid; gap: 12px; margin-top: 12px; list-style: none; padding: 0; }
+.mrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+.mrow.past { opacity: .75; }
+.mrow.done { opacity: .6; }
+.mrow.next { border: 2px solid var(--brand); padding: 13px 15px; }
+.mbody .meta + .meta { margin-top: 6px; }
+.mbody .btns { margin-top: 12px; }
+.mrow.none .mtitle { color: var(--mute); }
+.mon { flex: none; width: 40px; font-weight: 700; color: var(--brand); }
+.mbody { flex: 1; min-width: 0; }
+.mtitle { font-weight: 500; }
+.empty { color: var(--mute); text-align: center; padding: 18px 0; }
+
+details { margin-top: 16px; }
+summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; align-items: center; color: var(--mute); font-size: .9rem; }
+
+
+.lock {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--sat) + 24px) 24px 24px;
+  background: var(--bg);
+  overflow: auto;
+}
+#mlogin { z-index: 110; }
+.lockbox { width: min(100%, 380px); display: grid; gap: 12px; justify-items: center; text-align: center; }
+.lockbox h2 { font-size: 1.25rem; }
+.lockbox .hint { font-size: .875rem; color: var(--mute); }
+.lockbox .field, .lockbox .btn { width: 100%; }
+.lockbox .warnline { min-height: 1.4em; margin: 0; }
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--sab) + 28px);
+  transform: translateX(-50%);
+  z-index: 120;
+  max-width: min(92vw, 460px);
+  padding: 10px 16px;
+  color: var(--bg);
+  text-align: center;
+  white-space: pre-line;
+  word-break: break-word;
+  font-size: .875rem;
+  background: var(--ink);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgb(0 0 0 / .25);
+}
+.sr { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+@media (hover: hover) {
+  .btn:hover { filter: brightness(1.08); }
+  .btn.ghost:hover, .btn.danger:hover { background: color-mix(in srgb, currentColor 10%, transparent); filter: none; }
+  .chead:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+  .tab:hover { color: var(--ink); }
+  .chip:hover { border-color: var(--brand); }
+  .mjson summary:hover { color: var(--brand); }
+}
+
+/* Computer screens: wider layout, tabs in a row, cards in columns, editors beside the list */
+@media (min-width: 900px) {
+  :root { --maxw: 1120px; --gutter: max(24px, calc((100% - var(--maxw)) / 2)); }
+  header { padding-left: var(--gutter); padding-right: var(--gutter); }
+  header img { width: 120px; }
+  .tabs {
+    justify-content: flex-start;
+    gap: 4px;
+    padding: 0 var(--gutter);
+  }
+  .tab { flex: 0 0 auto; max-width: none; flex-direction: row; gap: 10px; min-height: 54px; padding: 0 22px; font-size: .9375rem; border-bottom: 3px solid transparent; }
+  .tab[aria-selected="true"] { border-bottom-color: var(--brand); }
+  .tab svg { width: 22px; height: 22px; }
+  .bdg { position: static; margin-left: 2px; }
+  main { max-width: var(--maxw); padding: 0 24px 56px; }
+  section { margin-top: 24px; }
+  #items, #overdue, #done, #rooms, #rooms-done, #rooms-past {
+    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    align-items: start;
+  }
+  #mjson-text { min-height: 240px; }
+  #sub-monthly { max-width: 760px; }
+  :root { --tabs-h: 55px; }
+  .subtabs { margin: 0; padding-left: 0; padding-right: 0; }
+  .subtab { flex: none; padding: 0 20px; font-size: .9375rem; }
+  dialog { width: min(92vw, 760px); }
+  .form { padding: 24px; gap: 14px; }
+  .form textarea.plain { min-height: 220px; }
+  #f-json { min-height: 140px; }
+  .occ .promo { max-width: 72ch; }
+}
+</style>
+</head>
+<body>
+<header>
+  <img src="logo.png" width="96" height="38" alt="BKK11 รวมภาคกรุงเทพ">
+  <h1 class="sr">ระบบสำหรับ Admin รภ.11</h1>
+  <div class="hbtns">
+  <button type="button" class="ibtn" id="more-btn" aria-haspopup="dialog" aria-label="เมนูอื่นๆ">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>
+  </button>
+  <button type="button" class="ibtn" id="tab-settings" aria-haspopup="dialog" aria-label="ตั้งค่า">
+    <span class="bdg" id="gear-bdg" hidden>!</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+  </button>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="เมนู">
+<div class="tablist" role="tablist">
+  <button class="tab" role="tab" id="tab-items" data-tab="items" aria-controls="panel-items" aria-selected="false" tabindex="-1" aria-label="รายการที่ต้องส่ง">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9 14l2 2 4-4"/></svg>
+    <span>ต้องส่ง</span>
+    <span class="bdg" hidden></span>
+  </button>
+  <button class="tab" role="tab" id="tab-visits" data-tab="visits" aria-controls="panel-visits" aria-selected="false" tabindex="-1" aria-label="นัดเยี่ยม">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+    <span>นัดเยี่ยม</span>
+  </button>
+</div>
+  <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-tokan/" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.3c2.7.2 5 2.4 5 5.7"/></svg>
+    <span>โทกัง</span>
+  </a>
+  <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-ymdgooglemaps/" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
+    <span>แผนที่</span>
+  </a>
+</nav>
+
+<main>
+  <section id="panel-items" role="tabpanel" aria-labelledby="tab-items" hidden>
+    <div class="subtabs" role="tablist" aria-label="หมวด">
+      <button type="button" class="subtab" role="tab" id="subtab-items" data-sub="items" aria-controls="sub-items" aria-selected="true">แจ้งข่าว<span class="bdg" hidden></span></button>
+      <button type="button" class="subtab" role="tab" id="subtab-rooms" data-sub="rooms" aria-controls="sub-rooms" aria-selected="false" tabindex="-1">ห้องที่ระลึก<span class="bdg" hidden></span></button>
+      <button type="button" class="subtab" role="tab" id="subtab-photos" data-sub="photos" aria-controls="sub-photos" aria-selected="false" tabindex="-1">รูป 4 ฝ่าย<span class="bdg" hidden></span></button>
+      <button type="button" class="subtab" role="tab" id="subtab-monthly" data-sub="monthly" aria-controls="sub-monthly" aria-selected="false" tabindex="-1">ประจำเดือน<span class="bdg" hidden></span></button>
+    </div>
+    <div class="subpanel" id="sub-items" role="tabpanel" aria-labelledby="subtab-items">
+      <div class="ask" id="badge-ask" hidden>
+        <span id="badge-msg"></span>
+        <button type="button" id="badge-btn">เปิดใช้</button>
+      </div>
+      <ul class="list" id="items"></ul>
+      <details id="overdue-wrap" hidden>
+        <summary>ผ่านกำหนดแล้ว</summary>
+        <ul class="list" id="overdue"></ul>
+      </details>
+      <details id="done-wrap" hidden>
+        <summary id="done-sum"></summary>
+        <ul class="list" id="done"></ul>
+      </details>
+    </div>
+    <div class="subpanel" id="sub-rooms" role="tabpanel" aria-labelledby="subtab-rooms" hidden>
+      <div class="hsec" aria-labelledby="h-rooms">
+        <h2 class="sech" id="h-rooms">ห้องที่ระลึก อ. ผู้มีพระคุณ</h2>
+        <ul class="months" id="rooms"></ul>
+        <details id="rooms-done-wrap" hidden>
+          <summary id="rooms-done-sum"></summary>
+          <ul class="months" id="rooms-done"></ul>
+        </details>
+        <details id="rooms-past-wrap" hidden>
+          <summary id="rooms-past-sum"></summary>
+          <ul class="months" id="rooms-past"></ul>
+        </details>
+      </div>
+    </div>
+    <div class="subpanel" id="sub-photos" role="tabpanel" aria-labelledby="subtab-photos" hidden>
+      <div class="hsec" id="sec-photos" aria-labelledby="h-photos">
+        <h2 class="sech" id="h-photos">แจ้งเรื่องรูปสนทนาธรรม 4 ฝ่าย</h2>
+        <ul class="months" id="photos"></ul>
+        <details id="photos-done-wrap" hidden>
+          <summary id="photos-done-sum"></summary>
+          <ul class="months" id="photos-done"></ul>
+        </details>
+      </div>
+    </div>
+    <div class="subpanel" id="sub-monthly" role="tabpanel" aria-labelledby="subtab-monthly" hidden>
+      <div class="hsec" aria-labelledby="h-monthly">
+        <h2 class="sech" id="h-monthly">รายการประจำเดือน</h2>
+        <div class="toprow">
+          <button type="button" class="btn addbtn" id="m-add">+ เพิ่มรายการประจำเดือน</button>
+          <button type="button" class="btn ghost" id="mjson-copy">คัดลอก JSON</button>
+        </div>
+        <ul class="list" id="monthly"></ul>
+        <details id="monthly-done-wrap" hidden>
+          <summary id="monthly-done-sum"></summary>
+          <ul class="list" id="monthly-done"></ul>
+        </details>
+      </div>
+    </div>
+  </section>
+  <section id="panel-visits" role="tabpanel" aria-labelledby="tab-visits" hidden>
+    <div class="vhead">
+      <button type="button" class="vnav" id="v-prev" aria-label="เดือนก่อน">‹</button>
+      <h2 class="vmonth" id="v-month" aria-live="polite"></h2>
+      <button type="button" class="vnav" id="v-next" aria-label="เดือนถัดไป">›</button>
+      <button type="button" class="btn ghost sm" id="v-today">วันนี้</button>
+    </div>
+    <div class="vlegend"><span><i class="vdot bbn"></i>ภาคบางบอน</span><span><i class="vdot bkt"></i>ภาคบางขุนเทียน</span></div>
+    <div class="vcal" id="v-cal" aria-label="ปฏิทินนัดเยี่ยม"></div>
+    <div class="vtop">
+      <h3 id="v-list-title"></h3>
+      <button type="button" class="btn sm" id="v-add">+ เพิ่มนัดเยี่ยม</button>
+    </div>
+    <p class="warnline" id="v-error" hidden></p>
+    <ul class="list" id="v-list"></ul>
+  </section>
+</main>
+
+<dialog id="mform">
+  <div class="form">
+    <h3 id="mform-title">เพิ่มรายการประจำเดือน</h3>
+    <label>ชื่อรายการ<input id="f-title" type="text" autocomplete="off"></label>
+    <div class="frow">
+      <label>วัน
+        <select id="f-weekday">
+          <option value="1">จันทร์</option><option value="2">อังคาร</option><option value="3">พุธ</option>
+          <option value="4">พฤหัสบดี</option><option value="5">ศุกร์</option><option value="6">เสาร์</option><option value="0">อาทิตย์</option>
+        </select>
+      </label>
+      <label>ครั้งที่ของเดือน
+        <select id="f-nth">
+          <option value="1">ที่ 1</option><option value="2">ที่ 2</option><option value="3">ที่ 3</option>
+          <option value="4">ที่ 4</option><option value="0">สุดท้าย</option>
+        </select>
+      </label>
+    </div>
+    <label>เวลา (ไม่บังคับ)<input id="f-time" type="text" placeholder="เช่น 19:00 น." autocomplete="off"></label>
+    <label>ข้อความโปรโมท
+      <textarea id="f-promote" class="plain" placeholder="วันนี้ {Today} ... ลิงก์ {link} ประจำเดือน {month}"></textarea>
+      <span class="hint">{Today} = วันที่จัด (วันจันทร์ที่ 12 ต.ค. 2569) · {ThisMonth} = ชื่อเดือนที่จัด (ตุลาคม) · {ชื่อคีย์} จาก JSON รายเดือน เช่น {link} {month}</span>
+    </label>
+    <details>
+      <summary>JSON เฉพาะรายการนี้ (ไม่บังคับ ทับข้อมูลรายเดือนรวม)</summary>
+      <textarea id="f-json" spellcheck="false" autocapitalize="off"></textarea>
+    </details>
+    <p class="warnline" id="f-error"></p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="f-cancel">ยกเลิก</button>
+      <button type="button" class="btn" id="f-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="oform">
+  <div class="form">
+    <h3>แก้ไขเฉพาะเดือนนี้</h3>
+    <p class="hint" id="oform-info"></p>
+    <label>วันที่จัด<input id="o-date" type="date"></label>
+    <label>เวลา (เว้นว่าง = ตามปกติ)<input id="o-time" type="text" autocomplete="off"></label>
+    <label>ข้อความโปรโมทเฉพาะเดือนนี้ (เว้นว่าง = ใช้ข้อความปกติ)
+      <textarea id="o-promote" class="plain"></textarea>
+    </label>
+    <p class="warnline" id="o-error"></p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="o-cancel">ยกเลิก</button>
+      <button type="button" class="btn danger" id="o-reset">คืนค่าปกติ</button>
+      <button type="button" class="btn" id="o-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="rdform">
+  <div class="form">
+    <h3>แก้วันนับถอยหลัง</h3>
+    <p class="hint" id="rdform-info"></p>
+    <label>วันครบกำหนดแจ้งเตือน<input id="rd-date" type="date"></label>
+    <p class="warnline" id="rd-error"></p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="rd-cancel">ยกเลิก</button>
+      <button type="button" class="btn danger" id="rd-reset">คืนค่าปกติ</button>
+      <button type="button" class="btn" id="rd-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="more" aria-labelledby="more-title">
+  <div class="sdlg-head">
+    <h3 id="more-title">เมนูอื่นๆ</h3>
+    <button type="button" class="sclose" id="more-close" aria-label="ปิด">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="morelist">
+    <button type="button" class="morebtn" id="open-mc">
+      <span class="moreico" aria-hidden="true">🎙️</span>
+      <span class="moretxt"><b>บทพิธีกรงานศพ</b><small>บทพิธีสวดมนต์อุทิศส่วนกุศล พิมพ์ชื่อหรือดึงจากฐานข้อมูลสมาชิก อ่านบนมือถือ/iPad</small></span>
+    </button>
+  </div>
+</dialog>
+
+<dialog id="mc" class="full" aria-labelledby="mc-title">
+  <div class="mc-bar">
+    <button type="button" class="sclose" id="mc-close" aria-label="ปิด">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 id="mc-title">บทพิธีกรงานศพ</h3>
+    <div class="mc-modes" id="mc-modes" role="radiogroup" aria-label="โหมด">
+      <button type="button" role="radio" aria-checked="true" data-mode="info">ข้อมูล</button>
+      <button type="button" role="radio" aria-checked="false" data-mode="read">อ่านบท</button>
+      <button type="button" role="radio" aria-checked="false" data-mode="edit">แก้ไขบท</button>
+    </div>
+    <div class="mc-tools" id="mc-tools" hidden>
+      <button type="button" id="mc-minus" aria-label="ลดขนาดตัวอักษร">A−</button>
+      <span id="mc-size" aria-live="polite"></span>
+      <button type="button" id="mc-plus" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
+      <button type="button" id="mc-pdf" aria-label="บันทึกเป็น PDF">PDF</button>
+      <button type="button" id="mc-wake" aria-pressed="false"></button>
+    </div>
+  </div>
+  <div class="mc-pane form" id="mc-info">
+    <label>วันที่จัดพิธี<input type="date" id="mc-date"></label>
+    <div class="mc-fields" id="mc-fields"></div>
+    <p class="hint">พิมพ์ชื่อลงในช่องได้เลย หรือกด “ค้นหาสมาชิก” เพื่อดึงชื่อจากฐานข้อมูลสมาชิก (ต้องเข้าสู่ระบบด้วยชื่อและรหัสสมาชิกเดียวกับโทกัง) ชื่อที่ใส่เก็บไว้ในเครื่องนี้เท่านั้น ไม่ซิงก์ข้ามเครื่อง ช่องชื่อมาจากตัวแปร {ชื่อช่อง} ในบท เพิ่มช่องใหม่ได้ที่แท็บ “แก้ไขบท”</p>
+    <div class="btns">
+      <button type="button" class="btn danger" id="mc-clear">ล้างชื่อทั้งหมด</button>
+      <button type="button" class="btn" id="mc-go">เริ่มอ่านบท</button>
+    </div>
+  </div>
+  <div class="mc-pane" id="mc-read" hidden>
+    <article class="mc-doc" id="mc-doc"></article>
+  </div>
+  <div class="mc-pane form" id="mc-edit" hidden>
+    <p class="hint">บรรทัดว่างคั่นระหว่างย่อหน้า · บรรทัดที่มีแค่ “---” คือเว้นช่องว่างใหญ่ (จบส่วนพูด) · ขึ้นต้นด้วย “# ” เป็นหัวข้อ · ขึ้นต้นด้วย “***” เป็นหมายเหตุ · {ชื่อช่อง} คือช่องที่ต้องกรอก (ขึ้นในแท็บข้อมูลเอง) · {วันที่} {เดือน} {ปี} มาจากวันที่จัดพิธี</p>
+    <textarea id="mc-tpl" class="plain" spellcheck="false"></textarea>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="mc-tpl-reset">คืนค่าบทเริ่มต้น</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="msearch" aria-labelledby="ms-title">
+  <div class="sdlg-head">
+    <h3 id="ms-title">ค้นหาสมาชิก</h3>
+    <button type="button" class="sclose" id="ms-close" aria-label="ปิด">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="form">
+    <div id="ms-search">
+      <input id="ms-q" type="search" placeholder="พิมพ์ชื่อหรือนามสกุล" autocomplete="off">
+      <p class="meta" id="ms-status"></p>
+      <ul class="mslist" id="ms-list"></ul>
+      <div class="btns">
+        <button type="button" class="btn ghost sm" id="ms-use">ใช้ข้อความที่พิมพ์</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="vform" aria-labelledby="vform-title">
+  <div class="form">
+    <h3 id="vform-title">เพิ่มนัดเยี่ยมน้อง</h3>
+    <label>ค้นหาน้องจากฐานข้อมูลสมาชิก<input id="vf-q" type="search" placeholder="พิมพ์ชื่อหรือนามสกุล" autocomplete="off"></label>
+    <p class="meta" id="vf-status"></p>
+    <ul class="mslist" id="vf-list"></ul>
+    <div class="frow">
+      <label>ชื่อ<input id="vf-first" type="text" autocomplete="off"></label>
+      <label>นามสกุล<input id="vf-last" type="text" autocomplete="off"></label>
+    </div>
+    <label>ชื่อเล่น (เลือกจาก ymd_places หรือพิมพ์เอง)<input id="vf-nick" type="text" autocomplete="off"></label>
+    <div class="chips" id="vf-nicks"></div>
+    <label>ภาค
+      <select id="vf-phak">
+        <option value="บางบอน">ภาคบางบอน (สีเขียว)</option>
+        <option value="บางขุนเทียน">ภาคบางขุนเทียน (สีเหลือง)</option>
+      </select>
+    </label>
+    <div class="frow">
+      <label>วันที่ไปเยี่ยม<input id="vf-date" type="date"></label>
+      <label>เวลา<input id="vf-time" type="time"></label>
+    </div>
+    <div class="vseg" id="vf-status-seg" role="radiogroup" aria-label="สถานะ">
+      <button type="button" class="btn sm ghost" role="radio" aria-checked="false" data-status="coordinating">กำลังประสานงานน้อง</button>
+      <button type="button" class="btn sm ghost" role="radio" aria-checked="false" data-status="coordinated">ประสานงานน้องแล้ว</button>
+    </div>
+    <p class="warnline" id="vf-err"></p>
+    <div class="btns">
+      <button type="button" class="btn danger" id="vf-del">ลบ</button>
+      <button type="button" class="btn ghost" id="vf-cancel">ยกเลิก</button>
+      <button type="button" class="btn" id="vf-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="settings" aria-labelledby="settings-title">
+  <div class="sdlg-head">
+    <h3 id="settings-title">ตั้งค่า</h3>
+    <button type="button" class="sclose" id="settings-close" aria-label="ปิด">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div id="panel-settings">
+    <div class="sbox" id="acct-box">
+      <div class="lab">บัญชีสมาชิก</div>
+      <p class="meta" id="acct-info"></p>
+      <button type="button" class="btn danger sm" id="acct-logout">ออกจากระบบ (รวมโทกัง/ที่อยู่น้อง)</button>
+    </div>
+    <div class="sbox" id="status-box">
+      <div class="lab">สถานะข้อมูล</div>
+      <p class="meta" id="updated"></p>
+      <p class="warnline" id="stale" hidden></p>
+    </div>
+    <div class="sbox">
+      <div class="lab" id="theme-lab">โหมดแสดงผล</div>
+      <div class="seg" id="theme-seg" role="radiogroup" aria-labelledby="theme-lab">
+        <button type="button" class="btn sm ghost" role="radio" aria-checked="false" data-mode="auto">อัตโนมัติ</button>
+        <button type="button" class="btn sm ghost" role="radio" aria-checked="false" data-mode="light">สว่าง</button>
+        <button type="button" class="btn sm ghost" role="radio" aria-checked="false" data-mode="dark">มืด</button>
+      </div>
+    </div>
+    <details class="mjson" id="msync">
+      <summary id="sync-sum">ซิงก์ข้ามเครื่อง</summary>
+      <p class="hint">ซิงก์ให้อัตโนมัติเมื่อล็อกอินอยู่ ใช้บัญชีสมาชิกเดียวกัน ไม่ต้องใส่รหัสอื่น</p>
+      <p class="meta" id="sync-status"></p>
+      <div class="btns">
+        <button type="button" class="btn ghost" id="sync-now">ซิงก์ตอนนี้</button>
+      </div>
+    </details>
+    <details class="mjson" id="mpush">
+      <summary id="push-sum">แจ้งเตือน push</summary>
+      <p class="hint">เตือนทุกเช้า ประมาณ 08:00 (ต้องส่งเหลือไม่เกิน 10 วัน · ประจำเดือนเหลือไม่เกิน 5 วัน) และเมื่อมีการแก้ไขจากอีกเครื่อง ตั้งค่าแยกแต่ละเครื่อง</p>
+      <label class="mlabel" for="push-name">ชื่อเครื่องนี้</label>
+      <input id="push-name" class="field" type="text" autocomplete="off" maxlength="40">
+      <p class="meta" id="push-status"></p>
+      <div class="btns">
+        <button type="button" class="btn" id="push-on">เปิดแจ้งเตือน</button>
+        <button type="button" class="btn ghost" id="push-test">ส่งทดสอบ</button>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn danger" id="push-off">ปิดแจ้งเตือนเครื่องนี้</button>
+      </div>
+      <ul class="meta" id="push-devices"></ul>
+    </details>
+    <details class="mjson" id="mjson">
+      <summary>ข้อมูลแทนที่รายเดือน (JSON)</summary>
+      <div class="mreader" id="mreader"></div>
+      <label class="mlabel" for="mjson-text">แก้ไข JSON (บันทึกให้อัตโนมัติ)</label>
+      <textarea id="mjson-text" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off"
+        placeholder='[ jan: { link: "aaa.html", month: "มกราคม" }, feb: { ... } ]'></textarea>
+      <p class="meta" id="mjson-status"></p>
+    </details>
+    <details class="mjson" id="photos-tpl">
+      <summary>ข้อความติดตามรูปสนทนาธรรม 4 ฝ่าย (แก้ไขได้)</summary>
+      <p class="hint">ใช้ {เดือนนี้} {เดือนหน้า} {รายชื่อตำบลที่ยังส่งไม่ครบ} กดปุ่ม "คัดลอกข้อความ" ที่การ์ดรูปในหน้าแรกเพื่อเอาไปใช้ ข้อความนี้ซิงก์ข้ามเครื่อง</p>
+      <textarea id="photos-tpl-text" class="plain" rows="14" spellcheck="false"></textarea>
+      <div class="btns">
+        <button type="button" class="btn ghost" id="photos-tpl-reset">คืนค่าเริ่มต้น</button>
+      </div>
+    </details>
+    <details class="mjson" id="rooms-tpl">
+      <summary>ข้อความยืนยันผู้เข้าร่วม (แก้ไขได้)</summary>
+      <p class="hint">ใช้ {วันที่จัดและเวลา} {วัน} {รวม} และชื่อภาค เช่น {บางบอน} {บางขุนเทียน} แทนข้อมูลของแต่ละรอบ กดปุ่ม "คัดลอกข้อความ" ที่แต่ละรอบเพื่อเอาไปใช้ ข้อความนี้ซิงก์ข้ามเครื่อง</p>
+      <textarea id="rooms-tpl-text" class="plain" rows="14" spellcheck="false"></textarea>
+      <div class="btns">
+        <button type="button" class="btn ghost" id="rooms-tpl-reset">คืนค่าเริ่มต้น</button>
+      </div>
+    </details>
+  </div>
+</dialog>
+
+<div id="print-root" aria-hidden="true"></div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<div id="mlogin" class="lock" role="dialog" aria-modal="true" aria-labelledby="mlogin-title" hidden>
+  <form id="mlogin-form" class="lockbox">
+    <img src="logo.png" width="132" height="52" alt="BKK11 รวมภาคกรุงเทพ">
+    <h2 id="mlogin-title">เข้าสู่ระบบ</h2>
+    <p class="hint">สำหรับผู้นำระดับรวมภาคและภาค ยุวชนชายเท่านั้น ใช้ชื่อและรหัสสมาชิกเดียวกับโทกัง</p>
+    <input id="mlogin-name" class="field" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ชื่อ-นามสกุล" aria-label="ชื่อ-นามสกุล">
+    <input id="mlogin-code" class="field" type="password" inputmode="numeric" autocomplete="off" placeholder="รหัสสมาชิก" aria-label="รหัสสมาชิก">
+    <p class="warnline" id="mlogin-error" role="alert"></p>
+    <button type="submit" class="btn" id="mlogin-go">เข้าสู่ระบบ</button>
+  </form>
+  <div id="mlogin-denied" class="lockbox" hidden>
+    <img src="logo.png" width="132" height="52" alt="BKK11 รวมภาคกรุงเทพ">
+    <h2>สิทธิ์การใช้งาน</h2>
+    <p class="hint" id="mlogin-denied-msg"></p>
+    <button type="button" class="btn" id="mlogin-retry" hidden>ลองใหม่</button>
+    <button type="button" class="btn ghost" id="mlogin-logout">ออกจากระบบ / ใช้บัญชีอื่น</button>
+  </div>
+</div>
+
+<script type="application/json" id="board-data">
+{
+  "issue": "กันยายน 2569",
+  "builtAt": "2026-09-21",
+  "nextRun": "2026-10-12",
+  "sources": [
+    "(Final) BKK11 - แจ้งข่าวเขตขึ้นไป.pdf (ก.ย. 2569)",
+    "ข่าวเพิ่มเติม ภูมิภาคมหานคร 3.pdf (ก.ย. 2569)",
+    "สรุปห้องที่ระลึก อ. ผู้มีพระคุณ (เฉพาะวันที่ เวลา และจำนวนคน)"
+  ],
+  "rooms": [
+    { "date": "2026-03-17", "time": "10:00-12:00", "count": 6, "regions": { "บางบอน": 3, "บางขุนเทียน": 3 } },
+    { "date": "2026-04-28", "time": "10:00-12:00", "count": 6, "regions": { "บางบอน": 3, "บางขุนเทียน": 3 } },
+    { "date": "2026-05-19", "time": "10:00-12:00", "count": 5, "regions": { "บางบอน": 2, "บางขุนเทียน": 3 } },
+    { "date": "2026-07-21", "time": "10:00-12:00", "count": 6, "regions": { "บางบอน": 3, "บางขุนเทียน": 3 } },
+    { "date": "2026-08-18", "time": "10:00-12:00", "count": 6, "regions": { "บางบอน": 3, "บางขุนเทียน": 3 } },
+    { "date": "2026-09-22", "time": "10:00-12:00", "count": 6, "regions": { "บางบอน": 3, "บางขุนเทียน": 3 } }
+  ],
+  "roomsNote": "รอบ 22 ก.ย. เป็นจำนวนตามรายชื่อที่จัดไว้ ยังไม่ถึงวันจัด",
+  "items": [
+    {
+      "title": "สมัครสอบธรรมะฝ่ายยุวชน ปี 2026",
+      "due": "2026-09-30",
+      "level": "ฝ่าย",
+      "submit": "ใบสมัครสอบของสมาชิกยุวชนชาย-หญิง อายุ 13 ปีขึ้นไป",
+      "how": "Google Form",
+      "note": "ขยายเวลารับสมัครถึง พ. 30 ก.ย. 2569 วันสอบ ส. 31 ต.ค. 2569 เวลา 10:00-11:30 น. (รวมภาค 11 สอบที่อาคารส่วนบุคคลย่งไท)",
+      "link": "https://docs.google.com/forms/d/e/1FAIpQLSf8gbBe9xWOsTMAng5yhjDv_-cyE-_ktniG9RxnqjM3K656vg/viewform",
+      "linkText": "ฟอร์มสมัครสอบ",
+      "verify": false
+    },
+    {
+      "title": "ลงทะเบียนผู้เข้าร่วม SIS FEST 2026 (ยุวชนหญิง)",
+      "due": "2026-11-15",
+      "level": "ภภ.มหานคร 3",
+      "submit": "ลงทะเบียนสมาชิกและเพื่อนสมาชิก เป้าหมาย 500 คน (ตำบลละ 5 คน)",
+      "how": "เว็บลงทะเบียน",
+      "note": "งานวันอาทิตย์ที่ 15 พ.ย. 2569 เริ่ม 13:30 น. ห้องพระใหญ่ สมาคมฯ ธนบุรี ไม่ระบุวันปิดรับลงทะเบียน จึงใช้วันงานเป็นกำหนด",
+      "link": "https://sgt-sisfest2026.web.app/sis-fest/",
+      "linkText": "ลงทะเบียน SIS FEST",
+      "verify": true
+    },
+    {
+      "title": "แจ้งรายชื่อเจ้าหน้าที่งาน SIS FEST 2026",
+      "due": "2026-11-15",
+      "level": "ภภ.มหานคร 3",
+      "submit": "เจ้าหน้าที่จากฝ่ายผู้ใหญ่ชาย-หญิง: แผนกทะเบียน (YWL) 12 คน, แผนกประชาสัมพันธ์ (YWL) 4 คน, แผนกภายนอกและรถยนต์ (ผู้ใหญ่ชาย)",
+      "how": "",
+      "note": "แผนกทะเบียนต้องถนัดใช้คอม/ไอแพด และมีอุปกรณ์ส่วนตัวนำมาได้ ไม่ระบุวันปิดรับและช่องทางแจ้ง",
+      "link": "",
+      "linkText": "",
+      "verify": true
+    }
+  ]
+}
+</script>
+
+<script>
+(() => {
+  const MONTHS = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+  const DAYS = ["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."];
+  const LEVEL_COLOR = { "ภภ.มหานคร 3": "var(--lv-bkk)", "ฝ่าย": "var(--lv-dept)", "รวมภาค": "var(--lv-all)" };
+  const $ = id => document.getElementById(id);
+
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  };
+
+  const parse = s => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
+    return m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])) : null;
+  };
+  const today = () => parse(new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" }));
+  const fmt = d => `${DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear() + 543}`;
+  const diff = (d, t) => Math.round((d - t) / 864e5);
+  const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : null;
+
+  function countdown(n) {
+    if (n < 0) return ["เลยมา " + -n + " วัน", "mute"];
+    if (n === 0) return ["วันนี้", "bad"];
+    if (n === 1) return ["พรุ่งนี้", "bad"];
+    if (n <= 7) return ["อีก " + n + " วัน", "warn"];
+    return ["อีก " + n + " วัน", "ok"];
+  }
+
+  const hash = str => {
+    let h = 5381;
+    for (const ch of str) h = ((h << 5) + h + ch.codePointAt(0)) >>> 0;
+    return h.toString(16);
+  };
+  const icsEsc = v => String(v).replace(/\\/g, "\\\\").replace(/[;,]/g, "\\$&").replace(/\r?\n/g, "\\n");
+
+  // RFC 5545: fold lines longer than 75 octets (never inside a UTF-8 character)
+  function fold(line) {
+    const enc = new TextEncoder();
+    const out = [];
+    let cur = "", bytes = 0;
+    for (const ch of line) {
+      const n = enc.encode(ch).length;
+      if (bytes + n > 73) { out.push(cur); cur = " " + ch; bytes = 1 + n; }
+      else { cur += ch; bytes += n; }
+    }
+    out.push(cur);
+    return out.join("\r\n");
+  }
+
+  // All-day event on the due date. Alarms: 09:00 seven days before and 09:00 the day before.
+  function calendarFile(it, d) {
+    const day = x => x.toISOString().slice(0, 10).replace(/-/g, "");
+    const stamp = new Date().toISOString().replace(/[-:]|\.\d{3}/g, "");
+    const url = safeUrl(it.link);
+    const desc = [
+      it.level && "ระดับ: " + it.level,
+      it.submit && "ส่ง: " + it.submit,
+      it.how && "ช่องทาง: " + it.how,
+      it.note,
+      url
+    ].filter(Boolean).join("\n");
+    const alarm = (trigger, text) => ["BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + icsEsc(text), "TRIGGER:" + trigger, "END:VALARM"];
+    return [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//BKK11//Board//TH",
+      "CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      "UID:" + hash(it.title + it.due) + "@bkk11-board",
+      "DTSTAMP:" + stamp,
+      "DTSTART;VALUE=DATE:" + day(d),
+      "DTEND;VALUE=DATE:" + day(new Date(d.getTime() + 864e5)),
+      "SUMMARY:" + icsEsc("[รภ.11] " + it.title),
+      "DESCRIPTION:" + icsEsc(desc),
+      ...(url ? ["URL:" + url] : []),
+      ...alarm("-P6DT15H", "อีก 7 วัน: " + it.title),
+      ...alarm("-PT15H", "พรุ่งนี้ครบกำหนด: " + it.title),
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].map(fold).join("\r\n") + "\r\n";
+  }
+
+  function addToCalendar(it, d) {
+    const blob = new Blob([calendarFile(it, d)], { type: "text/calendar;charset=utf-8" });
+    const href = URL.createObjectURL(blob);
+    const a = el("a");
+    a.href = href;
+    a.download = "bkk11-" + it.due + ".ics";
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(href), 10000);
+  }
+
+  // <state-lib>
+  const RETAIN_YEARS = 2;
+  const ID_RE = /^[\w-]{1,64}$/;
+  const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const YM_RE = /^(\d{4})-(\d{2})$/;
+
+  const cutoffMs = nowMs => {
+    const d = new Date(nowMs);
+    d.setUTCFullYear(d.getUTCFullYear() - RETAIN_YEARS);
+    return d.getTime();
+  };
+  const cutoffDay = nowMs => new Date(cutoffMs(nowMs)).toISOString().slice(0, 10);
+  const str = (v, max) => String(v == null ? "" : v).slice(0, max);
+
+  const PREF_KEYS = ["roomsTemplate", "photosTemplate"];
+  const emptyState = () => ({ items: [], json: { text: "", t: 0 }, done: {}, prefs: {}, roomDates: {} });
+
+  function cleanOverrides(o) {
+    const out = {};
+    if (!o || typeof o !== "object") return out;
+    for (const [k, v] of Object.entries(o).slice(0, 60)) {
+      if (!YM_RE.test(k) || !v || typeof v !== "object") continue;
+      out[k] = { date: DAY_RE.test(v.date) ? v.date : "", time: str(v.time, 60), promote: str(v.promote, 5000) };
+    }
+    return out;
+  }
+
+  function cleanItem(x) {
+    if (!x || typeof x !== "object" || !ID_RE.test(String(x.id)) || !Number.isFinite(x.updatedAt)) return null;
+    if (x.deleted) return { id: String(x.id), deleted: true, updatedAt: x.updatedAt };
+    const weekday = Number(x.weekday), nth = Number(x.nth);
+    if (!(weekday >= 0 && weekday <= 6) || ![0, 1, 2, 3, 4].includes(nth)) return null;
+    return {
+      id: String(x.id),
+      title: str(x.title, 200),
+      weekday,
+      nth,
+      time: str(x.time, 60),
+      promote: str(x.promote, 5000),
+      json: str(x.json, 20000),
+      overrides: cleanOverrides(x.overrides),
+      updatedAt: x.updatedAt
+    };
+  }
+
+  function normalizeState(s) {
+    const out = emptyState();
+    if (!s || typeof s !== "object") return out;
+    if (Array.isArray(s.items)) {
+      for (const x of s.items.slice(0, 500)) {
+        const c = cleanItem(x);
+        if (c) out.items.push(c);
+      }
+    }
+    if (s.json && typeof s.json === "object") out.json = { text: str(s.json.text, 20000), t: Number(s.json.t) || 0 };
+    if (s.done && typeof s.done === "object") {
+      for (const [k, v] of Object.entries(s.done).slice(0, 5000)) {
+        if (ID_RE.test(k) && v && Number.isFinite(v.t)) out.done[k] = { on: !!v.on, t: v.t };
+      }
+    }
+    if (s.prefs && typeof s.prefs === "object") {
+      for (const k of PREF_KEYS) {
+        const v = s.prefs[k];
+        if (v && typeof v === "object" && Number.isFinite(v.t)) out.prefs[k] = { text: str(v.text, 5000), t: v.t };
+      }
+    }
+    // Per-round override of the date used for a rooms-tab card's countdown, keyed by the round's own
+    // (board-supplied) date; "" means "cleared, use the default 1st-of-month countdown" but still wins merges.
+    if (s.roomDates && typeof s.roomDates === "object") {
+      for (const [k, v] of Object.entries(s.roomDates).slice(0, 2000)) {
+        if (!DAY_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
+        if (v.date !== "" && !DAY_RE.test(String(v.date))) continue;
+        out.roomDates[k] = { date: v.date === "" ? "" : String(v.date), t: v.t };
+      }
+    }
+    return out;
+  }
+
+  // Last write wins per record; same-title duplicates (e.g. imported on two devices) collapse to the newest
+  function mergeStates(a, b) {
+    const A = normalizeState(a), B = normalizeState(b);
+    const byId = new Map();
+    for (const x of [...A.items, ...B.items]) {
+      const cur = byId.get(x.id);
+      if (!cur || x.updatedAt >= cur.updatedAt) byId.set(x.id, x);
+    }
+    let items = [...byId.values()];
+    const best = new Map();
+    for (const x of items) {
+      if (x.deleted) continue;
+      const cur = best.get(x.title);
+      if (!cur || x.updatedAt > cur.updatedAt || (x.updatedAt === cur.updatedAt && x.id > cur.id)) best.set(x.title, x);
+    }
+    items = items.filter(x => x.deleted || best.get(x.title) === x).sort((p, q) => (p.id < q.id ? -1 : 1));
+    const done = { ...A.done };
+    for (const [k, v] of Object.entries(B.done)) if (!done[k] || v.t >= done[k].t) done[k] = v;
+    const prefs = { ...A.prefs };
+    for (const [k, v] of Object.entries(B.prefs)) if (!prefs[k] || v.t >= prefs[k].t) prefs[k] = v;
+    const roomDates = { ...A.roomDates };
+    for (const [k, v] of Object.entries(B.roomDates)) if (!roomDates[k] || v.t >= roomDates[k].t) roomDates[k] = v;
+    return { items, json: B.json.t >= A.json.t ? B.json : A.json, done, prefs, roomDates };
+  }
+
+  // Drops everything older than RETAIN_YEARS: old tombstones, done marks, per-month overrides
+  function pruneState(s, nowMs) {
+    const st = normalizeState(s);
+    const cut = cutoffMs(nowMs);
+    const d = new Date(cut);
+    const cutYm = d.getUTCFullYear() * 12 + d.getUTCMonth();
+    const items = st.items
+      .filter(x => !(x.deleted && x.updatedAt < cut))
+      .map(x => {
+        if (x.deleted) return x;
+        const overrides = {};
+        for (const [k, v] of Object.entries(x.overrides)) {
+          const m = YM_RE.exec(k);
+          if (+m[1] * 12 + (+m[2] - 1) >= cutYm) overrides[k] = v;
+        }
+        return { ...x, overrides };
+      });
+    const done = {};
+    for (const [k, v] of Object.entries(st.done)) if (v.t >= cut) done[k] = v;
+    const roomDates = {};
+    for (const [k, v] of Object.entries(st.roomDates)) if (v.t >= cut) roomDates[k] = v;
+    return { items, json: st.json, done, prefs: st.prefs, roomDates };
+  }
+
+  // The board published by the scheduled task (rooms + things to submit)
+  const cleanRegions = r => {
+    const out = {};
+    if (r && typeof r === "object") {
+      for (const [k, v] of Object.entries(r).slice(0, 10)) {
+        const name = str(k, 40).trim();
+        if (name && Number.isFinite(v) && v >= 0 && v <= 1000) out[name] = Math.round(v);
+      }
+    }
+    return out;
+  };
+
+  function normalizeBoard(b) {
+    if (!b || typeof b !== "object" || Array.isArray(b)) return { error: "board ต้องเป็นอ็อบเจ็กต์" };
+    const day = v => (DAY_RE.test(String(v)) ? String(v) : "");
+    const rooms = (Array.isArray(b.rooms) ? b.rooms : []).slice(0, 400)
+      .filter(r => r && DAY_RE.test(String(r.date)))
+      .map(r => {
+        const regions = cleanRegions(r.regions);
+        const issue = str(r.issue, 60).trim();
+        return { date: r.date, time: str(r.time, 60), count: Number.isFinite(r.count) ? r.count : null, ...(issue ? { issue } : {}), ...(Object.keys(regions).length ? { regions } : {}) };
+      });
+    const items = (Array.isArray(b.items) ? b.items : []).slice(0, 400)
+      .filter(i => i && str(i.title, 300))
+      .map(i => ({
+        title: str(i.title, 300),
+        due: day(i.due),
+        level: str(i.level, 60),
+        submit: str(i.submit, 1000),
+        how: str(i.how, 500),
+        note: str(i.note, 2000),
+        link: /^https?:\/\//i.test(String(i.link || "")) ? str(i.link, 1000) : "",
+        linkText: str(i.linkText, 200),
+        verify: !!i.verify
+      }));
+    return {
+      issue: str(b.issue, 60),
+      builtAt: day(b.builtAt),
+      nextRun: day(b.nextRun),
+      sources: (Array.isArray(b.sources) ? b.sources : []).slice(0, 50).map(x => str(typeof x === "string" ? x : x && x.name, 200)).filter(Boolean),
+      rooms,
+      roomsNote: str(b.roomsNote, 1000),
+      items
+    };
+  }
+
+  function pruneBoard(b, nowMs) {
+    const cut = cutoffDay(nowMs);
+    return {
+      ...b,
+      rooms: (b.rooms || []).filter(r => !r.date || r.date >= cut),
+      items: (b.items || []).filter(i => !i.due || i.due >= cut)
+    };
+  }
+  // Recurring events ("the 2nd Monday of each month") with per-month overrides; also drives the daily push
+  const NOTIFY_DAYS = 10;          // to-submit items
+  const MONTHLY_NOTIFY_DAYS = 5;   // recurring monthly events
+  const DAY_MS = 864e5;
+  const isoDay = d => d.toISOString().slice(0, 10);
+  const ymKey = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
+  const parseDay = s => (DAY_RE.test(String(s)) ? new Date(Date.UTC(+String(s).slice(0, 4), +String(s).slice(5, 7) - 1, +String(s).slice(8, 10))) : null);
+
+  // Key of a "to submit" item inside the done marks
+  const boardKey = (title, due) => {
+    let h = 5381;
+    for (const ch of (title || "") + "|" + (due || "")) h = ((h << 5) + h + ch.codePointAt(0)) >>> 0;
+    return h.toString(16);
+  };
+
+  // Memorial rooms: the LINE confirmation is due on a round's deadline day, announced ROOMS_NOTIFY_DAYS ahead
+  const ROOMS_NOTIFY_DAYS = 7;
+  const roomKey = day => boardKey("room", day);
+  // A saved roomDates override, else the 1st of the round's own month
+  const roomDeadline = (day, roomDates) => {
+    const d = parseDay(day);
+    if (!d) return null;
+    const ov = roomDates && roomDates[day];
+    return (ov && ov.date && parseDay(ov.date)) || new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+  };
+
+  // 4-division meeting photos: BKK11-4DivisionMeeting's Apps Script reports, per area, which of the 2 pictures
+  // (รูปที่1 = ภาพบรรยากาศ, รูปที่2 = ภาพถ่ายหมู่) are in this month's Drive folder
+  const PHOTO_API = "https://script.google.com/macros/s/AKfycbx0IgSpakNWcEQLuo8f2S9sA0xtOYNw6XgqxfkjVH-zs9fUzpccFgM3cHDGliiLYEOY/exec?api=status";
+  const PHOTO_SLOT_NAMES = ["ภาพบรรยากาศ", "ภาพถ่ายหมู่"];
+  const photoKey = ym => boardKey("photos", ym);
+  const photoLabel = name => String(name).replace(/^(.+?)-(.+)$/, "$2 (ตำบล$1)");
+  // Areas that have not sent every picture yet, in the API's order; null when the status is unusable
+  function photoMissing(st) {
+    if (!st || !YM_RE.test(String(st.month)) || !Array.isArray(st.areas)) return null;
+    const out = [];
+    for (const a of st.areas) {
+      if (!a || !Array.isArray(a.sent)) continue;
+      const missing = PHOTO_SLOT_NAMES.filter((_, i) => !a.sent[i]);
+      if (missing.length) out.push({ name: String(a.name), label: photoLabel(a.name), missing, partial: missing.length < PHOTO_SLOT_NAMES.length });
+    }
+    return out;
+  }
+  const lastDayOfMonth = d => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0));
+
+  // nth = 1..4, or 0 for the last one in the month
+  function nthWeekday(y, m, wd, nth) {
+    if (nth === 0) {
+      const last = new Date(Date.UTC(y, m + 1, 0));
+      return new Date(Date.UTC(y, m, last.getUTCDate() - ((last.getUTCDay() - wd + 7) % 7)));
+    }
+    const first = new Date(Date.UTC(y, m, 1));
+    return new Date(Date.UTC(y, m, 1 + ((wd - first.getUTCDay() + 7) % 7) + (nth - 1) * 7));
+  }
+
+  // Upcoming occurrences sorted by effective date. A per-month override (it.overrides["YYYY-MM"])
+  // moves that one month's date; JSON variables still use the rule's own month.
+  function occurrences(it, t, count) {
+    const out = [];
+    const y = t.getUTCFullYear(), m = t.getUTCMonth();
+    for (let i = -1; i < count + 3; i++) {
+      const yy = y + Math.floor((m + i) / 12), mm = (((m + i) % 12) + 12) % 12;
+      const rule = nthWeekday(yy, mm, it.weekday, it.nth);
+      const key = ymKey(yy, mm);
+      const ov = (it.overrides && it.overrides[key]) || null;
+      const date = (ov && ov.date && parseDay(ov.date)) || rule;
+      if (date >= t) out.push({ date, rule, key, month: mm, ov });
+    }
+    return out.sort((a, b) => a.date - b.date).slice(0, count);
+  }
+  // </state-lib>
+
+  // ---------- data shared across devices: localStorage first, optional sync through /api/sync ----------
+  const STATE_KEY = "bkk11-state";
+  const newId = () => (crypto.randomUUID ? crypto.randomUUID() : "i" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+  const itemSig = it => JSON.stringify([it.title, it.weekday, it.nth, it.time, it.promote, it.json, it.overrides || {}]);
+  const itemKey = it => boardKey(it.title, it.due);   // a changed title/due date counts as a new item
+
+  const DEVICE_KEY = "bkk11-device-id";
+  const deviceId = (() => {
+    try {
+      let v = localStorage.getItem(DEVICE_KEY);
+      if (!v) { v = newId(); localStorage.setItem(DEVICE_KEY, v); }
+      return v;
+    } catch (e) { return newId(); }
+  })();
+
+  let store = emptyState();      // full state incl. tombstones (this is what gets synced)
+  let done = new Set();          // views derived from `store`
+  const monthly = { items: [], json: "" };
+  const settings = { roomsTemplate: "", photosTemplate: "" };   // "" = use the built-in message
+  let sigs = new Map();
+  let lastData = null;
+  let refreshJsonBox = () => {};
+  let refreshTemplateBox = () => {};
+
+  function loadStore() {
+    try {
+      const v = JSON.parse(localStorage.getItem(STATE_KEY) || "null");
+      if (v) return pruneState(v, Date.now());
+    } catch (e) {}
+    // one-time migration from the first version's keys
+    const st = emptyState();
+    const now = Date.now();
+    try {
+      const m = JSON.parse(localStorage.getItem("bkk11-monthly") || "null");
+      if (m && Array.isArray(m.items)) {
+        st.items = m.items.map(x => ({ ...x, id: newId(), updatedAt: now, overrides: x.overrides || {} }));
+        if (m.json) st.json = { text: String(m.json), t: now };
+      }
+      for (const k of JSON.parse(localStorage.getItem("bkk11-done") || "[]")) st.done[k] = { on: true, t: now };
+    } catch (e) {}
+    const out = normalizeState(st);
+    try { localStorage.setItem(STATE_KEY, JSON.stringify(out)); } catch (e) {}   // keep the generated ids stable
+    return out;
+  }
+  function adoptStore() {
+    monthly.items = store.items.filter(x => !x.deleted);
+    monthly.json = store.json.text;
+    settings.roomsTemplate = (store.prefs.roomsTemplate || {}).text || "";
+    settings.photosTemplate = (store.prefs.photosTemplate || {}).text || "";
+    done = new Set(Object.entries(store.done).filter(([, v]) => v.on).map(([k]) => k));
+    sigs = new Map(monthly.items.map(x => [x.id, itemSig(x)]));
+  }
+  const persistLocal = () => { try { localStorage.setItem(STATE_KEY, JSON.stringify(store)); } catch (e) {} };
+
+  // Turns edits made to monthly.items / monthly.json / done into timestamped records
+  function commitLocal() {
+    const now = Date.now();
+    let changed = false;
+    const live = new Set();
+    for (const it of monthly.items) {
+      if (!it.id) it.id = newId();
+      if (!it.overrides) it.overrides = {};
+      live.add(it.id);
+      const sig = itemSig(it);
+      if (sigs.get(it.id) !== sig) { it.updatedAt = now; sigs.set(it.id, sig); changed = true; }
+    }
+    const gone = store.items.filter(x => !x.deleted && !live.has(x.id)).map(x => ({ id: x.id, deleted: true, updatedAt: now }));
+    if (gone.length) changed = true;
+    store.items = [...monthly.items, ...store.items.filter(x => x.deleted && !live.has(x.id)), ...gone];
+    if (monthly.json !== store.json.text) { store.json = { text: monthly.json, t: now }; changed = true; }
+    if (settings.roomsTemplate !== ((store.prefs.roomsTemplate || {}).text || "")) {
+      store.prefs.roomsTemplate = { text: settings.roomsTemplate, t: now };
+      changed = true;
+    }
+    if (settings.photosTemplate !== ((store.prefs.photosTemplate || {}).text || "")) {
+      store.prefs.photosTemplate = { text: settings.photosTemplate, t: now };
+      changed = true;
+    }
+    for (const k of done) if (!(store.done[k] && store.done[k].on)) { store.done[k] = { on: true, t: now }; changed = true; }
+    for (const [k, v] of Object.entries(store.done)) if (v.on && !done.has(k)) { store.done[k] = { on: false, t: now }; changed = true; }
+    if (changed) { persistLocal(); scheduleSync(); }
+    return changed;
+  }
+  const saveDone = commitLocal;
+  const saveMonthly = commitLocal;
+
+  function refreshAll() {
+    if (lastData) render(lastData);
+    renderMonthly();
+    refreshJsonBox();
+    refreshTemplateBox();
+  }
+
+  // ---------- shared sign-in: the same member session (storage key) as โทกัง and ที่อยู่น้อง, so one login covers all three sites ----------
+  // The Supabase project behind โทกัง holds the members; row-level security limits what each person can read, and the
+  // Edge Function /admin (sync, board, push) only accepts รวมภาค / ภาค leaders of the ยุวชนชาย division or the scheduled task's token.
+  const SUPA_URL = "https://cqdzfsucpivsgznfpjxl.supabase.co";
+  const SUPA_KEY = "sb_publishable_XkUBjE3M7HUiuDv7YwsbKA_mSu0ToEc";   // publishable (public) client key of that project, same one the โทกัง site ships
+  const API = SUPA_URL + "/functions/v1/admin";
+  const SESSION_KEY = "tokan_session_v1";
+  const ELIG_KEY = "bkk11-eligible";          // { sub, ok }: the eligibility check result for the signed-in member
+  const memSession = () => { try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; } };
+  const setMemSession = v => { try { if (v) localStorage.setItem(SESSION_KEY, JSON.stringify(v)); else localStorage.removeItem(SESSION_KEY); } catch (e) {} };
+  const eligOk = s => { try { const e = JSON.parse(localStorage.getItem(ELIG_KEY)); return !!(e && e.ok && s && e.sub === jwtClaims(s.access_token).sub); } catch (er) { return false; } };
+  const setEligible = (s, ok) => { try { localStorage.setItem(ELIG_KEY, JSON.stringify({ sub: jwtClaims(s.access_token).sub, ok })); } catch (e) {} };
+  const memAuthed = () => { const s = memSession(); return !!(s && s.access_token && eligOk(s)); };
+  // Who may use the app: รวมภาค / ภาค leaders of the ยุวชนชาย division
+  const ELIGIBLE_LEVELS = ["all", "phak"];
+  const ELIGIBLE_DIVISION = "ยุวชนชาย";
+  let msTarget = null, msTimer = 0, msSeq = 0;
+
+  // The sign-in screen covers the app; everything behind it is inert. This gates the page's UI, while the data itself
+  // (members, visit calendar, sync, push) is protected on the server.
+  function setLocked(locked) {
+    $("mlogin").hidden = !locked;
+    for (const e of document.querySelectorAll("header, nav.tabs, main")) e.inert = locked;
+  }
+  function showLoginForm(message) {
+    $("mlogin-form").hidden = false;
+    $("mlogin-denied").hidden = true;
+    $("mlogin-error").textContent = message || "";
+    setLocked(true);
+    setTimeout(() => $("mlogin-name").focus(), 50);
+  }
+  function showDenied(message, canRetry) {
+    $("mlogin-form").hidden = true;
+    $("mlogin-denied").hidden = false;
+    $("mlogin-denied-msg").textContent = message;
+    $("mlogin-retry").hidden = !canRetry;
+    setLocked(true);
+  }
+  function requireLogin(message) {
+    setMemSession(null);
+    try { localStorage.removeItem(ELIG_KEY); } catch (e) {}
+    for (const d of document.querySelectorAll("dialog[open]")) d.close();
+    showLoginForm(message);
+  }
+  function jwtClaims(tok) {
+    try {
+      const b = String(tok).split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(b + "=".repeat((4 - (b.length % 4)) % 4)), c => c.charCodeAt(0))));
+    } catch (e) { return {}; }
+  }
+  // null = the server refused the refresh token (session over); throws when the network is down (keep the session)
+  async function refreshMember(s) {
+    const r = await fetch(SUPA_URL + "/auth/v1/token?grant_type=refresh_token", {
+      method: "POST",
+      headers: { apikey: SUPA_KEY, "content-type": "application/json" },
+      body: JSON.stringify({ refresh_token: s.refresh_token })
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    const next = { ...s, access_token: d.access_token, refresh_token: d.refresh_token, expires_at: d.expires_at };
+    setMemSession(next);
+    return next;
+  }
+  // REST call to the member database as the signed-in member, with one silent token refresh on 401
+  async function memReq(method, path, body, extra) {
+    let s = memSession();
+    if (!s) { requireLogin(); throw Object.assign(new Error("signed out"), { status: 401 }); }
+    const go = tok => fetch(SUPA_URL + path, {
+      method,
+      headers: { apikey: SUPA_KEY, Authorization: "Bearer " + tok, ...(body !== undefined ? { "content-type": "application/json" } : {}), ...extra },
+      body: body !== undefined ? JSON.stringify(body) : undefined
+    });
+    let res = await go(s.access_token);
+    if (res.status === 401) {
+      s = await refreshMember(s);
+      if (!s) { requireLogin("หมดเวลาเข้าสู่ระบบ กรุณาเข้าสู่ระบบใหม่"); throw Object.assign(new Error("signed out"), { status: 401 }); }
+      res = await go(s.access_token);
+    }
+    if (!res.ok) throw Object.assign(new Error(method + " " + res.status), { status: res.status, body: await res.text().catch(() => "") });
+    return res.status === 204 ? null : res.json();
+  }
+  const memGet = path => memReq("GET", path);
+  // The admin API (sync / push) with the same member token; same silent refresh
+  async function apiFetch(path, init = {}) {
+    const call = tok => fetch(API + path, { ...init, headers: { ...(init.headers || {}), authorization: "Bearer " + tok } });
+    const s = memSession();
+    if (!s || !s.access_token) return new Response(JSON.stringify({ error: "signed out" }), { status: 401 });
+    let res = await call(s.access_token);
+    if (res.status === 401) {
+      const n = await refreshMember(s).catch(() => undefined);
+      if (n === null) { requireLogin("หมดเวลาเข้าสู่ระบบ กรุณาเข้าสู่ระบบใหม่"); return res; }
+      if (n) res = await call(n.access_token);
+    }
+    return res;
+  }
+  const likeTokens = q => q.split(/\s+/).map(t => t.replace(/[,()*%:\\"']/g, "")).filter(Boolean).slice(0, 3);
+  const nameFilter = toks => "(" + toks.map(t => `or(name_t.ilike.*${t}*,saku_t.ilike.*${t}*)`).join(",") + ")";
+  async function memSearch(q) {
+    const toks = likeTokens(q);
+    if (!toks.length) return [];
+    const params = new URLSearchParams({ select: "name_t,saku_t,po_nt,ch_nt,ha_nt", order: "name_t", limit: "20" });
+    params.set("and", nameFilter(toks));
+    return memGet("/rest/v1/members?" + params);
+  }
+
+  async function isEligible(session, profile) {
+    if (!ELIGIBLE_LEVELS.includes((profile || {}).level)) return false;
+    const mt = (jwtClaims(session.access_token).app_metadata || {}).mt_co;
+    if (!mt) return false;
+    const res = await fetch(`${SUPA_URL}/rest/v1/members?select=fa_nt&mt_co=eq.${encodeURIComponent(mt)}`, { headers: { apikey: SUPA_KEY, Authorization: "Bearer " + session.access_token } });
+    if (!res.ok) throw new Error("eligibility " + res.status);
+    const rows = await res.json();
+    return !!rows[0] && String(rows[0].fa_nt || "").trim() === ELIGIBLE_DIVISION;
+  }
+  function renderAccount() {
+    const p = (memSession() || {}).profile;
+    $("acct-info").textContent = p ? [p.name, p.po].filter(Boolean).join(" · ") : "";
+  }
+  $("mlogin-form").onsubmit = async e => {
+    e.preventDefault();
+    const name = $("mlogin-name").value.trim(), code = $("mlogin-code").value.trim();
+    if (!name || !code) { $("mlogin-error").textContent = "ใส่ชื่อและรหัสก่อน"; return; }
+    $("mlogin-go").disabled = true;
+    $("mlogin-error").textContent = "กำลังเข้าสู่ระบบ…";
+    try {
+      const res = await fetch(SUPA_URL + "/functions/v1/login", {
+        method: "POST",
+        headers: { apikey: SUPA_KEY, "content-type": "application/json" },
+        body: JSON.stringify({ name, code })
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok || !d.session) { $("mlogin-error").textContent = d.error && d.error !== "server" ? d.error : "เข้าสู่ระบบไม่สำเร็จ ลองใหม่อีกครั้ง"; return; }
+      if (!(await isEligible(d.session, d.profile))) { $("mlogin-error").textContent = "บัญชีนี้ไม่มีสิทธิ์ใช้งาน (เฉพาะผู้นำระดับรวมภาคและภาค ยุวชนชาย)"; return; }
+      setMemSession({ ...d.session, profile: d.profile });   // same shape โทกัง stores, so both sites stay signed in
+      setEligible(d.session, true);
+      $("mlogin-code").value = "";
+      $("mlogin-error").textContent = "";
+      setLocked(false);
+      renderAccount();
+      afterLogin();
+    } catch (err) {
+      $("mlogin-error").textContent = "เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง";
+    } finally {
+      $("mlogin-go").disabled = false;
+    }
+  };
+  $("acct-logout").onclick = () => requireLogin();
+  $("mlogin-logout").onclick = () => requireLogin();
+  $("mlogin-retry").onclick = () => gateStart();
+  // Signed in on โทกัง / ที่อยู่น้อง already? Then there is nothing to type here: check once that this member may use the app
+  async function gateStart() {
+    const s = memSession();
+    if (!s || !s.access_token) { showLoginForm(); return; }
+    let cur = s;
+    if (!eligOk(s)) {
+      showDenied("กำลังตรวจสอบสิทธิ์…", false);
+      try {
+        if (s.expires_at && s.expires_at * 1000 < Date.now() + 60000) {
+          cur = await refreshMember(s);
+          if (!cur) return requireLogin("หมดเวลาเข้าสู่ระบบ กรุณาเข้าสู่ระบบใหม่");
+        }
+        if (!(await isEligible(cur, cur.profile))) return showDenied("บัญชีนี้ไม่มีสิทธิ์ใช้งานแอปนี้ (เฉพาะผู้นำระดับรวมภาคและภาค ยุวชนชาย)", false);
+        setEligible(cur, true);
+      } catch (e) {
+        return showDenied("ตรวจสอบสิทธิ์ไม่ได้ (เชื่อมต่อไม่ได้?)", true);
+      }
+    }
+    setLocked(false);
+    renderAccount();
+    afterLogin();
+    if (cur.expires_at && cur.expires_at * 1000 < Date.now() + 60000) {
+      try { if (!(await refreshMember(cur))) requireLogin("หมดเวลาเข้าสู่ระบบ กรุณาเข้าสู่ระบบใหม่"); } catch (e) {}
+    }
+  }
+
+  let syncTimer = 0, syncing = false, syncDirty = false;
+  function setSyncStatus(text, bad) {
+    const st = $("sync-status");
+    st.textContent = text;
+    st.style.color = bad ? "var(--bad)" : "";
+    $("sync-sum").textContent = "ซิงก์ข้ามเครื่อง" + (memAuthed() ? " · อัตโนมัติ" : "");
+  }
+  function scheduleSync() {
+    if (!memAuthed()) return;
+    syncDirty = true;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(syncNow, 1500);
+  }
+  // One PUT both pushes this device's state and returns the merged result from the server
+  async function syncNow() {
+    if (!memAuthed()) { setSyncStatus("ยังไม่ได้ล็อกอิน", true); return { ok: false, message: "ยังไม่ได้ล็อกอิน" }; }
+    if (syncing) { syncDirty = true; return { ok: false, message: "กำลังซิงก์อยู่ รอสักครู่แล้วลองอีกครั้ง" }; }
+    syncing = true;
+    syncDirty = false;
+    setSyncStatus("กำลังซิงก์…");
+    try {
+      const res = await apiFetch("/sync", {
+        method: "PUT",
+        headers: { "content-type": "application/json", "x-device-id": deviceId },
+        body: JSON.stringify(store)
+      });
+      const fail = (message, code) => Object.assign(new Error(message), { code });
+      if (res.status === 401) throw fail("ไม่มีสิทธิ์ซิงก์ (ลองออกจากระบบแล้วเข้าใหม่)", 401);
+      if (!res.ok) throw fail("เซิร์ฟเวอร์ตอบ " + res.status, res.status);
+      const remote = await res.json();
+      store = pruneState(mergeStates(store, remote), Date.now());
+      adoptStore();
+      persistLocal();
+      refreshAll();
+      setSyncStatus("ซิงก์แล้ว " + new Date().toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" }));
+      return { ok: true };
+    } catch (e) {
+      const message = e instanceof TypeError ? "เชื่อมต่อไม่ได้ (ออฟไลน์?)" : e.message;
+      setSyncStatus("ซิงก์ไม่สำเร็จ: " + message, true);
+      return { ok: false, message };
+    } finally {
+      syncing = false;
+      if (syncDirty) scheduleSync();
+    }
+  }
+
+  // The board (rooms + things to submit) comes from the admin API (/board); the copy embedded in this page is the fallback
+  let board = null;
+  async function loadBoard() {
+    try {
+      const res = await fetch(API + "/board", { cache: "no-cache" });
+      if (!res.ok) return;
+      const b = await res.json();
+      if (!b || typeof b !== "object" || !b.builtAt || b.builtAt < ((board && board.builtAt) || "")) return;
+      board = b;
+      render(b);
+    } catch (e) {}
+  }
+
+  // ---------- push notifications on this device ----------
+  const PUSH_KEY = "bkk11-push-on";
+  const NAME_KEY = "bkk11-device-name";
+  let pushInfo = null;
+  const pushSupported = () => "serviceWorker" in navigator && "PushManager" in window && typeof Notification !== "undefined";
+  const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const guessName = () => (/iPad/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ? "iPad"
+    : /iPhone/.test(navigator.userAgent) ? "iPhone" : /Android/.test(navigator.userAgent) ? "Android" : "คอมพิวเตอร์");
+  const getPref = k => { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } };
+  const setPref = (k, v) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch (e) {} };
+  const deviceName = () => getPref(NAME_KEY) || guessName();
+  const b64ToBytes = str => {
+    const raw = atob((str + "=".repeat((4 - (str.length % 4)) % 4)).replace(/-/g, "+").replace(/_/g, "/"));
+    return Uint8Array.from(raw, c => c.charCodeAt(0));
+  };
+  const pushFetch = (method, body) => apiFetch("/push", {
+    method,
+    headers: { "content-type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const withTimeout = (promise, ms, message) =>
+    Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(message)), ms))]);
+  const swReady = () => withTimeout(navigator.serviceWorker.ready, 8000, "service worker ยังไม่พร้อม ลองเปิดแอปใหม่");
+
+  function setPushStatus(text, bad) {
+    const st = $("push-status");
+    st.textContent = text;
+    st.style.color = bad ? "var(--bad)" : "";
+  }
+  function renderPushDevices(devices) {
+    $("push-devices").replaceChildren(...devices.map(d => {
+      const when = new Date(d.createdAt).toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" });
+      return el("li", "", `${d.name}${d.id === deviceId ? " (เครื่องนี้)" : ""} · ลงทะเบียน ${when}`);
+    }));
+    $("push-sum").textContent = "แจ้งเตือน push" + (devices.some(d => d.id === deviceId) ? " · เปิดอยู่" : "");
+  }
+
+  async function subscribeAndRegister(publicKey) {
+    const reg = await swReady();
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(publicKey) });
+    const res = await pushFetch("PUT", { deviceId, name: deviceName(), subscription: sub.toJSON() });
+    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "ลงทะเบียนไม่สำเร็จ (" + res.status + ")");
+    setPref(PUSH_KEY, "1");
+    return (await res.json()).devices;
+  }
+
+  // Shows the current state; quietly re-registers this device if it was enabled but the server lost track of it
+  async function refreshPush() {
+    $("push-name").value = $("push-name").value || deviceName();
+    if (!pushSupported()) {
+      renderPushDevices([]);
+      return setPushStatus(isIos()
+        ? "iPhone/iPad ต้องเพิ่มแอปลงหน้าจอโฮมแล้วเปิดจากไอคอนก่อน (iOS 16.4 ขึ้นไป)"
+        : "เบราว์เซอร์นี้ไม่รองรับ push", true);
+    }
+    if (!memAuthed()) return setPushStatus("ล็อกอินก่อน แล้วจึงเปิดแจ้งเตือนได้", true);
+    setPushStatus("กำลังตรวจสอบ…");
+    try {
+      const res = await pushFetch("GET");
+      if (res.status === 401) return setPushStatus("ไม่มีสิทธิ์ ลองออกจากระบบแล้วเข้าใหม่", true);
+      if (!res.ok) throw new Error("เซิร์ฟเวอร์ตอบ " + res.status);
+      pushInfo = await res.json();
+      if (!pushInfo.enabled) return setPushStatus("เซิร์ฟเวอร์ยังไม่ได้ตั้งกุญแจ VAPID", true);
+      let devices = pushInfo.devices;
+      if (getPref(PUSH_KEY) === "1" && Notification.permission === "granted" && !devices.some(d => d.id === deviceId)) {
+        devices = await subscribeAndRegister(pushInfo.publicKey);
+      }
+      renderPushDevices(devices);
+      const on = devices.some(d => d.id === deviceId);
+      setPushStatus(on
+        ? "เปิดอยู่: เตือนทุกเช้า ~08:00 และเมื่อมีการแก้ไขจากอีกเครื่อง"
+        : Notification.permission === "denied" ? "ปิดการแจ้งเตือนไว้ เปิดที่ ตั้งค่าของเครื่อง/เบราว์เซอร์" : "ยังไม่ได้เปิดในเครื่องนี้");
+    } catch (e) {
+      setPushStatus("ตรวจสถานะไม่สำเร็จ: " + (e instanceof TypeError ? "เชื่อมต่อไม่ได้ (ออฟไลน์?)" : e.message), true);
+    }
+  }
+
+  async function enablePush() {
+    if (!pushSupported()) return refreshPush();
+    if (!memAuthed()) return setPushStatus("ล็อกอินก่อน แล้วจึงเปิดแจ้งเตือนได้", true);
+    const asked = Notification.requestPermission();   // must run straight from the tap
+    setPushStatus("กำลังตั้งค่า…");
+    try {
+      if ((await asked) !== "granted") return setPushStatus("ไม่ได้รับอนุญาต เปิดที่ ตั้งค่าของเครื่อง/เบราว์เซอร์ แล้วลองใหม่", true);
+      const res = await pushFetch("GET");
+      if (!res.ok) throw new Error(res.status === 401 ? "ไม่มีสิทธิ์ ลองออกจากระบบแล้วเข้าใหม่" : "เซิร์ฟเวอร์ตอบ " + res.status);
+      pushInfo = await res.json();
+      if (!pushInfo.enabled) return setPushStatus("เซิร์ฟเวอร์ยังไม่ได้ตั้งกุญแจ VAPID", true);
+      renderPushDevices(await subscribeAndRegister(pushInfo.publicKey));
+      $("badge-ask").hidden = true;
+      setBadge(badgeCount);
+      setPushStatus("เปิดแล้ว: เตือนทุกเช้า ~08:00 และเมื่อมีการแก้ไขจากอีกเครื่อง กด “ส่งทดสอบ” เพื่อลองดู");
+    } catch (e) {
+      setPushStatus("เปิดไม่สำเร็จ: " + (e instanceof TypeError ? "เชื่อมต่อไม่ได้ (ออฟไลน์?)" : e.message), true);
+    }
+  }
+
+  async function disablePush() {
+    try {
+      if (pushSupported()) {
+        const reg = await swReady();
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) await sub.unsubscribe();
+      }
+      setPref(PUSH_KEY, "");
+      if (memAuthed()) await pushFetch("DELETE", { deviceId });
+      await refreshPush();
+      setPushStatus("ปิดแจ้งเตือนในเครื่องนี้แล้ว");
+    } catch (e) {
+      setPushStatus("ปิดไม่สำเร็จ: " + e.message, true);
+    }
+  }
+
+  async function testPush() {
+    if (!memAuthed()) return setPushStatus("ล็อกอินก่อน", true);
+    setPushStatus("กำลังส่งทดสอบ…");
+    try {
+      const res = await pushFetch("POST", { action: "test", deviceId });
+      const r = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(r.error || "เซิร์ฟเวอร์ตอบ " + res.status);
+      setPushStatus(r.sent ? "ส่งแล้ว ถ้าไม่เห็นแจ้งเตือนภายใน 1 นาที ให้ตรวจการอนุญาตแจ้งเตือนของเครื่อง" : "ส่งไม่สำเร็จ (ลองปิดแล้วเปิดแจ้งเตือนใหม่)", !r.sent);
+    } catch (e) {
+      setPushStatus("ส่งทดสอบไม่สำเร็จ: " + e.message, true);
+    }
+  }
+
+  store = loadStore();
+  adoptStore();
+
+  function itemCard(it, t) {
+    const d = parse(it.due);
+    const n = d ? diff(d, t) : null;
+    const key = itemKey(it);
+    const isDone = done.has(key);
+    const c = el("li", "card" + (isDone ? " done" : n != null && n < 0 ? " past" : ""));
+    c.style.setProperty("--lc", LEVEL_COLOR[it.level] || "var(--brand)");
+
+    const tick = el("button", "tick" + (isDone ? " on" : ""));
+    tick.type = "button";
+    tick.setAttribute("aria-pressed", String(isDone));
+    tick.setAttribute("aria-label", isDone ? "ยกเลิกทำแล้ว" : "ทำเครื่องหมายว่าทำแล้ว");
+    tick.onclick = () => {
+      if (isDone) done.delete(key); else done.add(key);
+      saveDone();
+      render(lastData);
+    };
+
+    const head = el("button", "chead");
+    head.type = "button";
+    const main = el("div", "cmain");
+    main.append(el("div", "ctitle", it.title || ""));
+    const meta = el("div", "meta");
+    meta.append(el("span", "lvl", it.level || ""));
+    if (d) meta.append(" · " + fmt(d));
+    main.append(meta);
+    head.append(main);
+    if (isDone) {
+      head.append(el("span", "pill ok", "ทำแล้ว"));
+    } else if (n != null) {
+      const [txt, k] = countdown(n);
+      head.append(el("span", "pill " + k, txt));
+    }
+    head.append(el("span", "chev"));
+
+    const body = el("div", "body");
+    if (it.submit) body.append(el("p", "", "ส่ง: " + it.submit));
+    if (it.how) body.append(el("p", "", "ช่องทาง: " + it.how));
+    if (it.note) body.append(el("p", "", it.note));
+    const url = safeUrl(it.link);
+    if (url) {
+      const p = el("p");
+      const a = el("a", "", it.linkText || url);
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      p.append(a);
+      body.append(p);
+    }
+    if (it.verify) body.append(el("span", "verify", "ตรวจสอบกับต้นฉบับ"));
+    if (d && n >= 0 && !isDone) {
+      const b = el("button", "cal", "เพิ่มในปฏิทิน · เตือนก่อน 7 วัน");
+      b.type = "button";
+      b.onclick = () => addToCalendar(it, d);
+      body.append(b);
+    }
+
+    body.hidden = true;
+    if (body.childNodes.length) {
+      head.setAttribute("aria-expanded", "false");
+      head.onclick = () => {
+        const open = head.getAttribute("aria-expanded") !== "true";
+        head.setAttribute("aria-expanded", String(open));
+        body.hidden = !open;
+      };
+    } else {
+      head.disabled = true;
+    }
+    const top = el("div", "ctop");
+    top.append(tick, head);
+    c.append(top, body);
+    return c;
+  }
+
+  // App icon badge (iOS 16.4+ installed web app; needs notification permission there)
+  // Counts items due within BADGE_DAYS days (today included).
+  const BADGE_DAYS = NOTIFY_DAYS;
+  const badgeOk = () => typeof navigator.setAppBadge === "function";
+  const hasNotif = () => typeof Notification !== "undefined";
+  let badgeCount = 0;
+  // Counts shown as red bubbles on the tab icons; their sum goes on the app icon
+  const badgeParts = { rooms: 0, photos: 0, items: 0, monthly: 0 };
+  function refreshBadges() {
+    const put = (sel, n) => {
+      const b = document.querySelector(sel);
+      b.textContent = n > 99 ? "99+" : String(n);
+      b.hidden = !n;
+    };
+    for (const id of ["items", "rooms", "photos", "monthly"]) put("#subtab-" + id + " .bdg", badgeParts[id]);
+    const total = badgeParts.rooms + badgeParts.photos + badgeParts.items + badgeParts.monthly;
+    put("#tab-items .bdg", total);
+    setBadge(total);
+  }
+  function setBadge(n) {
+    badgeCount = n;
+    if (!badgeOk()) return;
+    if (hasNotif() && Notification.permission !== "granted") return;
+    try {
+      const p = n > 0 ? navigator.setAppBadge(n) : navigator.clearAppBadge();
+      if (p) p.catch(() => {});
+    } catch (e) {}
+  }
+  function initBadgeAsk() {
+    const ask = $("badge-ask"), msg = $("badge-msg"), btn = $("badge-btn");
+    const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const standalone = navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+    const phone = ios || matchMedia("(pointer: coarse)").matches;   // app-icon badges only matter on phones/tablets
+    const update = () => {
+      let text = "", button = false;
+      if (!phone) {
+        // nothing to ask on a computer
+      } else if (ios && !standalone) {
+        text = "ต้องติดตั้งแอปก่อนถึงจะมีเลขบนไอคอน: กดปุ่มแชร์ > เพิ่มไปยังหน้าจอโฮม แล้วเปิดจากไอคอน";
+      } else if (badgeOk() && hasNotif()) {
+        if (Notification.permission === "default") {
+          text = "แสดงเลขบนไอคอนแอป เมื่อมีรายการเหลือไม่เกิน " + BADGE_DAYS + " วัน";
+          button = true;
+        } else if (Notification.permission === "denied") {
+          text = "ปิดการแจ้งเตือนไว้ เปิดที่ ตั้งค่า > แจ้งเตือน > รภ.11 เพื่อให้มีเลขบนไอคอน";
+        }
+      } else if (ios) {
+        text = "แอปนี้ยังไม่ได้รับสิทธิ์เว็บแอปจาก iOS (ต้อง iOS 16.4 ขึ้นไป) ลองลบไอคอนแล้วเพิ่มใหม่ผ่านแชร์ > เพิ่มไปยังหน้าจอโฮม";
+      }
+      msg.textContent = text;
+      btn.hidden = !button;
+      ask.hidden = !text;
+    };
+    btn.onclick = () => {
+      Notification.requestPermission().then(() => {
+        update();
+        setBadge(badgeCount);
+      }).catch(() => {});
+    };
+    update();
+  }
+
+  function fill(box, nodes, emptyText) {
+    box.replaceChildren(...(nodes.length ? nodes : [el("p", "empty", emptyText)]));
+  }
+
+  const UPCOMING_MAX = 2;
+  const HISTORY_DAYS = 365;
+
+  const DEFAULT_ROOMS_TEMPLATE = [
+    "ข้อความนี้ส่งถึงผู้นำระดับภาคครับ",
+    "",
+    "ขออนุญาตยืนยันข้อมูลผู้เข้าร่วมห้องระลึก อ. ผู้มีพระคุณโดยมีรายละเอียดดังนี้",
+    "",
+    "วันที่ {วันที่จัดและเวลา}",
+    "",
+    "ภาคบางบอน จำนวน {บางบอน} ท่าน",
+    "ภาคบางขุนเทียน จำนวน {บางขุนเทียน} ท่าน",
+    "",
+    "โดยผู้นำสามารถตรวจสอบได้จาก Link ด้านล่างนี้",
+    "https://docs.google.com/spreadsheets/d/1GFecuxSa8tHV9hNvU3fv2ZKLCUnspOBDWjEwjasp2hA/edit?usp=sharing",
+    "",
+    "หากพบข้อมูลผิดพลาดสามารถแจ้งผ่านผมได้เลยครับ ขอบคุณครับ"
+  ].join("\n");
+  const roomsTemplate = () => settings.roomsTemplate || DEFAULT_ROOMS_TEMPLATE;
+
+  // ---------- รูปสนทนาธรรม 4 ฝ่าย: who has not sent both pictures this month (status comes from BKK11-4DivisionMeeting) ----------
+  const UPLOAD_URL = "https://tanawat40889.github.io/bkk11-4divisionmeeting/?openExternalBrowser=1";
+  const PHOTO_DEADLINE_DAY = 5;
+  const DEFAULT_PHOTOS_TEMPLATE = [
+    "❗ ข้อความนี้รบกวนส่งให้ผู้นำระดับตำบลขึ้นไปเท่านั้น",
+    "",
+    "สวัสดีครับ 🙏",
+    "ขออนุญาตแจ้งและติดตาม เรื่องรูปเพื่อส่งสมาคม 📸 จากรายการตำบลสนทนาธรรม 4 ฝ่าย ประจำเดือน {เดือนนี้} ในทุกพื้นที่ครับ โดยอยากรบกวนผู้นำช่วยติดตามตำบลดังต่อไปนี้ 👇",
+    "{รายชื่อตำบลที่ยังส่งไม่ครบ}",
+    "",
+    "📤 สามารถ upload ภาพ ได้ที่ " + UPLOAD_URL,
+    "",
+    "⏰ รบกวนขอรูปก่อนวันที่ " + PHOTO_DEADLINE_DAY + " {เดือนหน้า}",
+    "",
+    "ขอบคุณมากครับ 🙏"
+  ].join("\n");
+  const photosTemplate = () => settings.photosTemplate || DEFAULT_PHOTOS_TEMPLATE;
+  const photos = { status: null, error: false, loading: false };
+
+  function photosMessage(month, miss) {
+    const m = +month.slice(5, 7) - 1;
+    const vars = {
+      "เดือนนี้": MONTH_FULL[m],
+      "เดือนหน้า": MONTH_FULL[(m + 1) % 12],
+      "รายชื่อตำบลที่ยังส่งไม่ครบ": miss.map((a, i) => `${i + 1}. ${a.label}` + (a.partial ? ` (ขาด${a.missing.join(", ")})` : "")).join("\n")
+    };
+    return photosTemplate().replace(/\{\s*([^{}\n]+?)\s*\}/g, (x, k) => (vars[k] !== undefined ? vars[k] : x));
+  }
+
+  function renderPhotos() {
+    renderPhotosList();
+  }
+  function renderPhotosList() {
+    const ul = $("photos"), doneUl = $("photos-done"), t = today();
+    badgeParts.photos = 0;
+    $("photos-done-wrap").hidden = true;
+    doneUl.replaceChildren();
+    if (!photos.status) {
+      if (!photos.error) { ul.replaceChildren(el("p", "empty", "กำลังโหลดสถานะรูป…")); refreshBadges(); return; }
+      const retry = el("button", "btn ghost sm", "ลองใหม่");
+      retry.type = "button";
+      retry.onclick = loadPhotos;
+      ul.replaceChildren(mrow("later", "รูป", "รูปสนทนาธรรม 4 ฝ่าย", "โหลดสถานะรูปไม่สำเร็จ", null, null, [retry]));
+      refreshBadges();
+      return;
+    }
+    const st = photos.status, miss = photoMissing(st);
+    if (!miss) { ul.replaceChildren(); refreshBadges(); return; }
+    const total = st.areas.length;
+    const ym = st.month, y = +ym.slice(0, 4), m = +ym.slice(5, 7) - 1;
+    const send = lastDayOfMonth(new Date(Date.UTC(y, m, 1)));
+    const key = photoKey(ym), isDone = done.has(key);
+    const meta = [];
+    let kind, extra = [];
+    if (!miss.length) {
+      kind = "ok";
+      meta.push("ส่งครบทุกตำบลแล้ว (" + total + " ตำบล)");
+    } else {
+      kind = "warn";
+      meta.push(countdown(diff(send, t))[0] + " · ส่งข้อความวันที่ " + send.getUTCDate() + " " + MONTHS[m]);
+      meta.push("ยังไม่ครบ " + miss.length + " จาก " + total + " ตำบล");
+      const names = el("div", "meta", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "));
+      const cp = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+      cp.type = "button";
+      cp.onclick = () => copyText(photosMessage(ym, miss), cp);
+      const open = el("a", "btn ghost sm", "หน้าส่งรูป");
+      open.href = UPLOAD_URL;
+      open.target = "_blank";
+      open.rel = "noopener";
+      const row = el("div", "btns");
+      row.append(cp, open);
+      extra = [names, row];
+      if (!isDone && diff(send, t) === 0) badgeParts.photos = 1;
+    }
+    const finished = isDone || !miss.length;
+    const li = mrow("later" + (finished ? " done" : ""), MONTHS[m], "รูปสนทนาธรรม 4 ฝ่าย", meta.join(" · "),
+      kind === "ok" ? "ครบแล้ว" : "ยังไม่ครบ", isDone ? null : kind, extra);
+    if (miss.length) {
+      const tick = el("button", "otick" + (isDone ? " on" : ""));
+      tick.type = "button";
+      tick.setAttribute("aria-pressed", String(isDone));
+      tick.setAttribute("aria-label", isDone ? "ยกเลิกส่งข้อความแล้ว" : "ทำเครื่องหมายว่าส่งข้อความแล้ว");
+      tick.onclick = () => {
+        if (isDone) done.delete(key); else done.add(key);
+        saveDone();
+        renderPhotos();
+      };
+      li.prepend(tick);
+    }
+    if (finished) {
+      ul.replaceChildren(el("p", "empty", "ไม่มีรายการค้าง"));
+      $("photos-done-wrap").hidden = false;
+      $("photos-done-sum").textContent = "ทำแล้ว (1)";
+      doneUl.replaceChildren(li);
+    } else {
+      ul.replaceChildren(li);
+    }
+    refreshBadges();
+  }
+
+  async function loadPhotos() {
+    if (photos.loading) return;
+    photos.loading = true;
+    try {
+      const res = await fetch(PHOTO_API);
+      const st = await res.json();
+      if (!res.ok || !photoMissing(st)) throw new Error("bad status");
+      photos.status = st;
+      photos.error = false;
+    } catch (e) {
+      if (!photos.status) photos.error = true;
+    }
+    photos.loading = false;
+    renderPhotos();
+  }
+
+  // {วันที่จัดและเวลา} -> 22 กันยายน 2569 เวลา 10:00-12:00 น.   ({วัน} = อังคาร, {รวม} = total, {ชื่อภาค} = head count)
+  // Locked: each region always sends 3 people per round, whatever the board says
+  const REGION_DEFAULTS = { "บางบอน": 3, "บางขุนเทียน": 3 };
+  function roomsMessage(r, d) {
+    const regions = { ...(r.regions || {}), ...REGION_DEFAULTS };
+    const time = String(r.time || "").trim();
+    const vars = {
+      "วันที่จัดและเวลา": `${d.getUTCDate()} ${MONTH_FULL[d.getUTCMonth()]} ${d.getUTCFullYear() + 543}` + (time ? ` เวลา ${time}${/น\.?$/.test(time) ? "" : " น."}` : ""),
+      "วัน": DAY_TH[d.getUTCDay()],
+      "รวม": String(Object.values(regions).reduce((a, b) => a + b, 0)),
+      ...Object.fromEntries(Object.entries(regions).map(([k, v]) => [k, String(v)]))
+    };
+    const missing = new Set();
+    const text = roomsTemplate().replace(/\{\s*([^{}\n]+?)\s*\}/g, (m, k) => {
+      if (vars[k] !== undefined) return vars[k];
+      missing.add(k);
+      return m;
+    });
+    return { text, missing: [...missing] };
+  }
+
+  function mrow(cls, mon, title, meta, pill, kind, extra) {
+    const li = el("li", "mrow " + cls);
+    const body = el("div", "mbody");
+    body.append(el("div", "mtitle", title), el("div", "meta", meta));
+    if (extra) body.append(...extra);
+    li.append(el("div", "mon", mon), body);
+    if (kind) {
+      const p = el("span", "pill dot " + kind);
+      p.setAttribute("aria-label", pill);
+      li.append(p);
+    }
+    return li;
+  }
+
+  const roomMonthStart = d => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+
+  // "copy message" + "edit countdown date" buttons (and a note when the round has no head count per region yet)
+  function roomActions({ r, d }) {
+    const btn = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+    btn.type = "button";
+    btn.onclick = () => copyText(roomsMessage(r, d).text, btn);
+    const eb = el("button", "btn ghost sm", "แก้วันนับถอยหลัง");
+    eb.type = "button";
+    eb.onclick = () => openRoomDate(r, d);
+    const row = el("div", "btns");
+    row.append(btn, eb);
+    const { missing } = roomsMessage(r, d);
+    return missing.length ? [row, el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : [row];
+  }
+
+  function renderRooms(data, t) {
+    const rooms = (data.rooms || [])
+      .map(r => ({ r, d: parse(r.date) }))
+      .filter(x => x.d)
+      .sort((a, b) => a.d - b.d);
+    const info = ({ r, d }) => [
+      r.time,
+      r.count != null && r.count + " คน" + (d >= t ? " (ตามรายชื่อ)" : ""),
+      r.issue && "เอกสารแจ้งข่าว " + r.issue
+    ].filter(Boolean);
+
+    // The reminder that matters is sending the LINE confirmation message by the round's deadline date,
+    // not the round's event date itself, so the day-count counts down to that deadline (can show "เลยมา" if it already passed).
+    const meta = x => {
+      const m = info(x);
+      const ov = store.roomDates[x.r.date];
+      m.unshift(countdown(diff(roomDeadline(x.r.date, store.roomDates), t))[0] + (ov && ov.date ? " (ปรับเอง)" : ""));
+      return m.join(" · ");
+    };
+    const upAll = rooms.filter(x => x.d >= t);
+    const isDoneRoom = x => done.has(roomKey(x.r.date));
+    const up = upAll.filter(x => !isDoneRoom(x)).slice(0, UPCOMING_MAX);
+    const doneRooms = upAll.filter(isDoneRoom);
+    badgeParts.rooms = upAll.filter(x => {
+      const n = diff(roomDeadline(x.r.date, store.roomDates), t);
+      return n >= 0 && n <= ROOMS_NOTIFY_DAYS && !isDoneRoom(x);
+    }).length;
+    refreshBadges();
+    const roomCard = (x, i, finished) => {
+      const key = roomKey(x.r.date), isDone = done.has(key);
+      const li = mrow(finished ? "later done" : i === 0 ? "next" : "later", MONTHS[x.d.getUTCMonth()], fmt(x.d), meta(x),
+        finished ? null : i === 0 ? "กำลังจะมาถึง" : "ถัดไป", finished ? null : i === 0 ? "warn" : "ok", roomActions(x));
+      const tick = el("button", "otick" + (isDone ? " on" : ""));
+      tick.type = "button";
+      tick.setAttribute("aria-pressed", String(isDone));
+      tick.setAttribute("aria-label", isDone ? "ยกเลิกยืนยันแล้ว" : "ทำเครื่องหมายว่ายืนยันแล้ว");
+      tick.onclick = () => {
+        if (isDone) done.delete(key); else done.add(key);
+        saveDone();
+        render(lastData);
+      };
+      li.prepend(tick);
+      return li;
+    };
+    $("rooms").replaceChildren(...up.map((x, i) => roomCard(x, i, false)));
+    $("rooms-done-wrap").hidden = !doneRooms.length;
+    $("rooms-done-sum").textContent = `ทำแล้ว (${doneRooms.length})`;
+    $("rooms-done").replaceChildren(...doneRooms.map(x => roomCard(x, 0, true)));
+
+    const past = rooms
+      .filter(x => x.d < t && diff(x.d, t) >= -HISTORY_DAYS)
+      .reverse();
+    $("rooms-past-wrap").hidden = !past.length;
+    $("rooms-past-sum").textContent = `ดูย้อนหลัง 1 ปี (${past.length} รอบ)`;
+    $("rooms-past").replaceChildren(...past.map(x =>
+      mrow("past", MONTHS[x.d.getUTCMonth()], fmt(x.d), meta(x), null, null, roomActions(x))));
+
+    if (!up.length && !past.length && !doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ยังไม่มีข้อมูลรอบ"));
+    else if (!up.length && doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ทำครบทุกรอบแล้ว"));
+  }
+
+  // Edit the date a round's countdown targets, synced via store.roomDates (keyed by the round's own date)
+  let rdTarget = null;
+  function openRoomDate(r, d) {
+    const def = roomMonthStart(d);
+    rdTarget = { key: r.date, def };
+    const ov = store.roomDates[r.date];
+    $("rdform-info").textContent = `รอบ ${fmt(d)} · ปกติ ${fmt(def)}`;
+    $("rd-date").value = (ov && ov.date) || isoDay(def);
+    $("rd-error").textContent = "";
+    $("rd-reset").hidden = !(ov && ov.date);
+    $("rdform").showModal();
+  }
+  function saveRoomDate() {
+    const date = $("rd-date").value;
+    if (!parse(date)) { $("rd-error").textContent = "เลือกวันที่ก่อน"; return; }
+    store.roomDates[rdTarget.key] = { date, t: Date.now() };
+    persistLocal();
+    scheduleSync();
+    $("rdform").close();
+    refreshAll();
+  }
+  function resetRoomDate() {
+    store.roomDates[rdTarget.key] = { date: "", t: Date.now() };
+    persistLocal();
+    scheduleSync();
+    $("rdform").close();
+    refreshAll();
+  }
+
+  function render(data) {
+    data = pruneBoard(data, Date.now());
+    const t = today();
+
+    const items = (data.items || [])
+      .map(it => ({ it, d: parse(it.due) }))
+      .sort((a, b) => (a.d || 1e15) - (b.d || 1e15));
+    lastData = data;
+    const isDone = x => done.has(itemKey(x.it));
+    const open = items.filter(x => !isDone(x));
+    const doneItems = items.filter(isDone);
+    const upcoming = open.filter(x => !x.d || x.d >= t);
+    const overdue = open.filter(x => x.d && x.d < t).reverse();
+    badgeParts.items = upcoming.filter(x => x.d && diff(x.d, t) <= BADGE_DAYS).length;
+    refreshBadges();
+
+    const emptyText = doneItems.length ? "ทำครบทุกรายการแล้ว" : "ไม่มีรายการ";
+    fill($("items"), upcoming.map(x => itemCard(x.it, t)), emptyText);
+
+    $("overdue-wrap").hidden = !overdue.length;
+    $("overdue").replaceChildren(...overdue.map(x => itemCard(x.it, t)));
+
+    $("done-wrap").hidden = !doneItems.length;
+    $("done-sum").textContent = `ทำแล้ว (${doneItems.length})`;
+    $("done").replaceChildren(...doneItems.map(x => itemCard(x.it, t)));
+
+    renderRooms(data, t);
+
+    const b = parse(data.builtAt);
+    $("updated").textContent = b ? "อัปเดตล่าสุด " + fmt(b) : "";
+    // The weekly scheduled task writes its own next-expected-refresh date; if that date has passed
+    // (with a day's grace) and nothing refreshed the board since, the automation has gone quiet.
+    const nextRun = parse(data.nextRun);
+    const stale = !!(nextRun && nextRun < t && (!b || b < nextRun));
+    $("stale").hidden = !stale;
+    $("gear-bdg").hidden = !stale;
+    $("status-box").classList.toggle("stale", stale);
+    $("tab-settings").setAttribute("aria-label", stale ? "ตั้งค่า (ข้อมูลยังไม่อัปเดตตามกำหนด)" : "ตั้งค่า");
+    $("stale").textContent = stale ? "ข้อมูลยังไม่อัปเดตตามกำหนด (ควรอัปเดต " + fmt(nextRun) + ") ตรวจสอบระบบดึงข้อมูล" : "";
+  }
+
+  // ---------- รายการประจำเดือน (เก็บในเครื่องนี้) ----------
+  const DAY_TH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+  const EN_MON = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+  // {Today} -> วันจันทร์ที่ 21 ม.ค. 2569
+  const MONTH_FULL = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+  const todayText = d => `วัน${DAY_TH[d.getUTCDay()]}ที่ ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear() + 543}`;
+  const patternText = it =>
+    (it.nth === 0 ? `${DAY_TH[it.weekday]}สุดท้ายของเดือน` : `${DAY_TH[it.weekday]}ที่ ${it.nth} ของเดือน`) +
+    (it.time ? " · " + it.time : "");
+
+  function monthIndex(key) {
+    const k = String(key).trim().toLowerCase().replace(/\./g, "");
+    if (/^\d{1,2}$/.test(k)) return +k >= 1 && +k <= 12 ? +k - 1 : -1;
+    const th = MONTHS.findIndex(m => m.replace(/\./g, "") === k);
+    return th >= 0 ? th : EN_MON.indexOf(k.slice(0, 3));
+  }
+
+  // Accepts strict JSON, and also the loose form: [ Jan: { link: "a.html", month: "x" }, ... ]
+  function parseMonthJson(text) {
+    const empty = () => Array.from({ length: 12 }, () => ({}));
+    const src = String(text || "").trim();
+    if (!src) return { data: empty(), count: 0, bad: [] };
+    let obj;
+    try {
+      obj = JSON.parse(src);
+    } catch (e) {
+      let f = src;
+      if (/^\[\s*[^\s{"\[]+\s*:/.test(f) && f.endsWith("]")) f = "{" + f.slice(1, -1) + "}";
+      f = f.replace(/([{,]\s*)([A-Za-z_฀-๿][\w฀-๿.]*)\s*:/g, '$1"$2":').replace(/,\s*([}\]])/g, "$1");
+      try { obj = JSON.parse(f); } catch (e2) { return { error: "รูปแบบไม่ถูกต้อง ตรวจวงเล็บ { } [ ] เครื่องหมายคำพูด และลูกน้ำ" }; }
+    }
+    const entries = Array.isArray(obj)
+      ? obj.flatMap(o => (o && typeof o === "object" ? Object.entries(o) : []))
+      : Object.entries(obj && typeof obj === "object" ? obj : {});
+    const data = empty();
+    const bad = [];
+    let count = 0;
+    for (const [k, v] of entries) {
+      const i = monthIndex(k);
+      if (i < 0 || !v || typeof v !== "object") { bad.push(k); continue; }
+      for (const [pk, pv] of Object.entries(v)) data[i][pk.toLowerCase()] = String(pv);
+      count++;
+    }
+    return { data, count, bad, filled: data.filter(m => Object.keys(m).length).length };
+  }
+
+  // Replaces {Today} and {key} (case-insensitive, spaces allowed inside the braces)
+  function fillTemplate(tpl, date, vars) {
+    const v = { ...vars, today: todayText(date), thismonth: MONTH_FULL[date.getUTCMonth()] };
+    const missing = new Set();
+    const text = String(tpl).replace(/\{\s*([^{}\s]+)\s*\}/g, (m, k) => {
+      const key = k.toLowerCase();
+      if (Object.prototype.hasOwnProperty.call(v, key)) return v[key];
+      missing.add(k);
+      return m;
+    });
+    return { text, missing: [...missing] };
+  }
+
+  let toastTimer = 0;
+  function toast(message) {
+    const t = $("toast");
+    t.textContent = message;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 2800);
+  }
+
+  // Copies text and always says what happened (button label + a short message with a preview)
+  async function copyText(text, btn) {
+    const label = btn.dataset.label || btn.textContent;
+    btn.dataset.label = label;
+    const say = (buttonText, message) => {
+      btn.textContent = buttonText;
+      toast(message);
+      setTimeout(() => { btn.textContent = label; }, 1500);
+    };
+    text = String(text == null ? "" : text);
+    if (!text.trim()) return say("ไม่มีข้อมูล", "ไม่มีข้อมูลให้คัดลอก");
+    let ok = true;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      const ta = el("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;opacity:0;top:0";
+      document.body.append(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      try { ok = document.execCommand("copy"); } catch (e2) { ok = false; }
+      ta.remove();
+    }
+    if (!ok) return say("คัดลอกไม่สำเร็จ", "คัดลอกไม่สำเร็จ ลองใหม่อีกครั้ง");
+    const flat = text.replace(/\s+/g, " ").trim();
+    say("คัดลอกแล้ว", `คัดลอกแล้ว (${[...text].length} ตัวอักษร)\n${flat.slice(0, 42)}${flat.length > 42 ? "…" : ""}`);
+  }
+
+  const MONTHLY_SHOWN = 2;      // upcoming months listed on each card
+  const MONTHLY_LOOKAHEAD = 8;  // fetched to find the next occurrence not yet ticked done
+
+  function monthlyCard(it, i, t, g, occ) {
+    const occKey = o => boardKey(it.id, isoDay(o.date));
+    const isOccDone = o => done.has(occKey(o));
+    // The card's own tick marks the nearest occurrence done, which also silences its notification
+    const near = occ[0];
+    const nearDone = !!near && isOccDone(near);
+    const c = el("li", "card" + (nearDone ? " done" : ""));
+    c.style.setProperty("--lc", "var(--lv-all)");
+    const own = parseMonthJson(it.json);
+
+    const tick = el("button", "tick" + (nearDone ? " on" : ""));
+    tick.type = "button";
+    tick.disabled = !near;
+    tick.setAttribute("aria-pressed", String(nearDone));
+    tick.setAttribute("aria-label", nearDone ? "ยกเลิกทำแล้ว" : "ทำเครื่องหมายว่าทำแล้ว (ไม่ต้องแจ้งเตือน)");
+    tick.onclick = () => {
+      const k = occKey(near);
+      if (nearDone) done.delete(k); else done.add(k);
+      saveDone();
+      renderMonthly();
+    };
+
+    const head = el("button", "chead");
+    head.type = "button";
+    const main = el("div", "cmain");
+    main.append(el("div", "ctitle", it.title || ""), el("div", "meta", patternText(it)));
+    head.append(main);
+    if (nearDone) {
+      head.append(el("span", "pill ok", "ทำแล้ว"));
+    } else if (near) {
+      const [txt, k] = countdown(diff(near.date, t));
+      head.append(el("span", "pill " + k, txt));
+    }
+    head.append(el("span", "chev"));
+
+    // Rendered promote text for one occurrence (a per-month override wins over the default text)
+    const occView = o => {
+      const vars = { ...(g.data ? g.data[o.month] : {}), ...(own.data ? own.data[o.month] : {}) };
+      const tpl = (o.ov && o.ov.promote && o.ov.promote.trim()) ? o.ov.promote : (it.promote || "");
+      return { ...fillTemplate(tpl, o.date, vars), time: (o.ov && o.ov.time) || it.time || "" };
+    };
+
+    const body = el("div", "body flush");
+
+    // item-level actions first
+    const actions = el("div", "btns top");
+    const edit = el("button", "btn ghost", "แก้ไขรายการ");
+    edit.type = "button";
+    edit.onclick = () => openForm(i);
+    const del = el("button", "btn danger", "ลบ");
+    del.type = "button";
+    del.onclick = () => {
+      if (!confirm("ลบ “" + (it.title || "รายการนี้") + "” ?")) return;
+      monthly.items.splice(i, 1);
+      saveMonthly();
+      renderMonthly();
+    };
+    actions.append(edit, del);
+    body.append(actions);
+
+    if (own.error) body.append(el("p", "warnline", "JSON เฉพาะรายการอ่านไม่ได้: " + own.error));
+
+    // one row per upcoming month; its message shows only after tapping the row
+    const months = el("div", "occlist");
+    occ.forEach(o => {
+      const { text, missing, time } = occView(o);
+      const done1 = isOccDone(o);
+      const box = el("div", "occ" + (done1 ? " done" : ""));
+
+      const otick = el("button", "otick" + (done1 ? " on" : ""));
+      otick.type = "button";
+      otick.setAttribute("aria-pressed", String(done1));
+      otick.setAttribute("aria-label", done1 ? "ยกเลิกทำแล้ว" : "ทำเครื่องหมายว่าทำแล้ว");
+      otick.onclick = () => {
+        const k = occKey(o);
+        if (done1) done.delete(k); else done.add(k);
+        saveDone();
+        renderMonthly();
+      };
+
+      const oh = el("button", "occ-head");
+      oh.type = "button";
+      oh.setAttribute("aria-expanded", "false");
+      const dl = el("span", "occ-date", fmt(o.date) + (time ? " · " + time : ""));
+      if (o.ov) dl.append(" ", el("span", "tag", "แก้เดือนนี้"));
+      if (done1) oh.append(dl, el("span", "pill ok", "ทำแล้ว"), el("span", "chev"));
+      else { const [cd, ck] = countdown(diff(o.date, t)); oh.append(dl, el("span", "pill " + ck, cd), el("span", "chev")); }
+
+      const top = el("div", "occtop");
+      top.append(otick, oh);
+
+      const ob = el("div", "occ-body");
+      ob.hidden = true;
+      if (o.ov && o.ov.date && o.ov.date !== isoDay(o.rule)) ob.append(el("div", "meta", "ปกติ " + fmt(o.rule)));
+      ob.append(el("div", "promo", text || "(ยังไม่ได้ใส่ข้อความโปรโมท)"));
+      if (missing.length) ob.append(el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" ")));
+      const row = el("div", "btns");
+      if (text) {
+        const b = el("button", "btn ghost sm", "คัดลอก");
+        b.type = "button";
+        b.onclick = () => copyText(text, b);
+        row.append(b);
+      }
+      const ed = el("button", "btn ghost sm", "แก้เดือนนี้");
+      ed.type = "button";
+      ed.onclick = () => openOverride(i, o);
+      row.append(ed);
+      ob.append(row);
+
+      oh.onclick = () => {
+        const open = oh.getAttribute("aria-expanded") !== "true";
+        oh.setAttribute("aria-expanded", String(open));
+        ob.hidden = !open;
+      };
+      box.append(top, ob);
+      months.append(box);
+    });
+    body.append(months);
+
+    body.hidden = true;
+    head.setAttribute("aria-expanded", "false");
+    head.onclick = () => {
+      const open = head.getAttribute("aria-expanded") !== "true";
+      head.setAttribute("aria-expanded", String(open));
+      body.hidden = !open;
+    };
+    const top = el("div", "ctop");
+    top.append(tick, head);
+    const nextForCopy = occ.find(o => !isOccDone(o)) || occ[0];
+    const next = nextForCopy ? occView(nextForCopy).text : "";
+    if (next) {
+      const cb = el("button", "btn ghost xs", "คัดลอก");
+      cb.type = "button";
+      cb.setAttribute("aria-label", "คัดลอกข้อความโปรโมทครั้งถัดไป");
+      cb.onclick = () => copyText(next, cb);
+      top.append(cb);
+    }
+    c.append(top, body);
+    return c;
+  }
+
+  // Sorted by the nearest upcoming date; an occurrence that has passed is replaced by next month's
+  function renderMonthly() {
+    const t = today();
+    const g = parseMonthJson(monthly.json);
+    const list = monthly.items
+      .map((it, i) => {
+        const occ = occurrences(it, t, MONTHLY_LOOKAHEAD);
+        const nextUndone = occ.find(o => !done.has(boardKey(it.id, isoDay(o.date))));
+        return { it, i, occ: occ.slice(0, MONTHLY_SHOWN), sortDate: (nextUndone || occ[0] || {}).date };
+      })
+      .sort((a, b) => (a.sortDate || 1e15) - (b.sortDate || 1e15));
+    badgeParts.monthly = list.filter(x => x.sortDate && diff(x.sortDate, t) <= MONTHLY_NOTIFY_DAYS).length;
+    refreshBadges();
+    const nearDone = x => !!x.occ[0] && done.has(boardKey(x.it.id, isoDay(x.occ[0].date)));
+    const openCards = list.filter(x => !nearDone(x)).map(x => monthlyCard(x.it, x.i, t, g, x.occ));
+    const doneCards = list.filter(nearDone).map(x => monthlyCard(x.it, x.i, t, g, x.occ));
+    const emptyText = doneCards.length ? "ทำครบทุกรายการแล้ว" : "ยังไม่มีรายการ กด “เพิ่มรายการประจำเดือน” เพื่อเริ่มต้น";
+    $("monthly").replaceChildren(...(openCards.length ? openCards : [el("p", "empty", emptyText)]));
+    $("monthly-done-wrap").hidden = !doneCards.length;
+    $("monthly-done-sum").textContent = `ทำแล้ว (${doneCards.length})`;
+    $("monthly-done").replaceChildren(...doneCards);
+  }
+
+  // Edit one month only (e.g. a postponed date) without touching the recurring rule
+  let ovTarget = null;
+  function openOverride(i, o) {
+    ovTarget = { i, key: o.key, rule: o.rule };
+    const it = monthly.items[i];
+    $("oform-info").textContent = `${it.title} · ปกติ ${fmt(o.rule)}`;
+    $("o-date").value = isoDay(o.date);
+    $("o-time").value = (o.ov && o.ov.time) || "";
+    $("o-time").placeholder = it.time ? "ปกติ " + it.time : "เช่น 19:00 น.";
+    $("o-promote").value = (o.ov && o.ov.promote) || "";
+    $("o-error").textContent = "";
+    $("o-reset").hidden = !o.ov;
+    $("oform").showModal();
+  }
+  function saveOverride() {
+    const date = $("o-date").value;
+    if (!parse(date)) { $("o-error").textContent = "เลือกวันที่ก่อน"; return; }
+    const it = monthly.items[ovTarget.i];
+    const ov = { date, time: $("o-time").value.trim(), promote: $("o-promote").value };
+    const unchanged = date === isoDay(ovTarget.rule) && !ov.time && !ov.promote.trim();
+    it.overrides = it.overrides || {};
+    if (unchanged) delete it.overrides[ovTarget.key]; else it.overrides[ovTarget.key] = ov;
+    saveMonthly();
+    $("oform").close();
+    renderMonthly();
+  }
+  function resetOverride() {
+    const it = monthly.items[ovTarget.i];
+    if (it.overrides) delete it.overrides[ovTarget.key];
+    saveMonthly();
+    $("oform").close();
+    renderMonthly();
+  }
+
+  function jsonStatusText(text) {
+    const r = parseMonthJson(text);
+    if (r.error) return { ok: false, text: "อ่าน JSON ไม่ได้: " + r.error };
+    if (!String(text).trim()) return { ok: true, text: "ยังไม่ได้ใส่ข้อมูล" };
+    return { ok: true, text: `มีข้อมูล ${r.filled} จาก 12 เดือน` + (r.bad.length ? " · ข้ามคีย์ที่อ่านไม่ได้: " + r.bad.join(", ") : "") };
+  }
+
+  let editing = -1;
+  function openForm(i) {
+    editing = i;
+    const it = i >= 0 ? monthly.items[i] : { title: "", weekday: 1, nth: 2, time: "", promote: "", json: "" };
+    $("mform-title").textContent = i >= 0 ? "แก้ไขรายการประจำเดือน" : "เพิ่มรายการประจำเดือน";
+    $("f-title").value = it.title || "";
+    $("f-weekday").value = String(it.weekday);
+    $("f-nth").value = String(it.nth);
+    $("f-time").value = it.time || "";
+    $("f-promote").value = it.promote || "";
+    $("f-json").value = it.json || "";
+    $("f-error").textContent = "";
+    $("mform").showModal();
+  }
+  function saveForm() {
+    const title = $("f-title").value.trim();
+    const own = jsonStatusText($("f-json").value);
+    if (!title) { $("f-error").textContent = "ใส่ชื่อรายการก่อน"; return; }
+    if (!own.ok) { $("f-error").textContent = "JSON เฉพาะรายการ: " + own.text; return; }
+    const item = {
+      title,
+      weekday: +$("f-weekday").value,
+      nth: +$("f-nth").value,
+      time: $("f-time").value.trim(),
+      promote: $("f-promote").value,
+      json: $("f-json").value
+    };
+    if (editing >= 0) {
+      item.id = monthly.items[editing].id;
+      item.overrides = monthly.items[editing].overrides;
+      monthly.items[editing] = item;
+    } else {
+      monthly.items.push(item);
+    }
+    saveMonthly();
+    $("mform").close();
+    renderMonthly();
+  }
+
+  const JSON_SKELETON = "[\n" + EN_MON.map(m => "  " + m + ": {}").join(",\n") + "\n]";
+
+  // Read-only view of the parsed JSON: one row per month, key: value lines
+  function renderReader(text) {
+    const r = parseMonthJson(text);
+    const box = $("mreader");
+    if (r.error) {
+      box.replaceChildren(el("p", "warnline", "อ่าน JSON ไม่ได้ จึงแสดงตัวอ่านไม่ได้"));
+      return;
+    }
+    box.replaceChildren(...r.data.map((m, i) => {
+      const keys = Object.keys(m);
+      const row = el("div", "mr" + (keys.length ? "" : " blank"));
+      const vals = el("div", "mr-v");
+      if (keys.length) {
+        keys.forEach(k => {
+          const kv = el("div", "kv");
+          kv.append(el("span", "k", k), el("span", "v", m[k]));
+          vals.append(kv);
+        });
+      } else {
+        vals.append("ว่าง");
+      }
+      row.append(el("div", "mr-m", MONTHS[i]), vals);
+      return row;
+    }));
+  }
+
+  function initMonthly() {
+    $("m-add").onclick = () => openForm(-1);
+    $("f-cancel").onclick = () => $("mform").close();
+    $("f-save").onclick = saveForm;
+    $("o-cancel").onclick = () => $("oform").close();
+    $("o-save").onclick = saveOverride;
+    $("o-reset").onclick = resetOverride;
+    $("rd-cancel").onclick = () => $("rdform").close();
+    $("rd-save").onclick = saveRoomDate;
+    $("rd-reset").onclick = resetRoomDate;
+    const ta = $("mjson-text"), st = $("mjson-status"), det = $("mjson");
+    ta.value = monthly.json;
+    const check = () => {
+      const r = jsonStatusText(ta.value);
+      st.textContent = r.text;
+      st.style.color = r.ok ? "" : "var(--bad)";
+      renderReader(ta.value);
+      return r.ok;
+    };
+    const persist = () => {
+      if (!check() || ta.value === monthly.json) return;
+      monthly.json = ta.value;
+      saveMonthly();
+      renderMonthly();
+    };
+    let timer = 0;
+    ta.oninput = () => {
+      check();
+      clearTimeout(timer);
+      timer = setTimeout(persist, 300);
+    };
+    // Opening an empty JSON box pre-fills the twelve empty months
+    det.addEventListener("toggle", () => {
+      if (det.open && !ta.value.trim()) {
+        ta.value = JSON_SKELETON;
+        check();
+      }
+    });
+    // message template for the memorial-room tab
+    const tpl = $("rooms-tpl-text");
+    tpl.value = roomsTemplate();
+    let tplTimer = 0;
+    tpl.oninput = () => {
+      clearTimeout(tplTimer);
+      tplTimer = setTimeout(() => {
+        settings.roomsTemplate = tpl.value === DEFAULT_ROOMS_TEMPLATE ? "" : tpl.value;
+        saveMonthly();
+      }, 400);
+    };
+    $("rooms-tpl-reset").onclick = () => {
+      settings.roomsTemplate = "";
+      tpl.value = DEFAULT_ROOMS_TEMPLATE;
+      saveMonthly();
+    };
+    const ptpl = $("photos-tpl-text");
+    ptpl.value = photosTemplate();
+    let ptplTimer = 0;
+    ptpl.oninput = () => {
+      clearTimeout(ptplTimer);
+      ptplTimer = setTimeout(() => {
+        settings.photosTemplate = ptpl.value === DEFAULT_PHOTOS_TEMPLATE ? "" : ptpl.value;
+        saveMonthly();
+      }, 400);
+    };
+    $("photos-tpl-reset").onclick = () => {
+      settings.photosTemplate = "";
+      ptpl.value = DEFAULT_PHOTOS_TEMPLATE;
+      saveMonthly();
+    };
+    refreshTemplateBox = () => {
+      if (tpl.value !== roomsTemplate()) tpl.value = roomsTemplate();
+      if (ptpl.value !== photosTemplate()) ptpl.value = photosTemplate();
+      renderPhotos();
+    };
+    refreshJsonBox = () => {
+      const want = monthly.json || (det.open ? JSON_SKELETON : "");
+      if (ta.value !== want) ta.value = want;
+      check();
+    };
+    const dialogSave = { mform: saveForm, oform: saveOverride, rdform: saveRoomDate };
+    for (const id of ["mform", "oform", "rdform"]) {
+      $(id).addEventListener("keydown", e => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") dialogSave[id]();
+      });
+    }
+    $("mjson-copy").onclick = e => copyText(monthly.json || JSON_SKELETON, e.currentTarget);
+    check();
+    renderMonthly();
+  }
+
+  const tabs = [...document.querySelectorAll(".tab[role=\"tab\"]")];
+  let curSub = "items";
+  function showTab(id, focus) {
+    tabs.forEach(t => {
+      const on = t.dataset.tab === id;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      $("panel-" + t.dataset.tab).hidden = !on;
+      if (on && focus) t.focus();
+    });
+    if (id === "visits") {
+      try { history.replaceState(null, "", "#visits"); } catch (e) {}
+      loadVisits();
+    }
+  }
+  const SUBS = ["items", "rooms", "photos", "monthly"];
+  const subtabs = SUBS.map(id => $("subtab-" + id));
+  function showSub(id, focus) {
+    curSub = id;
+    SUBS.forEach(k => {
+      const on = k === id, t = $("subtab-" + k);
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      $("sub-" + k).hidden = !on;
+      if (on) { t.scrollIntoView({ inline: "nearest", block: "nearest" }); if (focus) t.focus(); }
+    });
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  }
+  subtabs.forEach((t, i) => {
+    t.onclick = () => showSub(SUBS[i]);
+    t.onkeydown = e => {
+      const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (k) showSub(SUBS[(i + k + SUBS.length) % SUBS.length], true);
+    };
+  });
+  tabs.forEach((t, i) => {
+    t.onclick = () => { showTab(t.dataset.tab); if (t.dataset.tab === "items") showSub(curSub); scrollTo(0, 0); };
+    t.onkeydown = e => {
+      const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (k) showTab(tabs[(i + k + tabs.length) % tabs.length].dataset.tab, true);
+    };
+  });
+  // Light/dark choice is per device (auto follows the phone); the early script in <head> applies it before first paint
+  const THEME_KEY = "bkk11-theme";
+  const THEME_BAR = { light: "#ffffff", dark: "#151d2e" };
+  function applyTheme(mode) {
+    const root = document.documentElement;
+    if (mode === "light" || mode === "dark") root.dataset.theme = mode; else delete root.dataset.theme;
+    document.querySelectorAll('meta[name="theme-color"]').forEach(m => {
+      if (!m.dataset.orig) m.dataset.orig = m.content;
+      m.content = THEME_BAR[mode] || m.dataset.orig;
+    });
+    document.querySelectorAll("#theme-seg button").forEach(b => {
+      const on = b.dataset.mode === mode;
+      b.setAttribute("aria-checked", String(on));
+      b.classList.toggle("ghost", !on);
+    });
+  }
+  applyTheme(getPref(THEME_KEY) || "auto");
+  document.querySelectorAll("#theme-seg button").forEach(b => {
+    b.onclick = () => {
+      setPref(THEME_KEY, b.dataset.mode === "auto" ? "" : b.dataset.mode);
+      applyTheme(b.dataset.mode);
+    };
+  });
+
+  // ---------- บทพิธีกรงานศพ: an editable ceremony script read on a phone/iPad; names typed or looked up in the member database ----------
+  const MC_KEY = "bkk11-mc";
+  const MC_BUILTIN = ["วันที่", "เดือน", "ปี"];
+  const MC_VAR = /\{\s*([^{}\n]+?)\s*\}/g;
+  const DEFAULT_MC = [
+    "สวัสดีสมาชิก และแขกผู้มีเกียรติทุกท่านครับ",
+    "",
+    "ขอแนะนำขั้นตอนพิธีสวดมนต์อุทิศส่วนกุศลแด่ผู้ล่วงลับของสมาคมสร้างคุณค่าในประเทศไทยดังนี้",
+    "",
+    "สมาคมสร้างคุณค่าในประเทศไทย เป็นองค์กรพุทธศาสนา ปฏิบัติพุทธธรรมของพระนิชิเร็นไดโชนินด้วยการสวด “นัมเมียวโฮเร็งเงเคียว” ซึ่งเป็นหัวใจของสัทธรรมปุณฑริกสูตรที่เป็นคำสอนของพระพุทธเจ้า",
+    "",
+    "ทางเจ้าภาพและสมาคมฯ ขอขอบคุณสมาชิกและแขกผู้มีเกียรติทุกท่าน ที่ให้ความร่วมมือตามข้อแนะนำ ต่าง ๆ เพื่อความเป็นระเบียบเรียบร้อยมา ณ โอกาสนี้",
+    "",
+    "ในพิธีสวดมนต์อุทิศส่วนกุศลในครั้งนี้ จะไม่มีการโรยผงกำยาน",
+    "",
+    "---",
+    "",
+    "เนื่องในพิธีสวดมนต์อุทิศส่วนกุศลแด่ คุณ{ผู้ล่วงลับ}",
+    "",
+    "ลำดับแรก ขอเรียนเชิญสมาชิกและแขกผู้มีเกียรติทุกท่านร่วมสวดมนต์บทโฮเบ็น-จีงาเงะ และไดโมขุ โดยพร้อมเพรียงกัน ขอเรียนเชิญ คุณ{ผู้นำสวด} เป็นผู้นำสวด",
+    "",
+    "---",
+    "",
+    "ลำดับต่อไป ขอเรียนเชิญ คุณ{ผู้กล่าวไว้อาลัย} กล่าวไว้อาลัย",
+    "",
+    "---",
+    "",
+    "ลำดับต่อไป ขอเรียนเชิญ ตัวแทนฝ่ายเจ้าภาพ คุณ{ตัวแทนเจ้าภาพ} กล่าวขอบคุณ",
+    "",
+    "---",
+    "",
+    "ลำดับสุดท้าย ขอเรียนเชิญสมาชิกและแขกผู้มีเกียรติทุกท่านสวดไดโมขุ 3 คำ เป็นอันเสร็จพิธี"
+  ].join("\n");
+  const MC_MIN = 16, MC_MAX = 44;
+  let mc = { date: "", values: {}, tpl: "", size: 24 };
+  try {
+    const v = JSON.parse(localStorage.getItem(MC_KEY) || "null");
+    if (v && typeof v === "object") mc = { ...mc, date: DAY_RE.test(v.date) ? v.date : "", values: v.values && typeof v.values === "object" ? v.values : {}, tpl: typeof v.tpl === "string" ? v.tpl : "", size: Math.min(MC_MAX, Math.max(MC_MIN, Number(v.size) || 24)) };
+  } catch (e) {}
+  const saveMc = () => { try { localStorage.setItem(MC_KEY, JSON.stringify(mc)); } catch (e) {} };
+  const mcTemplate = () => mc.tpl || DEFAULT_MC;
+  const mcVars = tpl => {
+    const out = [];
+    tpl.replace(MC_VAR, (m, k) => { if (!MC_BUILTIN.includes(k) && !out.includes(k)) out.push(k); return m; });
+    return out;
+  };
+  const mcDateVars = iso => {
+    const d = parse(iso);
+    return d ? { "วันที่": String(d.getUTCDate()), "เดือน": MONTH_FULL[d.getUTCMonth()], "ปี": String(d.getUTCFullYear() + 543) } : {};
+  };
+
+  function appendFilled(node, text, vals) {
+    let last = 0;
+    text.replace(MC_VAR, (m, k, i) => {
+      node.append(text.slice(last, i));
+      const v = String(vals[k] || "").trim();
+      node.append(el("mark", v ? "" : "empty", v || "……………"));
+      last = i + m.length;
+      return m;
+    });
+    node.append(text.slice(last));
+  }
+  function mcNodes() {
+    const vals = { ...mcDateVars(mc.date), ...mc.values };
+    const blocks = mcTemplate().replace(/\r/g, "").split(/\n{2,}/).map(b => b.trim()).filter(Boolean);
+    return blocks.map(b => {
+      if (/^-{3,}$/.test(b)) return el("div", "mc-gap");
+      const heading = /^#\s+/.test(b);
+      const node = el(heading ? "h2" : "p", /^\*{3}/.test(b) ? "mc-note" : "");
+      appendFilled(node, heading ? b.replace(/^#\s+/, "") : b, vals);
+      return node;
+    });
+  }
+  function renderMcDoc() {
+    $("mc-doc").style.setProperty("--mc-size", mc.size + "px");
+    $("mc-size").textContent = mc.size + "px";
+    $("mc-doc").replaceChildren(...mcNodes());
+  }
+  // Thai text shaping is far better in the browser's own print engine than in a JS PDF library, so "save as PDF"
+  // prints a clean copy of the script and the file name comes from the document title
+  const printTitle = document.title;
+  function printMc() {
+    $("print-root").replaceChildren(...mcNodes());
+    document.title = "บทพิธีกรงานศพ " + (mc.date || isoDay(today()));
+    window.print();
+  }
+  addEventListener("afterprint", () => { document.title = printTitle; $("print-root").replaceChildren(); });
+  function renderMcFields() {
+    $("mc-date").value = mc.date;
+    $("mc-fields").replaceChildren(...mcVars(mcTemplate()).map((k, i) => {
+      const row = el("div", "mc-row");
+      const lab = el("label", "lab", k);
+      lab.htmlFor = "mcf-" + i;
+      const input = el("input");
+      input.id = "mcf-" + i;
+      input.type = "text";
+      input.autocomplete = "off";
+      input.placeholder = "พิมพ์ชื่อ หรือกดค้นหาสมาชิก";
+      input.value = mc.values[k] || "";
+      input.oninput = () => { mc.values[k] = input.value; saveMc(); };
+      const find = el("button", "btn ghost sm", "ค้นหาสมาชิก");
+      find.type = "button";
+      find.onclick = () => openMemberSearch(k, input);
+      row.append(lab, input, find);
+      return row;
+    }));
+  }
+
+  let wakeLock = null, wakeWanted = false;
+  async function setWake(on) {
+    wakeWanted = on;
+    try {
+      if (on && navigator.wakeLock) wakeLock = await navigator.wakeLock.request("screen");
+      else if (wakeLock) { await wakeLock.release(); wakeLock = null; }
+    } catch (e) { wakeLock = null; }
+    const b = $("mc-wake");
+    b.setAttribute("aria-pressed", String(!!wakeLock));
+    b.textContent = wakeLock ? "จอค้างอยู่" : "ค้างจอ";
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && wakeWanted && !wakeLock && $("mc").open) setWake(true);
+  });
+
+  function setMcMode(mode) {
+    for (const b of $("mc-modes").children) b.setAttribute("aria-checked", String(b.dataset.mode === mode));
+    $("mc-info").hidden = mode !== "info";
+    $("mc-read").hidden = mode !== "read";
+    $("mc-edit").hidden = mode !== "edit";
+    $("mc-tools").hidden = mode !== "read";
+    if (mode === "info") renderMcFields();
+    if (mode === "read") renderMcDoc();
+    if (mode === "edit") $("mc-tpl").value = mcTemplate();
+    if (mode !== "read" && wakeLock) setWake(false);
+    $("mc").scrollTo(0, 0);
+  }
+  function openMc() {
+    if (!mc.date) mc.date = isoDay(today());
+    $("mc").showModal();
+    $("mc-wake").hidden = !navigator.wakeLock;
+    $("mc-wake").textContent = "ค้างจอ";
+    setMcMode("info");
+  }
+  for (const b of $("mc-modes").children) b.onclick = () => setMcMode(b.dataset.mode);
+  $("mc-close").onclick = () => $("mc").close();
+  $("mc").addEventListener("close", () => setWake(false));
+  $("mc-go").onclick = () => setMcMode("read");
+  $("mc-date").onchange = () => { mc.date = $("mc-date").value; saveMc(); };
+  $("mc-clear").onclick = () => {
+    if (!confirm("ล้างชื่อที่กรอกไว้ทั้งหมด?")) return;
+    mc.values = {};
+    saveMc();
+    renderMcFields();
+  };
+  $("mc-minus").onclick = () => { mc.size = Math.max(MC_MIN, mc.size - 2); saveMc(); renderMcDoc(); };
+  $("mc-plus").onclick = () => { mc.size = Math.min(MC_MAX, mc.size + 2); saveMc(); renderMcDoc(); };
+  $("mc-pdf").onclick = printMc;
+  $("mc-wake").onclick = () => setWake(!wakeLock);
+  $("mc-tpl").oninput = () => {
+    mc.tpl = $("mc-tpl").value === DEFAULT_MC ? "" : $("mc-tpl").value;
+    saveMc();
+  };
+  $("mc-tpl-reset").onclick = () => {
+    if (!confirm("คืนบทเป็นค่าเริ่มต้น? ข้อความที่แก้ไว้จะหาย")) return;
+    mc.tpl = "";
+    saveMc();
+    $("mc-tpl").value = DEFAULT_MC;
+  };
+
+  function showMemberView() {
+    $("ms-q").value = "";
+    $("ms-list").replaceChildren();
+    $("ms-status").textContent = "พิมพ์ชื่อหรือนามสกุลเพื่อค้นหา";
+    setTimeout(() => $("ms-q").focus(), 50);
+  }
+  function openMemberSearch(field, input) {
+    msTarget = { field, input };
+    $("ms-title").textContent = "ค้นหาสมาชิก · " + field;
+    showMemberView();
+    $("msearch").showModal();
+  }
+  function pickName(text) {
+    if (!msTarget) return;
+    msTarget.input.value = text;
+    msTarget.input.dispatchEvent(new Event("input"));
+    $("msearch").close();
+  }
+  $("ms-close").onclick = () => $("msearch").close();
+  $("msearch").addEventListener("click", e => { if (e.target === $("msearch")) $("msearch").close(); });
+  $("ms-use").onclick = () => { const q = $("ms-q").value.trim(); if (q) pickName(q); else $("msearch").close(); };
+  $("ms-q").oninput = () => {
+    clearTimeout(msTimer);
+    const q = $("ms-q").value.trim();
+    if (!q) { $("ms-list").replaceChildren(); $("ms-status").textContent = "พิมพ์ชื่อหรือนามสกุลเพื่อค้นหา"; return; }
+    msTimer = setTimeout(async () => {
+      const seq = ++msSeq;
+      $("ms-status").textContent = "กำลังค้นหา…";
+      try {
+        const rows = await memSearch(q);
+        if (seq !== msSeq) return;
+        $("ms-status").textContent = rows.length ? `พบ ${rows.length}${rows.length >= 20 ? "+" : ""} รายการ` : "ไม่พบ ลองพิมพ์ให้สั้นลง หรือใช้ข้อความที่พิมพ์";
+        $("ms-list").replaceChildren(...rows.map(r => {
+          const name = [r.name_t, r.saku_t].filter(Boolean).join(" ");
+          const li = el("li");
+          const b = el("button");
+          b.type = "button";
+          b.append(el("span", null, name), el("small", null, [r.po_nt, r.ch_nt, r.ha_nt].filter(Boolean).join(" · ")));
+          b.onclick = () => pickName(name);
+          li.append(b);
+          return li;
+        }));
+      } catch (err) {
+        if (seq !== msSeq) return;
+        $("ms-list").replaceChildren();
+        if (err.status !== 401) $("ms-status").textContent = "ค้นหาไม่สำเร็จ ลองใหม่อีกครั้ง";
+      }
+    }, 300);
+  };
+
+  // ---------- นัดเยี่ยมน้อง: a shared calendar (table public.visits, protected by row-level security) ----------
+  const VISIT_CLASS = { "บางบอน": "bbn", "บางขุนเทียน": "bkt" };
+  const VISIT_STATUS = { coordinating: "กำลังประสานงานน้อง", coordinated: "ประสานงานน้องแล้ว" };
+  const pad2 = n => String(n).padStart(2, "0");
+  let vMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
+  let vRows = [], vSelDay = "", vSeq = 0, vEdit = null, vStatus = "coordinating";
+  const vName = r => [r.first_name, r.last_name].filter(Boolean).join(" ");
+
+  async function loadVisits() {
+    if (!memAuthed()) return;
+    const seq = ++vSeq;
+    const y = vMonth.getUTCFullYear(), m = vMonth.getUTCMonth();
+    const params = new URLSearchParams({ select: "*", order: "visit_date,visit_time" });
+    params.set("and", `(visit_date.gte.${isoDay(new Date(Date.UTC(y, m, 1)))},visit_date.lte.${isoDay(new Date(Date.UTC(y, m + 1, 0)))})`);
+    let msg = "";
+    try {
+      const rows = await memGet("/rest/v1/visits?" + params);
+      if (seq !== vSeq) return;
+      vRows = rows;
+    } catch (e) {
+      if (seq !== vSeq || e.status === 401) return;
+      vRows = [];
+      msg = e.status === 404 || /PGRST205/.test(e.body || "") ? "ยังไม่ได้ตั้งค่าตารางนัดเยี่ยมในฐานข้อมูล" : "โหลดนัดเยี่ยมไม่สำเร็จ ลองใหม่อีกครั้ง";
+    }
+    $("v-error").hidden = !msg;
+    $("v-error").textContent = msg;
+    renderVisits();
+  }
+
+  function visitCard(r) {
+    const cls = VISIT_CLASS[r.phak] || "bbn";
+    const li = el("li", "card vcard");
+    li.style.setProperty("--lc", "var(--v-" + cls + ")");
+    const top = el("div", "ctop");
+    const head = el("button", "chead");
+    head.type = "button";
+    head.onclick = () => openVisit(r);
+    const main = el("div", "cmain");
+    main.append(el("div", "ctitle", vName(r) + (r.nickname ? " (" + r.nickname + ")" : "")));
+    const when = fmt(parse(r.visit_date)) + (r.visit_time ? " · " + String(r.visit_time).slice(0, 5) + " น." : "");
+    main.append(el("div", "meta", when + " · ภาค" + r.phak));
+    if (r.created_by) main.append(el("div", "meta", "บันทึกโดย " + r.created_by));
+    head.append(main);
+    const done1 = r.status === "coordinated";
+    const pill = el("button", "pill " + (done1 ? "ok" : "warn"), VISIT_STATUS[r.status] || r.status);
+    pill.type = "button";
+    pill.setAttribute("aria-label", "สถานะ " + (VISIT_STATUS[r.status] || r.status) + " กดเพื่อเปลี่ยน");
+    pill.onclick = async () => {
+      pill.disabled = true;
+      try {
+        const [row] = await memReq("PATCH", "/rest/v1/visits?id=eq." + encodeURIComponent(r.id), { status: done1 ? "coordinating" : "coordinated" }, { Prefer: "return=representation" });
+        if (row) vRows = vRows.map(x => (x.id === r.id ? row : x));
+      } catch (e) {
+        if (e.status !== 401) toast("เปลี่ยนสถานะไม่สำเร็จ");
+      }
+      renderVisits();
+    };
+    top.append(head, pill);
+    li.append(top);
+    return li;
+  }
+  function renderVisits() {
+    const y = vMonth.getUTCFullYear(), m = vMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
+    $("v-month").textContent = MONTH_FULL[m] + " " + (y + 543);
+    const byDay = {};
+    for (const r of vRows) (byDay[r.visit_date] = byDay[r.visit_date] || []).push(r);
+    const todayKey = isoDay(today());
+    const cells = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"].map(d => el("div", "vdow", d));
+    for (let i = 0; i < new Date(Date.UTC(y, m, 1)).getUTCDay(); i++) cells.push(el("div", "vcell blank"));
+    for (let d = 1, n = new Date(Date.UTC(y, m + 1, 0)).getUTCDate(); d <= n; d++) {
+      const key = ym + "-" + pad2(d), list = byDay[key] || [];
+      const b = el("button", "vcell" + (key === todayKey ? " today" : "") + (key === vSelDay ? " sel" : ""));
+      b.type = "button";
+      b.setAttribute("aria-label", `${d} ${MONTH_FULL[m]} มี ${list.length} นัด`);
+      const dots = el("span", "vdots");
+      list.slice(0, 4).forEach(r => dots.append(el("i", "vdot " + (VISIT_CLASS[r.phak] || "bbn"))));
+      if (list.length > 4) dots.append(el("small", null, "+" + (list.length - 4)));
+      b.append(el("span", "vnum", String(d)), dots);
+      b.onclick = () => { vSelDay = vSelDay === key ? "" : key; renderVisits(); };
+      cells.push(b);
+    }
+    $("v-cal").replaceChildren(...cells);
+    const shown = vSelDay ? vRows.filter(r => r.visit_date === vSelDay) : vRows;
+    $("v-list-title").textContent = (vSelDay ? "นัดเยี่ยมวันที่ " + fmt(parse(vSelDay)) : "นัดเยี่ยมเดือนนี้") + ` (${shown.length})`;
+    $("v-list").replaceChildren(...(shown.length ? shown.map(visitCard) : [el("li", "empty", "ยังไม่มีนัดเยี่ยม")]));
+  }
+  function moveMonth(delta) {
+    vMonth = new Date(Date.UTC(vMonth.getUTCFullYear(), vMonth.getUTCMonth() + delta, 1));
+    vSelDay = "";
+    vRows = [];
+    renderVisits();
+    loadVisits();
+  }
+  $("v-prev").onclick = () => moveMonth(-1);
+  $("v-next").onclick = () => moveMonth(1);
+  $("v-today").onclick = () => { const t = today(); vMonth = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); vSelDay = isoDay(t); vRows = []; renderVisits(); loadVisits(); };
+  $("v-add").onclick = () => openVisit(null);
+
+  function setVStatus(v) {
+    vStatus = v;
+    for (const b of $("vf-status-seg").children) {
+      b.setAttribute("aria-checked", String(b.dataset.status === v));
+      b.classList.toggle("ghost", b.dataset.status !== v);
+    }
+  }
+  for (const b of $("vf-status-seg").children) b.onclick = () => setVStatus(b.dataset.status);
+  function showNicks(list) {
+    const names = [...new Set(list.filter(Boolean))];
+    $("vf-nicks").replaceChildren(...names.map(n => {
+      const b = el("button", null, n);
+      b.type = "button";
+      b.onclick = () => { $("vf-nick").value = n; };
+      return b;
+    }));
+  }
+  function openVisit(row) {
+    vEdit = row;
+    $("vform-title").textContent = row ? "แก้ไขนัดเยี่ยมน้อง" : "เพิ่มนัดเยี่ยมน้อง";
+    const myPhak = ((memSession() || {}).profile || {}).phak;
+    $("vf-q").value = "";
+    $("vf-list").replaceChildren();
+    $("vf-status").textContent = "ค้นหาแล้วแตะชื่อ หรือพิมพ์ชื่อในช่องด้านล่างเองก็ได้";
+    $("vf-first").value = row ? row.first_name || "" : "";
+    $("vf-last").value = row ? row.last_name || "" : "";
+    $("vf-nick").value = row ? row.nickname || "" : "";
+    showNicks([]);
+    $("vf-phak").value = row ? row.phak : VISIT_CLASS[myPhak] ? myPhak : "บางบอน";
+    $("vf-date").value = row ? row.visit_date : vSelDay || (isoDay(today()).slice(0, 7) === isoDay(vMonth).slice(0, 7) ? isoDay(today()) : isoDay(vMonth));
+    $("vf-time").value = row && row.visit_time ? String(row.visit_time).slice(0, 5) : "";
+    setVStatus(row ? row.status : "coordinating");
+    $("vf-err").textContent = "";
+    $("vf-del").hidden = !row;
+    $("vform").showModal();
+  }
+  async function visitMemberSearch(q) {
+    const toks = likeTokens(q);
+    if (!toks.length) return [];
+    const url = embed => {
+      const p = new URLSearchParams({ select: "name_t,saku_t,phak_nt,ch_nt,ha_nt" + (embed ? ",ymd_places(nickname)" : ""), fa_nt: "eq." + ELIGIBLE_DIVISION, order: "name_t", limit: "20" });
+      p.set("and", nameFilter(toks));
+      return "/rest/v1/members?" + p;
+    };
+    try { return await memGet(url(true)); } catch (e) { if (e.status === 401) throw e; return memGet(url(false)); }
+  }
+  let vqTimer = 0, vqSeq = 0;
+  $("vf-q").oninput = () => {
+    clearTimeout(vqTimer);
+    const q = $("vf-q").value.trim();
+    if (!q) { $("vf-list").replaceChildren(); $("vf-status").textContent = "ค้นหาแล้วแตะชื่อ หรือพิมพ์ชื่อในช่องด้านล่างเองก็ได้"; return; }
+    vqTimer = setTimeout(async () => {
+      const seq = ++vqSeq;
+      $("vf-status").textContent = "กำลังค้นหา…";
+      try {
+        const rows = await visitMemberSearch(q);
+        if (seq !== vqSeq) return;
+        $("vf-status").textContent = rows.length ? `พบ ${rows.length}${rows.length >= 20 ? "+" : ""} รายการ` : "ไม่พบ ลองพิมพ์ให้สั้นลง หรือพิมพ์ชื่อในช่องด้านล่างเอง";
+        $("vf-list").replaceChildren(...rows.map(r => {
+          const nicks = (r.ymd_places || []).map(x => x.nickname);
+          const li = el("li");
+          const b = el("button");
+          b.type = "button";
+          b.append(el("span", null, [r.name_t, r.saku_t].filter(Boolean).join(" ") + (nicks[0] ? " (" + nicks[0] + ")" : "")), el("small", null, ["ภาค" + r.phak_nt, r.ch_nt, r.ha_nt].filter(Boolean).join(" · ")));
+          b.onclick = () => {
+            $("vf-first").value = r.name_t || "";
+            $("vf-last").value = r.saku_t || "";
+            if (VISIT_CLASS[r.phak_nt]) $("vf-phak").value = r.phak_nt;
+            $("vf-nick").value = nicks[0] || "";
+            showNicks(nicks);
+            $("vf-list").replaceChildren();
+            $("vf-status").textContent = "เลือกแล้ว: " + [r.name_t, r.saku_t].filter(Boolean).join(" ");
+          };
+          li.append(b);
+          return li;
+        }));
+      } catch (e) {
+        if (seq === vqSeq && e.status !== 401) $("vf-status").textContent = "ค้นหาไม่สำเร็จ ลองใหม่อีกครั้ง";
+      }
+    }, 300);
+  };
+  $("vf-cancel").onclick = () => $("vform").close();
+  $("vf-save").onclick = async () => {
+    const first = $("vf-first").value.trim(), date = $("vf-date").value;
+    if (!first) { $("vf-err").textContent = "ใส่ชื่อน้องก่อน"; return; }
+    if (!parse(date)) { $("vf-err").textContent = "เลือกวันที่ไปเยี่ยมก่อน"; return; }
+    const body = {
+      first_name: first,
+      last_name: $("vf-last").value.trim() || null,
+      nickname: $("vf-nick").value.trim() || null,
+      phak: $("vf-phak").value,
+      visit_date: date,
+      visit_time: $("vf-time").value || null,
+      status: vStatus
+    };
+    $("vf-save").disabled = true;
+    $("vf-err").textContent = "กำลังบันทึก…";
+    try {
+      if (vEdit) await memReq("PATCH", "/rest/v1/visits?id=eq." + encodeURIComponent(vEdit.id), body, { Prefer: "return=representation" });
+      else await memReq("POST", "/rest/v1/visits", body, { Prefer: "return=representation" });
+      $("vform").close();
+      vMonth = new Date(Date.UTC(+date.slice(0, 4), +date.slice(5, 7) - 1, 1));
+      vSelDay = date;
+      await loadVisits();
+    } catch (e) {
+      if (e.status !== 401) $("vf-err").textContent = "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง";
+    } finally {
+      $("vf-save").disabled = false;
+    }
+  };
+  $("vf-del").onclick = async () => {
+    if (!vEdit || !confirm("ลบนัดเยี่ยมของ “" + vName(vEdit) + "” ?")) return;
+    try {
+      await memReq("DELETE", "/rest/v1/visits?id=eq." + encodeURIComponent(vEdit.id));
+      $("vform").close();
+      await loadVisits();
+    } catch (e) {
+      if (e.status !== 401) $("vf-err").textContent = "ลบไม่สำเร็จ ลองใหม่อีกครั้ง";
+    }
+  };
+
+  $("more-btn").onclick = () => $("more").showModal();
+  $("more-close").onclick = () => $("more").close();
+  $("more").addEventListener("click", e => { if (e.target === $("more")) $("more").close(); });
+  $("open-mc").onclick = () => { $("more").close(); openMc(); };
+
+  function openSettings() {
+    if (!$("settings").open) $("settings").showModal();
+    refreshPush();
+  }
+  $("tab-settings").onclick = openSettings;
+  $("settings-close").onclick = () => $("settings").close();
+  $("settings").addEventListener("click", e => { if (e.target === $("settings")) $("settings").close(); });
+  const initial = location.hash.slice(1);
+  if (initial === "visits") showTab("visits");
+  else { showTab("items"); showSub(SUBS.includes(initial) ? initial : "items"); }
+  if (initial === "settings") openSettings();
+  addEventListener("hashchange", () => {
+    const id = location.hash.slice(1);
+    if (SUBS.includes(id)) { showTab("items"); showSub(id); }
+    else if (id === "visits") showTab("visits");
+    else if (id === "settings") openSettings();
+  });
+
+  if ("serviceWorker" in navigator) {
+    addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+  }
+
+  function initSync() {
+    $("sync-now").onclick = () => syncNow();
+    setSyncStatus(memAuthed() ? "พร้อมซิงก์" : "ยังไม่ได้ล็อกอิน");
+    $("push-on").onclick = enablePush;
+    $("push-off").onclick = disablePush;
+    $("push-test").onclick = testPush;
+    $("push-name").value = deviceName();
+    $("push-name").onchange = async () => {
+      setPref(NAME_KEY, $("push-name").value.trim());
+      if (getPref(PUSH_KEY) === "1" && pushInfo && pushInfo.publicKey) {
+        try { renderPushDevices(await subscribeAndRegister(pushInfo.publicKey)); } catch (e) {}
+      }
+    };
+    $("mpush").addEventListener("toggle", () => { if ($("mpush").open) refreshPush(); });
+  }
+  function afterLogin() {
+    syncNow();
+    if (getPref(PUSH_KEY) === "1") refreshPush();
+    if (!$("panel-visits").hidden) loadVisits();
+  }
+
+  initBadgeAsk();
+  initMonthly();
+  initSync();
+  gateStart();
+  let shownDay = today().getTime();
+  let lastPoll = Date.now();
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") return setBadge(badgeCount);
+    if (Date.now() - lastPoll > 20000) {
+      lastPoll = Date.now();
+      loadBoard();
+      loadPhotos();
+      if (memAuthed()) syncNow();
+    }
+    if (today().getTime() === shownDay) return;
+    shownDay = today().getTime();
+    refreshAll();
+  });
+  addEventListener("pagehide", () => setBadge(badgeCount));
+  window.renderBoard = render;
+  try {
+    board = JSON.parse($("board-data").textContent);
+    render(board);
+    loadBoard();
+    loadPhotos();
+  } catch (e) {
+    document.querySelector("main").prepend(el("p", "empty", "โหลดข้อมูลไม่สำเร็จ"));
+  }
+})();
+</script>
+</body>
+</html>
