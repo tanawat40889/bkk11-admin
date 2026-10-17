@@ -239,6 +239,31 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vtop h3 { font-size: 1rem; }
 .vcard .pill { align-self: center; margin-right: 12px; font: inherit; font-size: .75rem; font-weight: 700; border: 0; cursor: pointer; }
 .vcard .chead { padding-left: 14px; }
+.vdot.ymd { background: var(--brand); }
+.vdot.all { background: var(--mute); }
+.sstick { position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 4px max(16px, var(--sar)) 6px max(16px, var(--sal)); background: var(--bg); border-bottom: 1px solid var(--line); }
+.sstick .vhead { margin: 0 0 6px; }
+.sstick .vnav { width: 40px; height: 40px; }
+.sstick .vlegend { margin: 6px 0 0; }
+.scal { gap: 3px; }
+.scal .vdow { padding: 0; font-size: .6875rem; }
+.scal .vcell { min-height: 38px; gap: 2px; padding: 3px 2px; border-radius: 8px; }
+.scal .vcell.today { padding: 2px 1px; }
+.scal .vnum { font-size: .8125rem; }
+.scal .vdot { width: 7px; height: 7px; }
+.scal .vdots { min-height: 7px; gap: 2px; }
+.smonth { margin: 22px 0 0; padding-bottom: 6px; font-size: 1.05rem; font-weight: 700; border-bottom: 2px solid var(--line); }
+.sgroup, .smonth { scroll-margin-top: calc(var(--tabs-h) + var(--sstick, 330px) + 6px); }
+.sgroup.sel { color: var(--brand); }
+.sgroup { margin: 14px 0 6px; font-size: .875rem; font-weight: 700; color: var(--mute); }
+.sgroup.today { color: var(--brand); }
+.scard { border-left: 4px solid var(--mute); }
+.scard.ymd { border-left-color: var(--brand); }
+.scard.past { opacity: .55; }
+.scard .pill { align-self: center; margin-right: 12px; }
+.scard .chead { padding: 12px 8px 12px 14px; gap: 12px; cursor: default; }
+.stime { flex: none; width: 56px; font-size: .875rem; font-weight: 700; line-height: 1.3; color: var(--brand); text-align: center; overflow-wrap: anywhere; }
+.stime.none { font-weight: 500; font-size: .75rem; color: var(--mute); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chips button { padding: 4px 12px; font: inherit; font-size: .875rem; color: var(--brand); background: transparent; border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; }
 .vseg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -700,6 +725,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <span>นัดเยี่ยม</span>
     <span class="bdg" hidden></span>
   </button>
+  <button class="tab" role="tab" id="tab-schedule" data-tab="schedule" aria-controls="panel-schedule" aria-selected="false" tabindex="-1" aria-label="ตารางงาน">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <span>ตารางงาน</span>
+  </button>
 </div>
   <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-tokan/" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.3c2.7.2 5 2.4 5 5.7"/></svg>
@@ -792,6 +821,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
     <p class="warnline" id="v-error" hidden></p>
     <ul class="list" id="v-list"></ul>
+  </section>
+  <section id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" hidden>
+    <div class="sstick" id="s-stick">
+      <div class="vhead">
+        <button type="button" class="vnav" id="s-prev" aria-label="เดือนก่อน">‹</button>
+        <h2 class="vmonth" id="s-month" aria-live="polite"></h2>
+        <button type="button" class="vnav" id="s-next" aria-label="เดือนถัดไป">›</button>
+        <button type="button" class="btn ghost sm" id="s-today">วันนี้</button>
+      </div>
+      <div class="vcal scal" id="s-cal" aria-label="ปฏิทินตารางงาน"></div>
+      <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span></div>
+    </div>
+    <ul class="list" id="s-list"></ul>
   </section>
 </main>
 
@@ -1386,6 +1428,17 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         linkText: str(i.linkText, 200),
         verify: !!i.verify
       }));
+    // Schedule from the monthly "BB / BT รายการเดือน" table, only what concerns ยุวชนชาย: date (+ optional endDate), time, place, ฝ่าย, title
+    const events = (Array.isArray(b.events) ? b.events : []).slice(0, 600)
+      .filter(e => e && DAY_RE.test(String(e.date)) && str(e.title, 300).trim())
+      .map(e => ({
+        date: e.date,
+        ...(DAY_RE.test(String(e.endDate)) && e.endDate > e.date ? { endDate: e.endDate } : {}),
+        time: str(e.time, 40),
+        place: str(e.place, 80),
+        who: str(e.who, 40),
+        title: str(e.title, 300)
+      }));
     return {
       issue: str(b.issue, 60),
       builtAt: day(b.builtAt),
@@ -1393,7 +1446,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       sources: (Array.isArray(b.sources) ? b.sources : []).slice(0, 50).map(x => str(typeof x === "string" ? x : x && x.name, 200)).filter(Boolean),
       rooms,
       roomsNote: str(b.roomsNote, 1000),
-      items
+      items,
+      events
     };
   }
 
@@ -1402,7 +1456,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return {
       ...b,
       rooms: (b.rooms || []).filter(r => !r.date || r.date >= cut),
-      items: (b.items || []).filter(i => !i.due || i.due >= cut)
+      items: (b.items || []).filter(i => !i.due || i.due >= cut),
+      events: (b.events || []).filter(e => !e.date || e.date >= cut)
     };
   }
   // Recurring events ("the 2nd Monday of each month") with per-month overrides; also drives the daily push
@@ -2379,6 +2434,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("done").replaceChildren(...doneItems.map(x => itemCard(x.it, t)));
 
     renderRooms(data, t);
+    if (typeof renderSchedule === "function" && !$("panel-schedule").hidden) renderSchedule();
 
     const b = parse(data.builtAt);
     $("updated").textContent = b ? "อัปเดตล่าสุด " + fmt(b) : "";
@@ -2870,6 +2926,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       try { history.replaceState(null, "", "#visits"); } catch (e) {}
       loadVisits();
     }
+    if (id === "schedule") {
+      try { history.replaceState(null, "", "#schedule"); } catch (e) {}
+      renderSchedule();
+    }
   }
   const SUBS = ["items", "rooms", "photos", "monthly"];
   const subtabs = SUBS.map(id => $("subtab-" + id));
@@ -3139,6 +3199,86 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       }
     }, 300);
   };
+
+  // ---------- ตารางงาน: events from the monthly news-table (board.events), only what concerns ยุวชนชาย ----------
+  const YMD_WHO = /ยุวชนชาย|ผช|ยช|มิไรบุ/;
+  let sMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
+  let sSel = "", sInit = false;
+  const evEnd = e => e.endDate || e.date;
+  const evIsYmd = e => YMD_WHO.test(e.who || "");
+  function renderSchedule(jump) {
+    const evs = ((lastData && lastData.events) || [])
+      .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : (a.time || "") < (b.time || "") ? -1 : 1));
+    const y = sMonth.getUTCFullYear(), m = sMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
+    const first = ym + "-01", last = ym + "-" + pad2(new Date(Date.UTC(y, m + 1, 0)).getUTCDate());
+    $("s-month").textContent = MONTH_FULL[m] + " " + (y + 543);
+    const todayKey = isoDay(today());
+    const cells = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"].map(d => el("div", "vdow", d));
+    for (let i = 0; i < new Date(Date.UTC(y, m, 1)).getUTCDay(); i++) cells.push(el("div", "vcell blank"));
+    for (let d = 1, n = new Date(Date.UTC(y, m + 1, 0)).getUTCDate(); d <= n; d++) {
+      const key = ym + "-" + pad2(d), list = evs.filter(e => e.date <= key && evEnd(e) >= key);
+      const b = el("button", "vcell" + (key === todayKey ? " today" : "") + (key === sSel ? " sel" : ""));
+      b.type = "button";
+      b.setAttribute("aria-label", `${d} ${MONTH_FULL[m]} มี ${list.length} รายการ`);
+      const dots = el("span", "vdots");
+      list.slice(0, 4).forEach(e => dots.append(el("i", "vdot " + (evIsYmd(e) ? "ymd" : "all"))));
+      if (list.length > 4) dots.append(el("small", null, "+" + (list.length - 4)));
+      b.append(el("span", "vnum", String(d)), dots);
+      b.onclick = () => {
+        sSel = sSel === key ? "" : key;
+        renderSchedule(!!sSel);
+      };
+      cells.push(b);
+    }
+    $("s-cal").replaceChildren(...cells);
+
+    // One long scrolling list under the (sticky) calendar: every event, grouped by month then day
+    const shown = evs;
+    const out = [];
+    let lastDay = "", lastMonth = "";
+    for (const e of shown) {
+      const mk = e.date.slice(0, 7);
+      if (mk !== lastMonth) {
+        lastMonth = mk;
+        out.push(el("li", "smonth", MONTH_FULL[+mk.slice(5) - 1] + " " + (+mk.slice(0, 4) + 543)));
+      }
+      if (e.date !== lastDay) {
+        lastDay = e.date;
+        const h = el("li", "sgroup" + (e.date <= todayKey && evEnd(e) >= todayKey ? " today" : "") + (e.date === sSel ? " sel" : ""), fmt(parse(e.date)) + (e.endDate ? " – " + fmt(parse(e.endDate)) : ""));
+        h.dataset.day = e.date;
+        out.push(h);
+      }
+      const li = el("li", "card scard" + (evIsYmd(e) ? " ymd" : "") + (evEnd(e) < todayKey ? " past" : ""));
+      const top = el("div", "ctop");
+      const head = el("div", "chead");
+      const main = el("div", "cmain");
+      main.append(el("div", "ctitle", e.title));
+      if (e.place) main.append(el("div", "meta", "📍 " + e.place));
+      head.append(el("div", "stime" + (e.time ? "" : " none"), e.time || "ทั้งวัน"), main);
+      top.append(head);
+      if (e.who) top.append(el("span", "pill " + (evIsYmd(e) ? "ok" : "mute"), e.who));
+      li.append(top);
+      out.push(li);
+    }
+    const none = !((lastData && lastData.events) || []).length;
+    $("s-list").replaceChildren(...(out.length ? out : [el("li", "empty", none ? "ยังไม่มีข้อมูลตารางงาน" : "ไม่มีรายการ")]));
+    $("panel-schedule").style.setProperty("--sstick", $("s-stick").offsetHeight + "px");
+    if (jump && sSel) scrollToDay(sSel, true);
+    else if (!sInit && evs.length && !$("panel-schedule").hidden) { sInit = true; setTimeout(() => scrollToDay(todayKey, false), 60); }
+  }
+  // Scroll the list to a day (or the next day that has something)
+  function scrollToDay(key, smooth) {
+    const g = [...$("s-list").querySelectorAll(".sgroup")].find(x => x.dataset.day >= key);
+    if (g) g.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+  }
+  function moveSMonth(delta) {
+    sMonth = new Date(Date.UTC(sMonth.getUTCFullYear(), sMonth.getUTCMonth() + delta, 1));
+    sSel = "";
+    renderSchedule();
+  }
+  $("s-prev").onclick = () => moveSMonth(-1);
+  $("s-next").onclick = () => moveSMonth(1);
+  $("s-today").onclick = () => { const t = today(); sMonth = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); sSel = isoDay(t); renderSchedule(true); };
 
   // ---------- นัดเยี่ยมน้อง: a shared calendar (table public.visits, protected by row-level security) ----------
   const VISIT_CLASS = { "บางบอน": "bbn", "บางขุนเทียน": "bkt" };
@@ -3432,13 +3572,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("settings-close").onclick = () => $("settings").close();
   $("settings").addEventListener("click", e => { if (e.target === $("settings")) $("settings").close(); });
   const initial = location.hash.slice(1);
-  if (initial === "visits") showTab("visits");
+  if (initial === "visits" || initial === "schedule") showTab(initial);
   else { showTab("items"); showSub(SUBS.includes(initial) ? initial : "items"); }
   if (initial === "settings") openSettings();
   addEventListener("hashchange", () => {
     const id = location.hash.slice(1);
     if (SUBS.includes(id)) { showTab("items"); showSub(id); }
-    else if (id === "visits") showTab("visits");
+    else if (id === "visits" || id === "schedule") showTab(id);
     else if (id === "settings") openSettings();
   });
 
