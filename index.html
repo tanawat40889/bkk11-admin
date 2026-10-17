@@ -219,6 +219,8 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vhead { display: flex; align-items: center; gap: 8px; margin: 4px 0 10px; }
 .vmonth { flex: 1; text-align: center; font-size: 1.1rem; font-weight: 700; }
 .vnav { flex: none; width: 44px; height: 44px; font: inherit; font-size: 1.5rem; line-height: 1; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.vcover { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 12px; padding: 12px 14px; color: var(--warn); background: var(--warn-bg); border: 1px solid var(--warn); border-radius: var(--r); font-weight: 500; }
+.vcover .btn { flex: none; }
 .vlegend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 10px; font-size: .8125rem; color: var(--mute); }
 .vdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
 .vlegend .vdot { margin-right: 6px; }
@@ -696,6 +698,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   <button class="tab" role="tab" id="tab-visits" data-tab="visits" aria-controls="panel-visits" aria-selected="false" tabindex="-1" aria-label="นัดเยี่ยม">
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
     <span>นัดเยี่ยม</span>
+    <span class="bdg" hidden></span>
   </button>
 </div>
   <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-tokan/" target="_blank" rel="noopener">
@@ -776,6 +779,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <h2 class="vmonth" id="v-month" aria-live="polite"></h2>
       <button type="button" class="vnav" id="v-next" aria-label="เดือนถัดไป">›</button>
       <button type="button" class="btn ghost sm" id="v-today">วันนี้</button>
+    </div>
+    <div class="vcover" id="v-cover" role="alert" hidden>
+      <span id="v-cover-text"></span>
+      <button type="button" class="btn sm" id="v-cover-add">+ เพิ่มนัดเยี่ยม</button>
     </div>
     <div class="vlegend"><span><i class="vdot bbn"></i>ภาคบางบอน</span><span><i class="vdot bkt"></i>ภาคบางขุนเทียน</span></div>
     <div class="vcal" id="v-cal" aria-label="ปฏิทินนัดเยี่ยม"></div>
@@ -932,7 +939,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 <dialog id="vform" aria-labelledby="vform-title">
   <div class="form">
     <h3 id="vform-title">เพิ่มนัดเยี่ยมน้อง</h3>
-    <label>ค้นหาน้องจากฐานข้อมูลสมาชิก<input id="vf-q" type="search" placeholder="พิมพ์ชื่อหรือนามสกุล" autocomplete="off"></label>
+    <label>ค้นหาน้อง (ชื่อจริง นามสกุล หรือชื่อเล่น)<input id="vf-q" type="search" placeholder="พิมพ์ชื่อ นามสกุล หรือชื่อเล่น" autocomplete="off"></label>
     <p class="meta" id="vf-status"></p>
     <ul class="mslist" id="vf-list"></ul>
     <div class="frow">
@@ -2008,7 +2015,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const hasNotif = () => typeof Notification !== "undefined";
   let badgeCount = 0;
   // Counts shown as red bubbles on the tab icons; their sum goes on the app icon
-  const badgeParts = { rooms: 0, photos: 0, items: 0, monthly: 0 };
+  const badgeParts = { rooms: 0, photos: 0, items: 0, monthly: 0, visits: 0 };
   function refreshBadges() {
     const put = (sel, n) => {
       const b = document.querySelector(sel);
@@ -2016,8 +2023,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       b.hidden = !n;
     };
     for (const id of ["items", "rooms", "photos", "monthly"]) put("#subtab-" + id + " .bdg", badgeParts[id]);
-    const total = badgeParts.rooms + badgeParts.photos + badgeParts.items + badgeParts.monthly;
-    put("#tab-items .bdg", total);
+    put("#tab-visits .bdg", badgeParts.visits);
+    const total = badgeParts.rooms + badgeParts.photos + badgeParts.items + badgeParts.monthly + badgeParts.visits;
+    put("#tab-items .bdg", badgeParts.rooms + badgeParts.photos + badgeParts.items + badgeParts.monthly);
     setBadge(total);
   }
   function setBadge(n) {
@@ -3137,7 +3145,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const VISIT_STATUS = { coordinating: "กำลังประสานงานน้อง", coordinated: "ประสานงานน้องแล้ว" };
   const pad2 = n => String(n).padStart(2, "0");
   let vMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
-  let vRows = [], vSelDay = "", vSeq = 0, vEdit = null, vStatus = "coordinating";
+  let vRows = [], vSelDay = "", vSeq = 0, vEdit = null, vStatus = "coordinating", vMissing = [];
   const vName = r => [r.first_name, r.last_name].filter(Boolean).join(" ");
 
   async function loadVisits() {
@@ -3159,7 +3167,35 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("v-error").hidden = !msg;
     $("v-error").textContent = msg;
     renderVisits();
+    loadCoverage();
   }
+
+  // Every month each ภาค needs at least one visit on the calendar: count this month's visits whatever month is on screen
+  async function loadCoverage() {
+    if (!memAuthed()) return;
+    const t = today(), y = t.getUTCFullYear(), m = t.getUTCMonth();
+    const params = new URLSearchParams({ select: "phak" });
+    params.set("and", `(visit_date.gte.${isoDay(new Date(Date.UTC(y, m, 1)))},visit_date.lte.${isoDay(new Date(Date.UTC(y, m + 1, 0)))})`);
+    try {
+      const have = new Set((await memGet("/rest/v1/visits?" + params)).map(r => r.phak));
+      vMissing = Object.keys(VISIT_CLASS).filter(p => !have.has(p));
+    } catch (e) {
+      return;
+    }
+    badgeParts.visits = vMissing.length;
+    refreshBadges();
+    $("v-cover").hidden = !vMissing.length;
+    $("v-cover-text").textContent = vMissing.length ? `เดือน${MONTH_FULL[m]}ยังไม่มีนัดเยี่ยมของ ${vMissing.map(p => "ภาค" + p).join(" และ ")}` : "";
+  }
+  $("v-cover-add").onclick = () => {
+    const t = today();
+    vMonth = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1));
+    vSelDay = "";
+    renderVisits();
+    loadVisits();
+    openVisit(null);
+    if (vMissing[0]) $("vf-phak").value = vMissing[0];
+  };
 
   function visitCard(r) {
     const cls = VISIT_CLASS[r.phak] || "bbn";
@@ -3266,15 +3302,36 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("vf-del").hidden = !row;
     $("vform").showModal();
   }
+  // Looks the น้อง up by real name / surname (members) and by nickname (ymd_places, linked or not yet linked to a member)
   async function visitMemberSearch(q) {
     const toks = likeTokens(q);
     if (!toks.length) return [];
-    const url = embed => {
-      const p = new URLSearchParams({ select: "name_t,saku_t,phak_nt,ch_nt,ha_nt" + (embed ? ",ymd_places(nickname)" : ""), fa_nt: "eq." + ELIGIBLE_DIVISION, order: "name_t", limit: "20" });
-      p.set("and", nameFilter(toks));
-      return "/rest/v1/members?" + p;
+    const nick = toks.join(" ");
+    const soft = p => p.catch(e => { if (e.status === 401) throw e; return []; });
+    const byName = (async () => {
+      const url = embed => {
+        const p = new URLSearchParams({ select: "name_t,saku_t,phak_nt,ch_nt,ha_nt" + (embed ? ",ymd_places(nickname)" : ""), fa_nt: "eq." + ELIGIBLE_DIVISION, order: "name_t", limit: "20" });
+        p.set("and", nameFilter(toks));
+        return "/rest/v1/members?" + p;
+      };
+      try { return await memGet(url(true)); } catch (e) { if (e.status === 401) throw e; return memGet(url(false)); }
+    })();
+    const byNick = soft(memGet("/rest/v1/ymd_places?" + new URLSearchParams({
+      select: "nickname,members!inner(name_t,saku_t,phak_nt,ch_nt,ha_nt)", "members.fa_nt": "eq." + ELIGIBLE_DIVISION, nickname: "ilike.*" + nick + "*", limit: "20"
+    })));
+    const unlinked = soft(memGet("/rest/v1/ymd_places?" + new URLSearchParams({ select: "nickname", mt_co: "is.null", nickname: "ilike.*" + nick + "*", limit: "10" })));
+    const [a, b, c] = await Promise.all([byName, byNick, unlinked]);
+    const out = new Map();
+    const put = (m, nicks) => {
+      if (!m) return;
+      const key = [m.name_t, m.saku_t].join("|");
+      const cur = out.get(key);
+      const names = [...new Set([...(cur ? cur.ymd_places.map(x => x.nickname) : []), ...nicks].filter(Boolean))];
+      out.set(key, { name_t: m.name_t, saku_t: m.saku_t, phak_nt: m.phak_nt, ch_nt: m.ch_nt, ha_nt: m.ha_nt, ymd_places: names.map(n => ({ nickname: n })) });
     };
-    try { return await memGet(url(true)); } catch (e) { if (e.status === 401) throw e; return memGet(url(false)); }
+    for (const r of a) put(r, (r.ymd_places || []).map(x => x.nickname));
+    for (const r of b) put(r.members, [r.nickname]);
+    return [...out.values(), ...c.map(r => ({ nickOnly: r.nickname, ymd_places: [{ nickname: r.nickname }] }))].slice(0, 25);
   }
   let vqTimer = 0, vqSeq = 0;
   $("vf-q").oninput = () => {
@@ -3293,6 +3350,17 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
           const li = el("li");
           const b = el("button");
           b.type = "button";
+          if (r.nickOnly) {
+            b.append(el("span", null, "ชื่อเล่น " + r.nickOnly), el("small", null, "ยังไม่ผูกกับสมาชิก พิมพ์ชื่อ-นามสกุลเอง"));
+            b.onclick = () => {
+              $("vf-nick").value = r.nickOnly;
+              showNicks([r.nickOnly]);
+              $("vf-list").replaceChildren();
+              $("vf-status").textContent = "เลือกชื่อเล่นแล้ว: " + r.nickOnly + " (พิมพ์ชื่อ-นามสกุลต่อได้)";
+            };
+            li.append(b);
+            return li;
+          }
           b.append(el("span", null, [r.name_t, r.saku_t].filter(Boolean).join(" ") + (nicks[0] ? " (" + nicks[0] + ")" : "")), el("small", null, ["ภาค" + r.phak_nt, r.ch_nt, r.ha_nt].filter(Boolean).join(" · ")));
           b.onclick = () => {
             $("vf-first").value = r.name_t || "";
@@ -3397,6 +3465,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     syncNow();
     if (getPref(PUSH_KEY) === "1") refreshPush();
     if (!$("panel-visits").hidden) loadVisits();
+    else loadCoverage();
   }
 
   initBadgeAsk();
@@ -3411,7 +3480,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       lastPoll = Date.now();
       loadBoard();
       loadPhotos();
-      if (memAuthed()) syncNow();
+      if (memAuthed()) { syncNow(); loadCoverage(); }
     }
     if (today().getTime() === shownDay) return;
     shownDay = today().getTime();
