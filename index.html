@@ -725,9 +725,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <span>นัดเยี่ยม</span>
     <span class="bdg" hidden></span>
   </button>
-  <button class="tab" role="tab" id="tab-schedule" data-tab="schedule" aria-controls="panel-schedule" aria-selected="false" tabindex="-1" aria-label="ตารางงาน">
+  <button class="tab" role="tab" id="tab-schedule" data-tab="schedule" aria-controls="panel-schedule" aria-selected="false" tabindex="-1" aria-label="รายการ">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-    <span>ตารางงาน</span>
+    <span>รายการ</span>
   </button>
 </div>
   <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-tokan/" target="_blank" rel="noopener">
@@ -830,7 +830,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         <button type="button" class="vnav" id="s-next" aria-label="เดือนถัดไป">›</button>
         <button type="button" class="btn ghost sm" id="s-today">วันนี้</button>
       </div>
-      <div class="vcal scal" id="s-cal" aria-label="ปฏิทินตารางงาน"></div>
+      <div class="vcal scal" id="s-cal" aria-label="ปฏิทินรายการ"></div>
       <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span></div>
     </div>
     <ul class="list" id="s-list"></ul>
@@ -3261,7 +3261,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       out.push(li);
     }
     const none = !((lastData && lastData.events) || []).length;
-    $("s-list").replaceChildren(...(out.length ? out : [el("li", "empty", none ? "ยังไม่มีข้อมูลตารางงาน" : "ไม่มีรายการ")]));
+    $("s-list").replaceChildren(...(out.length ? out : [el("li", "empty", none ? "ยังไม่มีข้อมูลรายการ" : "ไม่มีรายการ")]));
     $("panel-schedule").style.setProperty("--sstick", $("s-stick").offsetHeight + "px");
     if (jump && sSel) scrollToDay(sSel, true);
     else if (!sInit && evs.length && !$("panel-schedule").hidden) { sInit = true; setTimeout(() => scrollToDay(todayKey, false), 60); }
