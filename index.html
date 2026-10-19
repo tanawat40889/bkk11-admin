@@ -243,6 +243,16 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vtop h3 { font-size: 1rem; }
 .vcard .pill { align-self: center; margin-right: 12px; font: inherit; font-size: .75rem; font-weight: 700; border: 0; cursor: pointer; }
 .vcard .chead { padding-left: 14px; }
+.swipe { position: relative; }
+.swact { position: absolute; top: 0; right: 0; bottom: 0; display: flex; }
+.swipe:not(.open):not(.dragging) .swact { visibility: hidden; }
+.swact button { width: 72px; padding: 0; font: inherit; font-weight: 700; color: #fff; border: 0; cursor: pointer; }
+.swact .sw-edit { background: #2563eb; }
+.swact .sw-del { background: #dc2626; }
+.swbody { position: relative; background: var(--card); transition: transform .2s ease; touch-action: pan-y; }
+.swbody.drag { transition: none; }
+.fab { position: fixed; z-index: 6; right: max(16px, var(--sar)); bottom: calc(20px + var(--sab)); width: 56px; height: 56px; padding: 0 0 4px; font: inherit; font-size: 2rem; line-height: 1; color: var(--brand-ink); background: var(--brand); border: 0; border-radius: 50%; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); cursor: pointer; }
+.stag { display: inline-block; margin-left: 6px; padding: 0 6px; font-size: .6875rem; color: var(--mute); border: 1px solid var(--line); border-radius: 999px; vertical-align: middle; }
 .vside { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-right: 12px; }
 .vside .pill { margin-right: 0; }
 .vshare { padding: 4px 10px; font: inherit; font-size: .75rem; color: var(--brand); background: none; border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; white-space: nowrap; }
@@ -846,6 +856,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span><button type="button" class="addcal addmonth" id="s-addmonth"></button></div>
     </div>
     <ul class="list" id="s-list"></ul>
+    <button type="button" class="fab" id="s-add" aria-label="เพิ่มรายการ">+</button>
   </section>
 </main>
 
@@ -1028,6 +1039,32 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <button type="button" class="btn danger" id="vf-del">ลบ</button>
       <button type="button" class="btn ghost" id="vf-cancel">ยกเลิก</button>
       <button type="button" class="btn" id="vf-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="sform" aria-labelledby="sform-title">
+  <div class="form">
+    <h3 id="sform-title">เพิ่มรายการ</h3>
+    <label>ชื่อรายการ<input id="sf-title" type="text" autocomplete="off" maxlength="300"></label>
+    <div class="frow">
+      <label>วันที่<input id="sf-date" type="date"></label>
+      <label>ถึงวันที่ (ถ้าหลายวัน)<input id="sf-end" type="date"></label>
+    </div>
+    <div class="frow">
+      <label>เวลาเริ่ม<input id="sf-t1" type="time"></label>
+      <label>เวลาสิ้นสุด<input id="sf-t2" type="time"></label>
+    </div>
+    <label>สถานที่ (ไม่บังคับ)<input id="sf-place" type="text" autocomplete="off" maxlength="80"></label>
+    <label>ฝ่าย / กลุ่ม
+      <input id="sf-who" type="text" list="sf-who-list" autocomplete="off" maxlength="40">
+      <datalist id="sf-who-list"><option value="ยุวชนชาย"><option value="ผช+ยช"><option value="4 ฝ่าย"><option value="ทุกฝ่าย"><option value="มิไรบุ ช.ญ."></datalist>
+    </label>
+    <p class="warnline" id="sf-err"></p>
+    <div class="btns">
+      <button type="button" class="btn danger" id="sf-del">ลบ</button>
+      <button type="button" class="btn ghost" id="sf-cancel">ยกเลิก</button>
+      <button type="button" class="btn" id="sf-save">บันทึก</button>
     </div>
   </div>
 </dialog>
@@ -2965,6 +3002,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (id === "schedule") {
       try { history.replaceState(null, "", "#schedule"); } catch (e) {}
       renderSchedule();
+      loadManual();
     }
   }
   const SUBS = ["items", "rooms", "photos", "monthly"];
@@ -3247,14 +3285,89 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }, 300);
   };
 
+  // Swipe a card to the left to reveal its action buttons (แก้ไข / ลบ); a tap on an opened card closes it
+  const SW_W = 144;
+  let swOpen = null;
+  function closeSwipe() {
+    if (!swOpen) return;
+    swOpen.classList.remove("open");
+    const b = swOpen.querySelector(".swbody");
+    if (b) b.style.transform = "";
+    swOpen = null;
+  }
+  document.addEventListener("pointerdown", e => { if (swOpen && !swOpen.contains(e.target)) closeSwipe(); }, true);
+  function makeSwipe(li, body, actions) {
+    const act = el("div", "swact");
+    for (const a of actions) {
+      const b = el("button", a.cls, a.label);
+      b.type = "button";
+      b.onclick = () => { closeSwipe(); a.fn(); };
+      act.append(b);
+    }
+    const wrap = el("div", "swbody");
+    wrap.append(body);
+    li.classList.add("swipe");
+    li.append(act, wrap);
+    let x0 = 0, y0 = 0, base = 0, dx = 0, mode = 0, pid = null, moved = false;
+    wrap.addEventListener("pointerdown", e => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      x0 = e.clientX; y0 = e.clientY; mode = 0; pid = e.pointerId;
+      base = li.classList.contains("open") ? -SW_W : 0;
+      dx = base;
+    });
+    wrap.addEventListener("pointermove", e => {
+      if (e.pointerId !== pid) return;
+      const mx = e.clientX - x0, my = e.clientY - y0;
+      if (!mode) {
+        if (Math.abs(mx) > 8 && Math.abs(mx) > Math.abs(my)) {
+          mode = 1;
+          if (swOpen && swOpen !== li) closeSwipe();
+          li.classList.add("dragging");
+          wrap.classList.add("drag");
+          try { wrap.setPointerCapture(pid); } catch (er) {}
+        } else if (Math.abs(my) > 8) mode = 2;
+      }
+      if (mode === 1) { dx = Math.max(-SW_W, Math.min(0, base + mx)); wrap.style.transform = `translateX(${dx}px)`; }
+    });
+    const end = e => {
+      if (e.pointerId !== pid) return;
+      pid = null;
+      if (mode !== 1) return;
+      wrap.classList.remove("drag");
+      li.classList.remove("dragging");
+      moved = true;
+      setTimeout(() => { moved = false; }, 60);
+      if (dx < -SW_W / 2) { li.classList.add("open"); swOpen = li; wrap.style.transform = `translateX(${-SW_W}px)`; }
+      else { li.classList.remove("open"); if (swOpen === li) swOpen = null; wrap.style.transform = ""; }
+    };
+    wrap.addEventListener("pointerup", end);
+    wrap.addEventListener("pointercancel", end);
+    wrap.addEventListener("click", e => {
+      if (moved) { e.stopPropagation(); e.preventDefault(); return; }
+      if (li.classList.contains("open")) { e.stopPropagation(); e.preventDefault(); closeSwipe(); }
+    }, true);
+  }
+
   // ---------- ตารางงาน: events from the monthly news-table (board.events), only what concerns ยุวชนชาย ----------
   const YMD_WHO = /ยุวชนชาย|ผช|ยช|มิไรบุ/;
   let sMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
-  let sSel = "", sInit = false;
+  let sSel = "", sInit = false, sManual = [], sEdit = null;
+  const manualEvent = r => ({ date: r.event_date, ...(r.end_date ? { endDate: r.end_date } : {}), time: r.event_time || "", place: r.place || "", who: r.who || "", title: r.title, mid: r.id, row: r });
+  async function loadManual() {
+    if (!memAuthed()) return;
+    try {
+      sManual = await memGet("/rest/v1/schedule_events?" + new URLSearchParams({ select: "*", order: "event_date,event_time", limit: "1000" }));
+    } catch (e) {
+      if (e.status === 401) return;
+      sManual = [];
+    }
+    if (!$("panel-schedule").hidden) renderSchedule();
+  }
   const evEnd = e => e.endDate || e.date;
   const evIsYmd = e => YMD_WHO.test(e.who || "");
   function renderSchedule(jump) {
-    const evs = ((lastData && lastData.events) || [])
+    closeSwipe();
+    const evs = [...((lastData && lastData.events) || []), ...sManual.map(manualEvent)]
       .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : (a.time || "") < (b.time || "") ? -1 : 1));
     const y = sMonth.getUTCFullYear(), m = sMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
     const first = ym + "-01", last = ym + "-" + pad2(new Date(Date.UTC(y, m + 1, 0)).getUTCDate());
@@ -3305,7 +3418,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const top = el("div", "ctop");
       const head = el("div", "chead");
       const main = el("div", "cmain");
-      main.append(el("div", "ctitle", e.title));
+      const ttl = el("div", "ctitle", e.title);
+      if (e.mid) ttl.append(el("span", "stag", "เพิ่มเอง"));
+      main.append(ttl);
       if (e.place) main.append(el("div", "meta", "📍 " + e.place));
       const add = el("button", "addcal", "📅 เพิ่มลงปฏิทิน");
       add.type = "button";
@@ -3314,10 +3429,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       head.append(el("div", "stime" + (e.time ? "" : " none"), e.time || "ทั้งวัน"), main);
       top.append(head);
       if (e.who) top.append(el("span", "pill " + (evIsYmd(e) ? "ok" : "mute"), e.who));
-      li.append(top);
+      if (e.mid) makeSwipe(li, top, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openEvForm(e.row) }, { label: "ลบ", cls: "sw-del", fn: () => deleteEv(e.row) }]);
+      else li.append(top);
       out.push(li);
     }
-    const none = !((lastData && lastData.events) || []).length;
+    const none = !evs.length;
     $("s-list").replaceChildren(...(out.length ? out : [el("li", "empty", none ? "ยังไม่มีข้อมูลรายการ" : "ไม่มีรายการ")]));
     $("panel-schedule").style.setProperty("--sstick", $("s-stick").offsetHeight + "px");
     if (jump && sSel) scrollToDay(sSel, true);
@@ -3369,6 +3485,61 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   $("s-prev").onclick = () => moveSMonth(-1);
   $("s-next").onclick = () => moveSMonth(1);
+  // Add / edit an event by hand (table public.schedule_events)
+  const timeParts = t => { const m = /^(\d{1,2})[:.](\d{2})(?:\s*-\s*(\d{1,2})[:.](\d{2}))?/.exec(t || ""); return m ? [pad2(+m[1]) + ":" + m[2], m[3] ? pad2(+m[3]) + ":" + m[4] : ""] : ["", ""]; };
+  function openEvForm(row) {
+    sEdit = row;
+    $("sform-title").textContent = row ? "แก้ไขรายการ" : "เพิ่มรายการ";
+    const t = today(), ymNow = sMonth.getUTCFullYear() + "-" + pad2(sMonth.getUTCMonth() + 1);
+    const [t1, t2] = timeParts(row && row.event_time);
+    $("sf-title").value = row ? row.title : "";
+    $("sf-date").value = row ? row.event_date : sSel || (isoDay(t).slice(0, 7) === ymNow ? isoDay(t) : ymNow + "-01");
+    $("sf-end").value = row && row.end_date ? row.end_date : "";
+    $("sf-t1").value = t1;
+    $("sf-t2").value = t2;
+    $("sf-place").value = row ? row.place || "" : "";
+    $("sf-who").value = row ? row.who || "" : "ยุวชนชาย";
+    $("sf-err").textContent = "";
+    $("sf-del").hidden = !row;
+    $("sform").showModal();
+  }
+  async function deleteEv(row) {
+    if (!confirm("ลบรายการ “" + row.title + "” ?")) return false;
+    try {
+      await memReq("DELETE", "/rest/v1/schedule_events?id=eq." + encodeURIComponent(row.id));
+      await loadManual();
+      return true;
+    } catch (e) {
+      if (e.status !== 401) toast("ลบไม่สำเร็จ ลองใหม่อีกครั้ง");
+      return false;
+    }
+  }
+  $("s-add").onclick = () => openEvForm(null);
+  $("sf-cancel").onclick = () => $("sform").close();
+  $("sf-del").onclick = async () => { if (sEdit && (await deleteEv(sEdit))) $("sform").close(); };
+  $("sf-save").onclick = async () => {
+    const title = $("sf-title").value.trim(), date = $("sf-date").value, end = $("sf-end").value, t1 = $("sf-t1").value, t2 = $("sf-t2").value;
+    if (!title) { $("sf-err").textContent = "ใส่ชื่อรายการก่อน"; return; }
+    if (!parse(date)) { $("sf-err").textContent = "เลือกวันที่ก่อน"; return; }
+    if (end && end <= date) { $("sf-err").textContent = "วันสิ้นสุดต้องหลังวันเริ่ม"; return; }
+    if (t2 && !t1) { $("sf-err").textContent = "ใส่เวลาเริ่มก่อน"; return; }
+    const body = { title, event_date: date, end_date: end || null, event_time: t1 ? t1 + (t2 ? "-" + t2 : "") : null, place: $("sf-place").value.trim() || null, who: $("sf-who").value.trim() || null };
+    $("sf-save").disabled = true;
+    $("sf-err").textContent = "กำลังบันทึก…";
+    try {
+      if (sEdit) await memReq("PATCH", "/rest/v1/schedule_events?id=eq." + encodeURIComponent(sEdit.id), body, { Prefer: "return=representation" });
+      else await memReq("POST", "/rest/v1/schedule_events", body, { Prefer: "return=representation" });
+      $("sform").close();
+      sMonth = new Date(Date.UTC(+date.slice(0, 4), +date.slice(5, 7) - 1, 1));
+      sSel = date;
+      await loadManual();
+      renderSchedule(true);
+    } catch (e) {
+      if (e.status !== 401) $("sf-err").textContent = "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง";
+    } finally {
+      $("sf-save").disabled = false;
+    }
+  };
   $("s-today").onclick = () => { const t = today(); sMonth = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); sSel = isoDay(t); renderSchedule(true); };
 
   // ---------- นัดเยี่ยมน้อง: a shared calendar (table public.visits, protected by row-level security) ----------
@@ -3452,7 +3623,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     share.onclick = () => openShare(r);
     side.append(pill, share);
     top.append(head, side);
-    li.append(top);
+    makeSwipe(li, top, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openVisit(r) }, { label: "ลบ", cls: "sw-del", fn: () => deleteVisit(r) }]);
     return li;
   }
   // ---- share a visit as a message card ("<ผู้แชร์> เชิญชวนให้คุณไปเยี่ยม…"), with the น้อง's Google Maps link when ymd_places has one
@@ -3519,7 +3690,17 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       copyText(vShare.text, $("vs-copy"));
     }
   };
+  async function deleteVisit(r) {
+    if (!confirm("ลบนัดเยี่ยมของ “" + vName(r) + "” ?")) return;
+    try {
+      await memReq("DELETE", "/rest/v1/visits?id=eq." + encodeURIComponent(r.id));
+      await loadVisits();
+    } catch (e) {
+      if (e.status !== 401) toast("ลบไม่สำเร็จ ลองใหม่อีกครั้ง");
+    }
+  }
   function renderVisits() {
+    closeSwipe();
     const y = vMonth.getUTCFullYear(), m = vMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
     $("v-month").textContent = MONTH_FULL[m] + " " + (y + 543);
     const byDay = {};
@@ -3756,6 +3937,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (getPref(PUSH_KEY) === "1") refreshPush();
     if (!$("panel-visits").hidden) loadVisits();
     else loadCoverage();
+    if (!$("panel-schedule").hidden) loadManual();
   }
 
   initBadgeAsk();
