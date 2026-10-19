@@ -243,6 +243,12 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vtop h3 { font-size: 1rem; }
 .vcard .pill { align-self: center; margin-right: 12px; font: inherit; font-size: .75rem; font-weight: 700; border: 0; cursor: pointer; }
 .vcard .chead { padding-left: 14px; }
+.vside { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-right: 12px; }
+.vside .pill { margin-right: 0; }
+.vshare { padding: 4px 10px; font: inherit; font-size: .75rem; color: var(--brand); background: none; border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.sharecard { display: grid; gap: 6px; padding: 14px 16px; background: var(--bg); border: 1px solid var(--line); border-left: 5px solid var(--lc, var(--brand)); border-radius: var(--r); line-height: 1.5; overflow-wrap: anywhere; }
+.sharecard .sc-title { font-weight: 700; font-size: 1rem; }
+.sharecard a { color: var(--brand); }
 .vdot.ymd { background: var(--brand); }
 .vdot.all { background: var(--mute); }
 .sstick { position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 4px max(16px, var(--sar)) 6px max(16px, var(--sal)); background: var(--bg); border-bottom: 1px solid var(--line); }
@@ -1022,6 +1028,23 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <button type="button" class="btn danger" id="vf-del">ลบ</button>
       <button type="button" class="btn ghost" id="vf-cancel">ยกเลิก</button>
       <button type="button" class="btn" id="vf-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="vshare" aria-labelledby="vs-title">
+  <div class="sdlg-head">
+    <h3 id="vs-title">แชร์นัดเยี่ยม</h3>
+    <button type="button" class="sclose" id="vs-close" aria-label="ปิด">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="form">
+    <div class="sharecard" id="vs-card"></div>
+    <p class="meta" id="vs-note"></p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="vs-copy">คัดลอกข้อความ</button>
+      <button type="button" class="btn" id="vs-send">ส่งต่อ</button>
     </div>
   </div>
 </dialog>
@@ -3423,10 +3446,79 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       }
       renderVisits();
     };
-    top.append(head, pill);
+    const side = el("div", "vside");
+    const share = el("button", "vshare", "📤 แชร์");
+    share.type = "button";
+    share.onclick = () => openShare(r);
+    side.append(pill, share);
+    top.append(head, side);
     li.append(top);
     return li;
   }
+  // ---- share a visit as a message card ("<ผู้แชร์> เชิญชวนให้คุณไปเยี่ยม…"), with the น้อง's Google Maps link when ymd_places has one
+  const MAP_RE = /^https?:\/\/\S+$/i;
+  let vShare = null;
+  function shareText(r, map) {
+    const sharer = ((memSession() || {}).profile || {}).name || "มีผู้ใช้";
+    const who = r.nickname || r.first_name;
+    const when = fmt(parse(r.visit_date)) + (r.visit_time ? " · " + String(r.visit_time).slice(0, 5) + " น." : "");
+    return { sharer, who, when, text: [`🤝 ${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`, `📅 ${when}`, ...(map ? ["📍 " + map] : [])].join("\n") };
+  }
+  async function findMap(r) {
+    const pick = rows => { for (const x of rows) if (x && MAP_RE.test(String(x.google_map || "").trim())) return String(x.google_map).trim(); return ""; };
+    try {
+      if (r.first_name && r.last_name) {
+        const rows = await memGet("/rest/v1/members?" + new URLSearchParams({ select: "ymd_places(google_map)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
+        if (rows.length === 1) { const m = pick(rows[0].ymd_places || []); if (m) return m; }
+      }
+      if (r.nickname) {
+        const rows = await memGet("/rest/v1/ymd_places?" + new URLSearchParams({ select: "google_map", nickname: "eq." + r.nickname, limit: "5" }));
+        const links = [...new Set(rows.map(x => String(x.google_map || "").trim()).filter(x => MAP_RE.test(x)))];
+        if (rows.length === 1 && links.length === 1) return links[0];
+      }
+    } catch (e) {}
+    return "";
+  }
+  function drawShare() {
+    const { sharer, who, when, text } = shareText(vShare.r, vShare.map);
+    const card = $("vs-card");
+    card.style.setProperty("--lc", "var(--v-" + (VISIT_CLASS[vShare.r.phak] || "bbn") + ")");
+    const nodes = [el("div", "sc-title", `${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`), el("div", null, "📅 " + when)];
+    if (vShare.map) {
+      const line = el("div", null, "📍 ");
+      const a = el("a", null, vShare.map);
+      a.href = vShare.map;
+      a.target = "_blank";
+      a.rel = "noopener";
+      line.append(a);
+      nodes.push(line);
+    }
+    card.replaceChildren(...nodes);
+    vShare.text = text;
+    $("vs-note").textContent = vShare.looking ? "กำลังหาลิงก์ที่อยู่…" : vShare.map ? "" : "ไม่พบลิงก์ Google Map ของน้องคนนี้ จะแชร์เฉพาะวันและเวลา";
+  }
+  async function openShare(r) {
+    vShare = { r, map: "", text: "", looking: true };
+    drawShare();
+    $("vshare").showModal();
+    const cur = vShare;
+    const map = await findMap(r);
+    if (vShare !== cur) return;
+    cur.map = map;
+    cur.looking = false;
+    drawShare();
+  }
+  $("vs-close").onclick = () => $("vshare").close();
+  $("vshare").addEventListener("click", e => { if (e.target === $("vshare")) $("vshare").close(); });
+  $("vs-copy").onclick = () => copyText(vShare && vShare.text, $("vs-copy"));
+  $("vs-send").onclick = async () => {
+    if (!vShare || !vShare.text) return;
+    if (navigator.share) {
+      try { await navigator.share({ text: vShare.text }); } catch (e) { if (e.name !== "AbortError") copyText(vShare.text, $("vs-copy")); }
+    } else {
+      copyText(vShare.text, $("vs-copy"));
+    }
+  };
   function renderVisits() {
     const y = vMonth.getUTCFullYear(), m = vMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
     $("v-month").textContent = MONTH_FULL[m] + " " + (y + 543);
