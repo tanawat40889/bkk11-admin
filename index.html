@@ -243,7 +243,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .sstick { position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 4px max(16px, var(--sar)) 6px max(16px, var(--sal)); background: var(--bg); border-bottom: 1px solid var(--line); }
 .sstick .vhead { margin: 0 0 6px; }
 .sstick .vnav { width: 40px; height: 40px; }
-.sstick .vlegend { margin: 6px 0 0; }
+.sstick .vlegend { flex-wrap: nowrap; align-items: center; gap: 6px 14px; margin: 6px 0 0; white-space: nowrap; }
 .scal { gap: 3px; }
 .scal .vdow { padding: 0; font-size: .6875rem; }
 .scal .vcell { min-height: 38px; gap: 2px; padding: 3px 2px; border-radius: 8px; }
@@ -260,6 +260,8 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .scard.ymd { border-left-color: var(--brand); }
 .scard.past { opacity: .55; }
 .scard .pill { align-self: center; margin-right: 12px; }
+.addmonth { margin: 0 0 0 auto; padding: 0; }
+.addcal { margin-top: 6px; padding: 4px 0; font: inherit; font-size: .8125rem; color: var(--brand); background: none; border: 0; cursor: pointer; }
 .scard .chead { padding: 12px 8px 12px 14px; gap: 12px; cursor: default; }
 .stime { flex: none; width: 56px; font-size: .875rem; font-weight: 700; line-height: 1.3; color: var(--brand); text-align: center; overflow-wrap: anywhere; }
 .stime.none { font-weight: 500; font-size: .75rem; color: var(--mute); }
@@ -829,7 +831,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         <button type="button" class="btn ghost sm" id="s-today">วันนี้</button>
       </div>
       <div class="vcal scal" id="s-cal" aria-label="ปฏิทินรายการ"></div>
-      <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span></div>
+      <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span><button type="button" class="addcal addmonth" id="s-addmonth"></button></div>
     </div>
     <ul class="list" id="s-list"></ul>
   </section>
@@ -3229,6 +3231,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       cells.push(b);
     }
     $("s-cal").replaceChildren(...cells);
+    const inMonth = evs.filter(e => e.date <= last && evEnd(e) >= first);
+    const am = $("s-addmonth");
+    am.hidden = !inMonth.length;
+    am.textContent = `📅 ทั้งเดือน (${inMonth.length})`;
+    am.setAttribute("aria-label", `เพิ่มรายการทั้งเดือน ${inMonth.length} รายการลงปฏิทิน`);
+    am.onclick = () => addToCalendar(inMonth, "events-" + ym + ".ics");
 
     // One long scrolling list under the (sticky) calendar: every event, grouped by month then day
     const shown = evs;
@@ -3252,6 +3260,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const main = el("div", "cmain");
       main.append(el("div", "ctitle", e.title));
       if (e.place) main.append(el("div", "meta", "📍 " + e.place));
+      const add = el("button", "addcal", "📅 เพิ่มลงปฏิทิน");
+      add.type = "button";
+      add.onclick = () => addToCalendar([e], "event-" + e.date + ".ics");
+      main.append(add);
       head.append(el("div", "stime" + (e.time ? "" : " none"), e.time || "ทั้งวัน"), main);
       top.append(head);
       if (e.who) top.append(el("span", "pill " + (evIsYmd(e) ? "ok" : "mute"), e.who));
@@ -3263,6 +3275,40 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("panel-schedule").style.setProperty("--sstick", $("s-stick").offsetHeight + "px");
     if (jump && sSel) scrollToDay(sSel, true);
     else if (!sInit && evs.length && !$("panel-schedule").hidden) { sInit = true; setTimeout(() => scrollToDay(todayKey, false), 60); }
+  }
+  // "Add to calendar": a one-event .ics file that opens the phone's calendar app (times are Bangkok time)
+  const icsText = v => String(v).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/[,;]/g, c => "\\" + c);
+  function eventLines(e) {
+    const ymd = d => d.replace(/-/g, "");
+    const addDay = (d, n) => isoDay(new Date(parseDay(d).getTime() + n * DAY_MS));
+    const m = /^(\d{1,2})[:.](\d{2})(?:\s*-\s*(\d{1,2})[:.](\d{2}))?/.exec(e.time || "");
+    const hm = (h, mi) => pad2(h) + pad2(mi) + "00";
+    let when;
+    if (m) {
+      const end = m[3] ? hm(+m[3], +m[4]) : hm(Math.min(+m[1] + 1, 23), +m[2]);
+      when = ["DTSTART;TZID=Asia/Bangkok:" + ymd(e.date) + "T" + hm(+m[1], +m[2]), "DTEND;TZID=Asia/Bangkok:" + ymd(e.endDate || e.date) + "T" + end];
+    } else {
+      when = ["DTSTART;VALUE=DATE:" + ymd(e.date), "DTEND;VALUE=DATE:" + ymd(addDay(e.endDate || e.date, 1))];
+    }
+    const stamp = new Date().toISOString().replace(/[-:]|\.\d+/g, "");
+    let h = 5381;
+    for (const ch of e.date + (e.time || "") + e.title + (e.place || "")) h = ((h << 5) + h + ch.codePointAt(0)) >>> 0;
+    return ["BEGIN:VEVENT", "UID:" + h.toString(16) + "@bkk11-admin", "DTSTAMP:" + stamp, ...when,
+      "SUMMARY:" + icsText(e.title), ...(e.place ? ["LOCATION:" + icsText(e.place)] : []), ...(e.who ? ["DESCRIPTION:" + icsText("ฝ่าย " + e.who)] : []),
+      "END:VEVENT"];
+  }
+  const eventsIcs = list => ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//BKK11 Admin//TH", "CALSCALE:GREGORIAN",
+    "BEGIN:VTIMEZONE", "TZID:Asia/Bangkok", "BEGIN:STANDARD", "DTSTART:19700101T000000", "TZOFFSETFROM:+0700", "TZOFFSETTO:+0700", "TZNAME:ICT", "END:STANDARD", "END:VTIMEZONE",
+    ...list.flatMap(eventLines), "END:VCALENDAR"].join("\r\n") + "\r\n";
+  function addToCalendar(list, name) {
+    const url = URL.createObjectURL(new Blob([eventsIcs(list)], { type: "text/calendar;charset=utf-8" }));
+    const a = el("a");
+    a.href = url;
+    a.download = name;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
   // Scroll the list to a day (or the next day that has something)
   function scrollToDay(key, smooth) {
