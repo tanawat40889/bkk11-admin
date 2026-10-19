@@ -251,7 +251,8 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .swact .sw-del { background: #dc2626; }
 .swbody { position: relative; background: var(--card); transition: transform .2s ease; touch-action: pan-y; }
 .swbody.drag { transition: none; }
-.fab { position: fixed; z-index: 6; right: max(16px, var(--sar)); bottom: calc(20px + var(--sab)); width: 56px; height: 56px; padding: 0 0 4px; font: inherit; font-size: 2rem; line-height: 1; color: var(--brand-ink); background: var(--brand); border: 0; border-radius: 50%; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); cursor: pointer; }
+.fab { position: fixed; z-index: 6; right: max(16px, var(--sar)); bottom: calc(20px + var(--sab)); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; color: var(--brand-ink); background: var(--brand); border: 0; border-radius: 50%; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); cursor: pointer; }
+.fab svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
 .stag { display: inline-block; margin-left: 6px; padding: 0 6px; font-size: .6875rem; color: var(--mute); border: 1px solid var(--line); border-radius: 999px; vertical-align: middle; }
 .vside { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-right: 12px; }
 .vside .pill { margin-right: 0; }
@@ -856,7 +857,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span><button type="button" class="addcal addmonth" id="s-addmonth"></button></div>
     </div>
     <ul class="list" id="s-list"></ul>
-    <button type="button" class="fab" id="s-add" aria-label="เพิ่มรายการ">+</button>
+    <button type="button" class="fab" id="s-add" aria-label="เพิ่มรายการ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
   </section>
 </main>
 
