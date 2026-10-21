@@ -3550,6 +3550,27 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let vMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
   let vRows = [], vSelDay = "", vSeq = 0, vEdit = null, vStatus = "coordinating", vMissing = [];
   const vName = r => [r.first_name, r.last_name].filter(Boolean).join(" ");
+  // Shown everywhere in the visit calendar: the nickname, or the real name when there is none
+  // Visits saved with a real name only get their nickname looked up from ymd_places (matched by name + surname, only when unambiguous)
+  const vNickCache = new Map();
+  const vNickKey = r => r.first_name + "|" + (r.last_name || "");
+  const vNick = r => r.nickname || vNickCache.get(vNickKey(r)) || "";
+  const vLabel = r => vNick(r) || vName(r);
+  async function resolveNicks(rows) {
+    const todo = [...new Map(rows.filter(r => !r.nickname && r.first_name && r.last_name && !vNickCache.has(vNickKey(r))).map(r => [vNickKey(r), r])).values()];
+    if (!todo.length) return false;
+    let found = false;
+    await Promise.all(todo.map(async r => {
+      let nick = "";
+      try {
+        const m = await memGet("/rest/v1/members?" + new URLSearchParams({ select: "ymd_places(nickname)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
+        if (m.length === 1) nick = ((m[0].ymd_places || []).map(x => String(x.nickname || "").trim()).find(Boolean)) || "";
+      } catch (e) { return; }
+      vNickCache.set(vNickKey(r), nick);
+      if (nick) found = true;
+    }));
+    return found;
+  }
 
   async function loadVisits() {
     if (!memAuthed()) return;
@@ -3562,6 +3583,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const rows = await memGet("/rest/v1/visits?" + params);
       if (seq !== vSeq) return;
       vRows = rows;
+      resolveNicks(rows).then(found => { if (found && seq === vSeq) renderVisits(); });
     } catch (e) {
       if (seq !== vSeq || e.status === 401) return;
       vRows = [];
@@ -3599,7 +3621,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     head.type = "button";
     head.onclick = () => openVisit(r);
     const main = el("div", "cmain");
-    main.append(el("div", "ctitle", vName(r) + (r.nickname ? " (" + r.nickname + ")" : "")));
+    main.append(el("div", "ctitle", vLabel(r)));
     const when = fmt(parse(r.visit_date)) + (r.visit_time ? " · " + String(r.visit_time).slice(0, 5) + " น." : "");
     main.append(el("div", "meta", when + " · ภาค" + r.phak));
     if (r.created_by) main.append(el("div", "meta", "บันทึกโดย " + r.created_by));
@@ -3630,9 +3652,23 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // ---- share a visit as a message card ("<ผู้แชร์> เชิญชวนให้คุณไปเยี่ยม…"), with the น้อง's Google Maps link when ymd_places has one
   const MAP_RE = /^https?:\/\/\S+$/i;
   let vShare = null;
+  // The signed-in leader's own nickname (their row in ymd_places, matched by member code); the real name is used when there is none
+  let mySharerNick = "", mySharerFor = "";
+  async function loadMyNick() {
+    const s = memSession();
+    if (!s) return;
+    const claims = jwtClaims(s.access_token), code = String(((claims.app_metadata || {}).mt_co) || "");
+    if (!/^\d{1,12}$/.test(code) || mySharerFor === code) return;
+    mySharerNick = "";
+    try {
+      const rows = await memGet("/rest/v1/ymd_places?" + new URLSearchParams({ select: "nickname", mt_co: "eq." + code, limit: "5" }));
+      mySharerNick = (rows.map(x => String(x.nickname || "").trim()).find(Boolean)) || "";
+      mySharerFor = code;
+    } catch (e) {}
+  }
   function shareText(r, map) {
-    const sharer = ((memSession() || {}).profile || {}).name || "มีผู้ใช้";
-    const who = r.nickname || r.first_name;
+    const sharer = mySharerNick || ((memSession() || {}).profile || {}).name || "มีผู้ใช้";
+    const who = vNick(r) || r.first_name;
     const when = fmt(parse(r.visit_date)) + (r.visit_time ? " · " + String(r.visit_time).slice(0, 5) + " น." : "");
     return { sharer, who, when, text: [`🤝 ${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`, `📅 ${when}`, ...(map ? ["📍 " + map] : [])].join("\n") };
   }
@@ -3674,7 +3710,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     drawShare();
     $("vshare").showModal();
     const cur = vShare;
-    const map = await findMap(r);
+    const [map] = await Promise.all([findMap(r), loadMyNick()]);
     if (vShare !== cur) return;
     cur.map = map;
     cur.looking = false;
@@ -3692,7 +3728,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
   };
   async function deleteVisit(r) {
-    if (!confirm("ลบนัดเยี่ยมของ “" + vName(r) + "” ?")) return;
+    if (!confirm("ลบนัดเยี่ยมของ “" + vLabel(r) + "” ?")) return;
     try {
       await memReq("DELETE", "/rest/v1/visits?id=eq." + encodeURIComponent(r.id));
       await loadVisits();
@@ -3881,7 +3917,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
   };
   $("vf-del").onclick = async () => {
-    if (!vEdit || !confirm("ลบนัดเยี่ยมของ “" + vName(vEdit) + "” ?")) return;
+    if (!vEdit || !confirm("ลบนัดเยี่ยมของ “" + vLabel(vEdit) + "” ?")) return;
     try {
       await memReq("DELETE", "/rest/v1/visits?id=eq." + encodeURIComponent(vEdit.id));
       $("vform").close();
