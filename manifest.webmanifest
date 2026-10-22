@@ -20,5 +20,5 @@
   ],
   "id": "./",
   "scope": "./",
-  "orientation": "portrait"
+  "orientation": "any"
 }

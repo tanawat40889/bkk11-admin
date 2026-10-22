@@ -689,24 +689,27 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   .mjson summary:hover { color: var(--brand); }
 }
 
-/* Computer screens: wider layout, tabs in a row, cards in columns, editors beside the list */
-@media (min-width: 900px) {
-  :root { --maxw: 1120px; --gutter: max(24px, calc((100% - var(--maxw)) / 2)); }
+/* iPad / computer screens (portrait iPad from 744px up too): wider layout, tabs in a row, cards in columns, editors beside the list */
+@media (min-width: 700px) {
+  :root { --maxw: 1120px; --gutter: max(24px, var(--sal), var(--sar), calc((100% - var(--maxw)) / 2)); }
   header { padding-left: var(--gutter); padding-right: var(--gutter); }
   header img { width: 120px; }
   .tabs {
     justify-content: flex-start;
     gap: 4px;
     padding: 0 var(--gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .tabs::-webkit-scrollbar { display: none; }
   .tab { flex: 0 0 auto; max-width: none; flex-direction: row; gap: 10px; min-height: 54px; padding: 0 22px; font-size: .9375rem; border-bottom: 3px solid transparent; }
   .tab[aria-selected="true"] { border-bottom-color: var(--brand); }
   .tab svg { width: 22px; height: 22px; }
   .bdg { position: static; margin-left: 2px; }
-  main { max-width: var(--maxw); padding: 0 24px 56px; }
+  main { max-width: var(--maxw); padding: 0 max(24px, var(--sar)) calc(56px + var(--sab)) max(24px, var(--sal)); }
   section { margin-top: 24px; }
   #items, #overdue, #done, #rooms, #rooms-done, #rooms-past {
-    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     align-items: start;
   }
   #mjson-text { min-height: 240px; }
@@ -714,11 +717,35 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   :root { --tabs-h: 55px; }
   .subtabs { margin: 0; padding-left: 0; padding-right: 0; }
   .subtab { flex: none; padding: 0 20px; font-size: .9375rem; }
-  dialog { width: min(92vw, 760px); }
+  dialog { width: min(90vw, 640px); }
   .form { padding: 24px; gap: 14px; }
   .form textarea.plain { min-height: 220px; }
   #f-json { min-height: 140px; }
   .occ .promo { max-width: 72ch; }
+  /* Bigger touch targets for the shared pieces on tablets */
+  .btn { min-height: 48px; }
+  .btn.sm { min-height: 44px; }
+  .mc-doc { padding-left: 32px; padding-right: 32px; }
+  .scal .vcell { min-height: 46px; }
+  .sstick { margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px; }
+}
+/* iPad landscape and larger screens: calendar on the left (stays in view), the long list on the right */
+@media (min-width: 1000px) {
+  :root { --maxw: 1180px; }
+  #panel-schedule:not([hidden]), #panel-visits:not([hidden]) { display: grid; grid-template-columns: minmax(380px, 440px) minmax(0, 1fr); gap: 0 32px; align-items: start; }
+  .sstick, .vleft { position: sticky; top: calc(var(--sat) + var(--tabs-h) + 12px); margin: 0; padding: 14px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+  .vleft { z-index: 1; }
+  .sstick { z-index: 1; }
+  .sstick .vhead { margin-bottom: 10px; }
+  .scal .vcell { min-height: 56px; }
+  .sgroup, .smonth { scroll-margin-top: calc(var(--tabs-h) + 20px); }
+  .sgroup:first-child, .smonth:first-child { margin-top: 0; }
+  #panel-visits .vright { min-width: 0; }
+  #panel-visits .vright .vtop { margin-top: 0; }
+  .fab { right: max(28px, var(--sar)); }
+}
+@media (min-width: 1280px) {
+  :root { --maxw: 1260px; }
 }
 </style>
 </head>
@@ -827,6 +854,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
   </section>
   <section id="panel-visits" role="tabpanel" aria-labelledby="tab-visits" hidden>
+    <div class="vleft">
     <div class="vhead">
       <button type="button" class="vnav" id="v-prev" aria-label="เดือนก่อน">‹</button>
       <h2 class="vmonth" id="v-month" aria-live="polite"></h2>
@@ -838,12 +866,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
     <div class="vlegend"><span><i class="vdot bbn"></i>ภาคบางบอน</span><span><i class="vdot bkt"></i>ภาคบางขุนเทียน</span></div>
     <div class="vcal" id="v-cal" aria-label="ปฏิทินนัดเยี่ยม"></div>
+    </div>
+    <div class="vright">
     <div class="vtop">
       <h3 id="v-list-title"></h3>
       <button type="button" class="btn sm" id="v-add">+ เพิ่มนัดเยี่ยม</button>
     </div>
     <p class="warnline" id="v-error" hidden></p>
     <ul class="list" id="v-list"></ul>
+    </div>
   </section>
   <section id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" hidden>
     <div class="sstick" id="s-stick">
