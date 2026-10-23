@@ -116,6 +116,7 @@ body::before {
   z-index: 10;
 }
 header {
+  transform: translateZ(0);
   display: flex;
   align-items: center;
   gap: 14px;
@@ -131,6 +132,7 @@ section { margin-top: 16px; }
   position: sticky;
   top: var(--sat);
   z-index: 5;
+  transform: translateZ(0);
   display: flex;
   justify-content: center;
   padding: 0 var(--sar) 0 var(--sal);
@@ -241,7 +243,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vdots small { font-size: .6875rem; line-height: 10px; color: var(--mute); }
 .vtop { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 20px 0 0; }
 .vtop h3 { font-size: 1rem; }
-.vcard .pill { align-self: center; margin-right: 12px; font: inherit; font-size: .75rem; font-weight: 700; border: 0; cursor: pointer; }
+.vcard .pill { align-self: center; min-height: 36px; padding: 0 12px; margin-right: 12px; font: inherit; font-size: .75rem; font-weight: 700; border: 0; cursor: pointer; }
 .vcard .chead { padding-left: 14px; }
 .swipe { position: relative; }
 .swact { position: absolute; top: 0; right: 0; bottom: 0; display: flex; }
@@ -256,13 +258,13 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .stag { display: inline-block; margin-left: 6px; padding: 0 6px; font-size: .6875rem; color: var(--mute); border: 1px solid var(--line); border-radius: 999px; vertical-align: middle; }
 .vside { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-right: 12px; }
 .vside .pill { margin-right: 0; }
-.vshare { padding: 4px 10px; font: inherit; font-size: .75rem; color: var(--brand); background: none; border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.vshare { min-height: 36px; padding: 0 12px; font: inherit; font-size: .75rem; color: var(--brand); background: none; border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; white-space: nowrap; }
 .sharecard { display: grid; gap: 6px; padding: 14px 16px; background: var(--bg); border: 1px solid var(--line); border-left: 5px solid var(--lc, var(--brand)); border-radius: var(--r); line-height: 1.5; overflow-wrap: anywhere; }
 .sharecard .sc-title { font-weight: 700; font-size: 1rem; }
 .sharecard a { color: var(--brand); }
 .vdot.ymd { background: var(--brand); }
 .vdot.all { background: var(--mute); }
-.sstick { position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 4px max(16px, var(--sar)) 6px max(16px, var(--sal)); background: var(--bg); border-bottom: 1px solid var(--line); }
+.sstick { transform: translateZ(0); position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 4px max(16px, var(--sar)) 6px max(16px, var(--sal)); background: var(--bg); border-bottom: 1px solid var(--line); }
 .sstick .vhead { margin: 0 0 6px; }
 .sstick .vnav { width: 40px; height: 40px; }
 .sstick .vlegend { flex-wrap: nowrap; align-items: center; gap: 6px 14px; margin: 6px 0 0; white-space: nowrap; }
@@ -282,8 +284,8 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .scard.ymd { border-left-color: var(--brand); }
 .scard.past { opacity: .55; }
 .scard .pill { align-self: center; margin-right: 12px; }
-.addmonth { margin: 0 0 0 auto; padding: 0; }
-.addcal { margin-top: 6px; padding: 4px 0; font: inherit; font-size: .8125rem; color: var(--brand); background: none; border: 0; cursor: pointer; }
+.addcal.addmonth { margin: 0 0 0 auto; padding: 0 0 0 8px; }
+.addcal { min-height: 36px; margin-top: 2px; padding: 6px 0; font: inherit; font-size: .8125rem; color: var(--brand); background: none; border: 0; cursor: pointer; }
 .scard .chead { padding: 12px 8px 12px 14px; gap: 12px; cursor: default; }
 .stime { flex: none; width: 56px; font-size: .875rem; font-weight: 700; line-height: 1.3; color: var(--brand); text-align: center; overflow-wrap: anywhere; }
 .stime.none { font-weight: 500; font-size: .75rem; color: var(--mute); }
@@ -548,7 +550,7 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .hsec:first-child { margin-top: 0; }
 .hsec + .hsec { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
 #panel-items { margin-top: 0; }
-.subtabs { position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; display: flex; gap: 6px; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 10px max(16px, var(--sar)) 10px max(16px, var(--sal)); overflow-x: auto; scrollbar-width: none; background: var(--bg); }
+.subtabs { transform: translateZ(0); position: sticky; top: calc(var(--sat) + var(--tabs-h)); z-index: 4; display: flex; gap: 6px; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 10px max(16px, var(--sar)) 10px max(16px, var(--sal)); overflow-x: auto; scrollbar-width: none; background: var(--bg); }
 .subtabs::-webkit-scrollbar { display: none; }
 .subtab { flex: 1 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 40px; padding: 0 11px; font: inherit; font-size: .875rem; font-weight: 500; color: var(--mute); background: var(--card); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; white-space: nowrap; }
 .subtab[aria-selected="true"] { color: var(--brand-ink); background: var(--brand); border-color: var(--brand); font-weight: 700; }
@@ -1050,7 +1052,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <label>ชื่อ<input id="vf-first" type="text" autocomplete="off"></label>
       <label>นามสกุล<input id="vf-last" type="text" autocomplete="off"></label>
     </div>
-    <label>ชื่อเล่น (เลือกจาก ymd_places หรือพิมพ์เอง)<input id="vf-nick" type="text" autocomplete="off"></label>
+    <label>ชื่อเล่น (เลือกจากรายชื่อติดต่อ หรือพิมพ์เอง)<input id="vf-nick" type="text" autocomplete="off"></label>
     <div class="chips" id="vf-nicks"></div>
     <label>ภาค
       <select id="vf-phak">
@@ -1781,17 +1783,32 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     } catch (e) { return {}; }
   }
   // null = the server refused the refresh token (session over); throws when the network is down (keep the session)
-  async function refreshMember(s) {
-    const r = await fetch(SUPA_URL + "/auth/v1/token?grant_type=refresh_token", {
-      method: "POST",
-      headers: { apikey: SUPA_KEY, "content-type": "application/json" },
-      body: JSON.stringify({ refresh_token: s.refresh_token })
-    });
-    if (!r.ok) return null;
-    const d = await r.json();
-    const next = { ...s, access_token: d.access_token, refresh_token: d.refresh_token, expires_at: d.expires_at };
-    setMemSession(next);
-    return next;
+  // One refresh at a time: refresh tokens are single-use, so several calls that all find the access token expired (as happens
+  // right after coming back from the background) must share one request, or the losers would be refused and logged out.
+  // โทกัง / แผนที่ share this session, so a token another page already rotated is used instead of refreshing again.
+  let refreshing = null;
+  const sessionFresh = x => !!(x && x.access_token && x.expires_at && x.expires_at * 1000 > Date.now() + 60000);
+  function refreshMember(s) {
+    if (refreshing) return refreshing;
+    refreshing = (async () => {
+      const cur = memSession();
+      if (cur && s && cur.refresh_token !== s.refresh_token && sessionFresh(cur)) return cur;
+      const base = cur && cur.refresh_token ? { ...s, ...cur } : s;
+      const r = await fetch(SUPA_URL + "/auth/v1/token?grant_type=refresh_token", {
+        method: "POST",
+        headers: { apikey: SUPA_KEY, "content-type": "application/json" },
+        body: JSON.stringify({ refresh_token: base.refresh_token })
+      });
+      if (!r.ok) {
+        const again = memSession();   // refused because another page rotated the token a moment ago: use theirs
+        return again && again.refresh_token !== base.refresh_token && sessionFresh(again) ? again : null;
+      }
+      const d = await r.json();
+      const next = { ...base, access_token: d.access_token, refresh_token: d.refresh_token, expires_at: d.expires_at };
+      setMemSession(next);
+      return next;
+    })().finally(() => { refreshing = null; });
+    return refreshing;
   }
   // REST call to the member database as the signed-in member, with one silent token refresh on 401
   async function memReq(method, path, body, extra) {
@@ -1832,14 +1849,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!toks.length) return [];
     const params = new URLSearchParams({ select: "name_t,saku_t,po_nt,ch_nt,ha_nt", order: "name_t", limit: "20" });
     params.set("and", nameFilter(toks));
-    return memGet("/rest/v1/members?" + params);
+    return memGet("/rest/v1/tokan?" + params);
   }
 
   async function isEligible(session, profile) {
     if (!ELIGIBLE_LEVELS.includes((profile || {}).level)) return false;
     const mt = (jwtClaims(session.access_token).app_metadata || {}).mt_co;
     if (!mt) return false;
-    const res = await fetch(`${SUPA_URL}/rest/v1/members?select=fa_nt&mt_co=eq.${encodeURIComponent(mt)}`, { headers: { apikey: SUPA_KEY, Authorization: "Bearer " + session.access_token } });
+    const res = await fetch(`${SUPA_URL}/rest/v1/tokan?select=fa_nt&mt_co=eq.${encodeURIComponent(mt)}`, { headers: { apikey: SUPA_KEY, Authorization: "Bearer " + session.access_token } });
     if (!res.ok) throw new Error("eligibility " + res.status);
     const rows = await res.json();
     return !!rows[0] && String(rows[0].fa_nt || "").trim() === ELIGIBLE_DIVISION;
@@ -3582,7 +3599,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let vRows = [], vSelDay = "", vSeq = 0, vEdit = null, vStatus = "coordinating", vMissing = [];
   const vName = r => [r.first_name, r.last_name].filter(Boolean).join(" ");
   // Shown everywhere in the visit calendar: the nickname, or the real name when there is none
-  // Visits saved with a real name only get their nickname looked up from ymd_places (matched by name + surname, only when unambiguous)
+  // Visits saved with a real name only get their nickname looked up from bkk11_contacts (matched by name + surname, only when unambiguous)
   const vNickCache = new Map();
   const vNickKey = r => r.first_name + "|" + (r.last_name || "");
   const vNick = r => r.nickname || vNickCache.get(vNickKey(r)) || "";
@@ -3594,8 +3611,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     await Promise.all(todo.map(async r => {
       let nick = "";
       try {
-        const m = await memGet("/rest/v1/members?" + new URLSearchParams({ select: "ymd_places(nickname)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
-        if (m.length === 1) nick = ((m[0].ymd_places || []).map(x => String(x.nickname || "").trim()).find(Boolean)) || "";
+        const m = await memGet("/rest/v1/tokan?" + new URLSearchParams({ select: "bkk11_contacts(nickname)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
+        if (m.length === 1) nick = ((m[0].bkk11_contacts || []).map(x => String(x.nickname || "").trim()).find(Boolean)) || "";
       } catch (e) { return; }
       vNickCache.set(vNickKey(r), nick);
       if (nick) found = true;
@@ -3680,10 +3697,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     makeSwipe(li, top, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openVisit(r) }, { label: "ลบ", cls: "sw-del", fn: () => deleteVisit(r) }]);
     return li;
   }
-  // ---- share a visit as a message card ("<ผู้แชร์> เชิญชวนให้คุณไปเยี่ยม…"), with the น้อง's Google Maps link when ymd_places has one
+  // ---- share a visit as a message card ("<ผู้แชร์> เชิญชวนให้คุณไปเยี่ยม…"), with the น้อง's Google Maps link when bkk11_contacts has one
   const MAP_RE = /^https?:\/\/\S+$/i;
   let vShare = null;
-  // The signed-in leader's own nickname (their row in ymd_places, matched by member code); the real name is used when there is none
+  // The signed-in leader's own nickname (their row in bkk11_contacts, matched by member code); the real name is used when there is none
   let mySharerNick = "", mySharerFor = "";
   async function loadMyNick() {
     const s = memSession();
@@ -3692,7 +3709,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!/^\d{1,12}$/.test(code) || mySharerFor === code) return;
     mySharerNick = "";
     try {
-      const rows = await memGet("/rest/v1/ymd_places?" + new URLSearchParams({ select: "nickname", mt_co: "eq." + code, limit: "5" }));
+      const rows = await memGet("/rest/v1/bkk11_contacts?" + new URLSearchParams({ select: "nickname", mt_co: "eq." + code, limit: "5" }));
       mySharerNick = (rows.map(x => String(x.nickname || "").trim()).find(Boolean)) || "";
       mySharerFor = code;
     } catch (e) {}
@@ -3707,11 +3724,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const pick = rows => { for (const x of rows) if (x && MAP_RE.test(String(x.google_map || "").trim())) return String(x.google_map).trim(); return ""; };
     try {
       if (r.first_name && r.last_name) {
-        const rows = await memGet("/rest/v1/members?" + new URLSearchParams({ select: "ymd_places(google_map)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
-        if (rows.length === 1) { const m = pick(rows[0].ymd_places || []); if (m) return m; }
+        const rows = await memGet("/rest/v1/tokan?" + new URLSearchParams({ select: "bkk11_contacts(google_map)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
+        if (rows.length === 1) { const m = pick(rows[0].bkk11_contacts || []); if (m) return m; }
       }
       if (r.nickname) {
-        const rows = await memGet("/rest/v1/ymd_places?" + new URLSearchParams({ select: "google_map", nickname: "eq." + r.nickname, limit: "5" }));
+        const rows = await memGet("/rest/v1/bkk11_contacts?" + new URLSearchParams({ select: "google_map", nickname: "eq." + r.nickname, limit: "5" }));
         const links = [...new Set(rows.map(x => String(x.google_map || "").trim()).filter(x => MAP_RE.test(x)))];
         if (rows.length === 1 && links.length === 1) return links[0];
       }
@@ -3841,7 +3858,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("vf-del").hidden = !row;
     $("vform").showModal();
   }
-  // Looks the น้อง up by real name / surname (members) and by nickname (ymd_places, linked or not yet linked to a member)
+  // Looks the น้อง up by real name / surname (members) and by nickname (bkk11_contacts, linked or not yet linked to a member)
   async function visitMemberSearch(q) {
     const toks = likeTokens(q);
     if (!toks.length) return [];
@@ -3849,28 +3866,28 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const soft = p => p.catch(e => { if (e.status === 401) throw e; return []; });
     const byName = (async () => {
       const url = embed => {
-        const p = new URLSearchParams({ select: "name_t,saku_t,phak_nt,ch_nt,ha_nt" + (embed ? ",ymd_places(nickname)" : ""), fa_nt: "eq." + ELIGIBLE_DIVISION, order: "name_t", limit: "20" });
+        const p = new URLSearchParams({ select: "name_t,saku_t,phak_nt,ch_nt,ha_nt" + (embed ? ",bkk11_contacts(nickname)" : ""), fa_nt: "eq." + ELIGIBLE_DIVISION, order: "name_t", limit: "20" });
         p.set("and", nameFilter(toks));
-        return "/rest/v1/members?" + p;
+        return "/rest/v1/tokan?" + p;
       };
       try { return await memGet(url(true)); } catch (e) { if (e.status === 401) throw e; return memGet(url(false)); }
     })();
-    const byNick = soft(memGet("/rest/v1/ymd_places?" + new URLSearchParams({
-      select: "nickname,members!inner(name_t,saku_t,phak_nt,ch_nt,ha_nt)", "members.fa_nt": "eq." + ELIGIBLE_DIVISION, nickname: "ilike.*" + nick + "*", limit: "20"
+    const byNick = soft(memGet("/rest/v1/bkk11_contacts?" + new URLSearchParams({
+      select: "nickname,tokan!inner(name_t,saku_t,phak_nt,ch_nt,ha_nt)", "tokan.fa_nt": "eq." + ELIGIBLE_DIVISION, nickname: "ilike.*" + nick + "*", limit: "20"
     })));
-    const unlinked = soft(memGet("/rest/v1/ymd_places?" + new URLSearchParams({ select: "nickname", mt_co: "is.null", nickname: "ilike.*" + nick + "*", limit: "10" })));
+    const unlinked = soft(memGet("/rest/v1/bkk11_contacts?" + new URLSearchParams({ select: "nickname", mt_co: "is.null", nickname: "ilike.*" + nick + "*", limit: "10" })));
     const [a, b, c] = await Promise.all([byName, byNick, unlinked]);
     const out = new Map();
     const put = (m, nicks) => {
       if (!m) return;
       const key = [m.name_t, m.saku_t].join("|");
       const cur = out.get(key);
-      const names = [...new Set([...(cur ? cur.ymd_places.map(x => x.nickname) : []), ...nicks].filter(Boolean))];
-      out.set(key, { name_t: m.name_t, saku_t: m.saku_t, phak_nt: m.phak_nt, ch_nt: m.ch_nt, ha_nt: m.ha_nt, ymd_places: names.map(n => ({ nickname: n })) });
+      const names = [...new Set([...(cur ? cur.bkk11_contacts.map(x => x.nickname) : []), ...nicks].filter(Boolean))];
+      out.set(key, { name_t: m.name_t, saku_t: m.saku_t, phak_nt: m.phak_nt, ch_nt: m.ch_nt, ha_nt: m.ha_nt, bkk11_contacts: names.map(n => ({ nickname: n })) });
     };
-    for (const r of a) put(r, (r.ymd_places || []).map(x => x.nickname));
-    for (const r of b) put(r.members, [r.nickname]);
-    return [...out.values(), ...c.map(r => ({ nickOnly: r.nickname, ymd_places: [{ nickname: r.nickname }] }))].slice(0, 25);
+    for (const r of a) put(r, (r.bkk11_contacts || []).map(x => x.nickname));
+    for (const r of b) put(r.tokan, [r.nickname]);
+    return [...out.values(), ...c.map(r => ({ nickOnly: r.nickname, bkk11_contacts: [{ nickname: r.nickname }] }))].slice(0, 25);
   }
   let vqTimer = 0, vqSeq = 0;
   $("vf-q").oninput = () => {
@@ -3885,7 +3902,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         if (seq !== vqSeq) return;
         $("vf-status").textContent = rows.length ? `พบ ${rows.length}${rows.length >= 20 ? "+" : ""} รายการ` : "ไม่พบ ลองพิมพ์ให้สั้นลง หรือพิมพ์ชื่อในช่องด้านล่างเอง";
         $("vf-list").replaceChildren(...rows.map(r => {
-          const nicks = (r.ymd_places || []).map(x => x.nickname);
+          const nicks = (r.bkk11_contacts || []).map(x => x.nickname);
           const li = el("li");
           const b = el("button");
           b.type = "button";
@@ -4027,6 +4044,25 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     refreshAll();
   });
   addEventListener("pagehide", () => setBadge(badgeCount));
+  // iOS can drop the pinned bars (menu, sub-tabs, calendar) after the in-app browser, another app or the screen lock was
+  // shown on top of this page. Poke WebKit to lay them out and repaint again whenever the page comes back.
+  let repaintTimer = 0, wasAway = false;
+  function repaintBars(force) {
+    if (!wasAway && !force) return;
+    clearTimeout(repaintTimer);
+    repaintTimer = setTimeout(() => {
+      wasAway = false;
+      const bars = document.querySelectorAll("header, nav.tabs, .subtabs, .sstick, .vleft");
+      bars.forEach(b => { b.style.transform = "translate3d(0,0,0.01px)"; });
+      if (!force) { const y = scrollY; scrollTo(0, y + 1); scrollTo(0, y); }
+      requestAnimationFrame(() => requestAnimationFrame(() => bars.forEach(b => { b.style.transform = ""; })));
+    }, 60);
+  }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") wasAway = true; else repaintBars(); });
+  addEventListener("pagehide", () => { wasAway = true; });
+  addEventListener("blur", () => { wasAway = true; });
+  for (const ev of ["pageshow", "focus"]) addEventListener(ev, () => repaintBars());
+  addEventListener("orientationchange", () => repaintBars(true));
   window.renderBoard = render;
   try {
     board = JSON.parse($("board-data").textContent);
