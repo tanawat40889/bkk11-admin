@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-XIiikSd3164pkz+kUAtLNHo0OwsD4IhXmUNhNIph6rE='; style-src 'self' https://fonts.googleapis.com 'sha256-c+FSwW2Unc8oFQZKBuoR6sOANlGSU6En1sXfoHWrLPI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-wdHQQ7fvWsSfbrC/a79xiypThS5faeQU1hxa2Datti0='; style-src 'self' https://fonts.googleapis.com 'sha256-c+FSwW2Unc8oFQZKBuoR6sOANlGSU6En1sXfoHWrLPI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -1951,7 +1951,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   function requireLogin(message) {
     setMemSession(null);
-    try { localStorage.removeItem(ELIG_KEY); } catch (e) {}
+    try { localStorage.removeItem(ELIG_KEY); localStorage.removeItem("bkk11-events"); } catch (e) {}
     for (const d of document.querySelectorAll("dialog[open]")) d.close();
     showLoginForm(message);
   }
@@ -3578,18 +3578,22 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }, true);
   }
 
-  // ---------- ตารางงาน: events from the monthly news-table (board.events), only what concerns ยุวชนชาย ----------
+  // ---------- รายการ: every event comes from public.schedule_events ('pdf' rows = the monthly news-table, filled by the weekly task; 'manual' rows = typed here) ----------
   const YMD_WHO = /ยุวชนชาย|ผช|ยช|มิไรบุ/;
   let sMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
-  let sSel = "", sInit = false, sManual = [], sEdit = null;
-  const manualEvent = r => ({ date: r.event_date, ...(r.end_date ? { endDate: r.end_date } : {}), time: r.event_time || "", place: r.place || "", who: r.who || "", title: r.title, mid: r.id, row: r });
+  let sSel = "", sInit = false, sManual = [], sEdit = null;   // sManual = all rows of schedule_events (both sources)
+  // only 'manual' rows can be edited here (mid set); 'pdf' rows are replaced by the weekly task. A row without source (before the column existed) counts as manual
+  const manualEvent = r => ({ date: r.event_date, ...(r.end_date ? { endDate: r.end_date } : {}), time: r.event_time || "", place: r.place || "", who: r.who || "", title: r.title, ...(r.source === "pdf" ? {} : { mid: r.id }), row: r });
+  const EVENTS_KEY = "bkk11-events";   // last list read from the table, so the tab still works offline (cleared on sign-out)
+  try { const c = JSON.parse(localStorage.getItem(EVENTS_KEY) || "null"); if (Array.isArray(c) && memAuthed()) sManual = c; } catch (e) {}
   async function loadManual() {
     if (!memAuthed()) return;
     try {
       sManual = await memGet("/rest/v1/schedule_events?" + new URLSearchParams({ select: "*", order: "event_date,event_time", limit: "1000" }));
+      try { localStorage.setItem(EVENTS_KEY, JSON.stringify(sManual)); } catch (e) {}
     } catch (e) {
       if (e.status === 401) return;
-      sManual = [];
+      try { const c = JSON.parse(localStorage.getItem(EVENTS_KEY) || "null"); sManual = Array.isArray(c) ? c : []; } catch (er) { sManual = []; }
     }
     if (!$("panel-schedule").hidden) renderSchedule();
   }
@@ -3597,7 +3601,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const evIsYmd = e => YMD_WHO.test(e.who || "");
   function renderSchedule(jump) {
     closeSwipe();
-    const evs = [...((lastData && lastData.events) || []), ...sManual.map(manualEvent)]
+    const evs = sManual.map(manualEvent)
       .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : (a.time || "") < (b.time || "") ? -1 : 1));
     const y = sMonth.getUTCFullYear(), m = sMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
     const first = ym + "-01", last = ym + "-" + pad2(new Date(Date.UTC(y, m + 1, 0)).getUTCDate());
