@@ -1,5 +1,5 @@
 const CACHE = "bkk11-v1";
-const SHELL = ["./", "index.html", "logo.png", "loader-icon.png", "favicon.png", "apple-touch-icon.png", "manifest.webmanifest"];
+const SHELL = ["./", "index.html", "logo.png", "favicon.png", "apple-touch-icon.png", "manifest.webmanifest"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

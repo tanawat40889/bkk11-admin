@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-ZFNUBC4MKxtXNKCB6tejIItevSrsu3MHOlz0OXuqCRI='; style-src 'self' https://fonts.googleapis.com 'sha256-8NDHdyJIqtZB6/MKSBlwSy+p03f8eNWIiG02EEf3qdU='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-ZFNUBC4MKxtXNKCB6tejIItevSrsu3MHOlz0OXuqCRI='; style-src 'self' https://fonts.googleapis.com 'sha256-8zpC6Zwb9BcLdQYuYHlnApmxv67zoQpUMoVAeYSxj9g='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -862,15 +862,33 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   .bkk-loader__icon { animation: none; }
   .bkk-loader { transition-duration: 0.01s; }
 }
+
+/* Admin: โลโก้รวมภาค 11 อย่างเดียว (ไม่มีไอคอนแอป) + แถบ 5 สีวิ่ง */
+.bkk-loader--logo { gap: 22px; }
+.bkk-loader--logo .bkk-loader__brand {
+  width: min(240px, 62vw);
+  height: auto;
+  animation: bkk-pulse 1.8s ease-in-out infinite;
+}
+.bkk-loader__bar {
+  width: min(190px, 48vw);
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #be1e2d, #ffc20e, #8cc152, #2563eb, #1f3a6e, #be1e2d);
+  background-size: 200% 100%;
+  animation: bkk-slide 1.4s linear infinite;
+}
+@keyframes bkk-slide { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .bkk-loader--logo .bkk-loader__brand { animation: none; }
+  .bkk-loader__bar { animation-duration: 4s; }
+}
 </style>
 </head>
 <body>
-<div id="bkkLoader" class="bkk-loader" role="status" aria-live="polite">
-  <div class="bkk-loader__mark">
-    <span class="bkk-loader__ring" aria-hidden="true"></span>
-    <img class="bkk-loader__icon" src="loader-icon.png" alt="" width="72" height="72">
-  </div>
-  <img class="bkk-loader__brand" src="logo.png" alt="BKK11 รวมภาคกรุงเทพ" height="30">
+<div id="bkkLoader" class="bkk-loader bkk-loader--logo" role="status" aria-live="polite">
+  <img class="bkk-loader__brand" src="logo.png" alt="BKK11 รวมภาคกรุงเทพ" width="240" height="94">
+  <span class="bkk-loader__bar" aria-hidden="true"></span>
   <p class="bkk-loader__text">กำลังโหลดระบบ Admin…</p>
   <a class="bkk-loader__retry" href="">โหลดไม่ขึ้น? ลองใหม่</a>
 </div>
@@ -943,10 +961,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <span>รายการ</span>
   </button>
 </div>
-  <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-tokan/" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.3c2.7.2 5 2.4 5 5.7"/></svg>
-    <span>โทกัง</span>
-  </a>
   <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-ymdgooglemaps/" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
     <span>แผนที่</span>
@@ -1129,6 +1143,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </button>
   </div>
   <div class="morelist">
+    <a class="morebtn" href="https://tanawat40889.github.io/bkk11-tokan/" target="_blank" rel="noopener">
+      <span class="moreico" aria-hidden="true">👥</span>
+      <span class="moretxt"><b>โทกัง</b><small>รายชื่อสมาชิกรวมภาคกรุงเทพ 11 เปิดในแท็บใหม่</small></span>
+    </a>
     <button type="button" class="morebtn" id="open-mc">
       <span class="moreico" aria-hidden="true">🎙️</span>
       <span class="moretxt"><b>บทพิธีกรงานศพ</b><small>บทพิธีสวดมนต์อุทิศส่วนกุศล พิมพ์ชื่อหรือดึงจากฐานข้อมูลสมาชิก อ่านบนมือถือ/iPad</small></span>
