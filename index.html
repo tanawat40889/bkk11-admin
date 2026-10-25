@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-wdHQQ7fvWsSfbrC/a79xiypThS5faeQU1hxa2Datti0='; style-src 'self' https://fonts.googleapis.com 'sha256-c+FSwW2Unc8oFQZKBuoR6sOANlGSU6En1sXfoHWrLPI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-EVnF67Nbli8mbCa9l1kVGxwKcXUGiSBrmhhCzoxBo1k='; style-src 'self' https://fonts.googleapis.com 'sha256-c+FSwW2Unc8oFQZKBuoR6sOANlGSU6En1sXfoHWrLPI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -1382,9 +1382,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   <form id="mlogin-form" class="lockbox">
     <img src="logo.png" width="132" height="52" alt="BKK11 รวมภาคกรุงเทพ">
     <h2 id="mlogin-title">เข้าสู่ระบบ</h2>
-    <p class="hint">สำหรับผู้นำระดับรวมภาคและภาค ยุวชนชายเท่านั้น ใช้ชื่อและรหัสสมาชิกเดียวกับโทกัง</p>
-    <input id="mlogin-name" class="field" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ชื่อ-นามสกุล" aria-label="ชื่อ-นามสกุล">
-    <input id="mlogin-code" class="field" type="password" inputmode="numeric" autocomplete="off" placeholder="รหัสสมาชิก" aria-label="รหัสสมาชิก">
+    <p class="hint">สำหรับผู้นำระดับรวมภาคและภาค ยุวชนชายเท่านั้น ใช้ Username และ Password เดียวกับโทกัง</p>
+    <input id="mlogin-name" class="field" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Username" aria-label="Username">
+    <input id="mlogin-code" class="field" type="password" inputmode="numeric" autocomplete="off" placeholder="Password" aria-label="Password">
     <p class="warnline" id="mlogin-error" role="alert"></p>
     <button type="submit" class="btn" id="mlogin-go">เข้าสู่ระบบ</button>
   </form>
@@ -2047,7 +2047,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("mlogin-form").onsubmit = async e => {
     e.preventDefault();
     const name = $("mlogin-name").value.trim(), code = $("mlogin-code").value.trim();
-    if (!name || !code) { $("mlogin-error").textContent = "ใส่ชื่อและรหัสก่อน"; return; }
+    if (!name || !code) { $("mlogin-error").textContent = "ใส่ Username และ Password ก่อน"; return; }
     $("mlogin-go").disabled = true;
     $("mlogin-error").textContent = "กำลังเข้าสู่ระบบ…";
     BKKLoader.show("กำลังเข้าสู่ระบบ…");
