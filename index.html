@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-EVnF67Nbli8mbCa9l1kVGxwKcXUGiSBrmhhCzoxBo1k='; style-src 'self' https://fonts.googleapis.com 'sha256-c+FSwW2Unc8oFQZKBuoR6sOANlGSU6En1sXfoHWrLPI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-gAAvWbrUg8PMYrN8PXruaIJX7LEjiw7PmeIzK7wxZKo='; style-src 'self' https://fonts.googleapis.com 'sha256-oJ+WB53re1S2LsxukUEq3FqCXmyWbXlDzAz1BBRvDdA='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -41,6 +41,10 @@
   --lv-all: #c2410c;
   --v-bbn: #16a34a;
   --v-bkt: #ca8a04;
+  --v-c2: #2563eb;
+  --v-c3: #9333ea;
+  --v-c4: #ea580c;
+  --v-c5: #db2777;
   --r: 14px;
   --sat: env(safe-area-inset-top, 0px);
   --sal: env(safe-area-inset-left, 0px);
@@ -70,6 +74,10 @@
     --lv-all: #fdba74;
     --v-bbn: #4ade80;
     --v-bkt: #facc15;
+    --v-c2: #60a5fa;
+    --v-c3: #c084fc;
+    --v-c4: #fb923c;
+    --v-c5: #f472b6;
   }
 }
 :root[data-theme="dark"] {
@@ -92,6 +100,10 @@
   --lv-all: #fdba74;
   --v-bbn: #4ade80;
   --v-bkt: #facc15;
+  --v-c2: #60a5fa;
+  --v-c3: #c084fc;
+  --v-c4: #fb923c;
+  --v-c5: #f472b6;
 }
 * { box-sizing: border-box; margin: 0; }
 [hidden] { display: none !important; }
@@ -180,8 +192,8 @@ section { margin-top: 16px; }
 .sclose { display: grid; place-items: center; width: 44px; height: 44px; color: var(--mute); background: transparent; border: 0; border-radius: 12px; cursor: pointer; }
 .sclose svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; padding: 0; }
-.mc-bar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: calc(var(--sat) + 6px) 8px 8px; background: var(--card); border-bottom: 1px solid var(--line); }
-.mc-bar h3 { flex: 1; min-width: 0; font-size: 1.05rem; }
+.mc-bar, .acc-bar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: calc(var(--sat) + 6px) 8px 8px; background: var(--card); border-bottom: 1px solid var(--line); }
+.mc-bar h3, .acc-bar h3 { flex: 1; min-width: 0; font-size: 1.05rem; }
 .mc-opts { display: flex; flex: 1 0 100%; flex-wrap: wrap; gap: 6px 8px; }
 .mc-top { min-height: 38px; padding: 0 12px; font: inherit; font-size: .875rem; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
 .mc-fsx { position: fixed; z-index: 5; top: calc(var(--sat) + 8px); right: 10px; width: 44px; height: 44px; font: inherit; font-size: 1.1rem; color: var(--ink); background: color-mix(in srgb, var(--card) 80%, transparent); border: 1px solid var(--line); border-radius: 50%; opacity: .6; cursor: pointer; }
@@ -195,8 +207,8 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .mc-tools span { min-width: 3.2em; text-align: center; color: var(--mute); font-size: .875rem; }
 .mc-tools #mc-pdf { margin-left: auto; }
 .mc-tools #mc-wake[aria-pressed="true"] { color: var(--brand); border-color: var(--brand); }
-.mc-pane { max-width: 760px; margin: 0 auto; }
-.mc-pane.form { padding: 16px 16px calc(24px + var(--sab)); }
+.mc-pane, .acc-pane { max-width: 760px; margin: 0 auto; }
+.mc-pane.form, .acc-pane.form { padding: 16px 16px calc(24px + var(--sab)); }
 .mc-fields { display: grid; gap: 14px; }
 .mc-fields .mc-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
 .mc-fields .lab { grid-column: 1 / -1; font-size: .8125rem; color: var(--mute); }
@@ -233,6 +245,21 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vlegend .vdot { margin-right: 6px; }
 .vdot.bbn { background: var(--v-bbn); }
 .vdot.bkt { background: var(--v-bkt); }
+.vdot.c2 { background: var(--v-c2); }
+.vdot.c3 { background: var(--v-c3); }
+.vdot.c4 { background: var(--v-c4); }
+.vdot.c5 { background: var(--v-c5); }
+.tab[hidden] { display: none; }
+.acc-sec { display: grid; gap: 10px; padding: 14px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.acc-sec h4 { font-size: 1rem; }
+.acc-list, .acc-results, .acc-log { list-style: none; padding: 0; display: grid; gap: 8px; }
+.acc-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; }
+.acc-info { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.acc-info small { color: var(--mute); font-size: .8125rem; overflow-wrap: anywhere; }
+.acc-row .btn { flex: none; margin: 0; }
+.acc-empty { color: var(--mute); font-size: .875rem; }
+.acc-log { gap: 4px; margin-top: 8px; font-size: .8125rem; color: var(--mute); }
+.acc-hist summary { cursor: pointer; padding: 8px 0; }
 .vcal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .vdow { padding: 4px 0; text-align: center; font-size: .75rem; color: var(--mute); }
 .vcell { display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 56px; padding: 6px 2px; font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
@@ -961,7 +988,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <span>รายการ</span>
   </button>
 </div>
-  <a class="tab tablink" href="https://tanawat40889.github.io/bkk11-ymdgooglemaps/" target="_blank" rel="noopener">
+  <a class="tab tablink" id="tab-maps" href="https://tanawat40889.github.io/bkk11-ymdgooglemaps/" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
     <span>แผนที่</span>
   </a>
@@ -1040,7 +1067,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <div class="vcover" id="v-cover" role="alert" hidden>
       <span id="v-cover-text"></span>
     </div>
-    <div class="vlegend"><span><i class="vdot bbn"></i>ภาคบางบอน</span><span><i class="vdot bkt"></i>ภาคบางขุนเทียน</span></div>
+    <div class="vlegend" id="v-legend"></div>
     <div class="vcal" id="v-cal" aria-label="ปฏิทินนัดเยี่ยม"></div>
     </div>
     <div class="vright">
@@ -1151,11 +1178,25 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <span class="moreico" aria-hidden="true">🎙️</span>
       <span class="moretxt"><b>บทพิธีกรงานวัด</b><small>บทพิธีสวดมนต์อุทิศส่วนกุศล พิมพ์ชื่อหรือดึงจากฐานข้อมูลสมาชิก อ่านบนมือถือ/iPad</small></span>
     </button>
+    <button type="button" class="morebtn" id="open-access" hidden>
+      <span class="moreico" aria-hidden="true">🔐</span>
+      <span class="moretxt"><b>จัดการสิทธิ์</b><small>กำหนดว่าใครใช้ ต้องส่ง / แผนที่ ได้ (เฉพาะเจ้าของ)</small></span>
+    </button>
     <a class="morebtn" href="https://tanawat40889.github.io/bkk11-boardgames/" target="_blank" rel="noopener">
       <span class="moreico" aria-hidden="true">🎲</span>
       <span class="moretxt"><b>บอร์ดเกม</b><small>เปิดเว็บบอร์ดเกม BKK11 ในแท็บใหม่</small></span>
     </a>
   </div>
+</dialog>
+
+<dialog id="access" class="full" aria-labelledby="access-title">
+  <div class="acc-bar">
+    <button type="button" class="sclose" id="access-close" aria-label="ปิด">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 id="access-title">จัดการสิทธิ์</h3>
+  </div>
+  <div class="acc-pane form" id="access-body"></div>
 </dialog>
 
 <dialog id="mc" class="full" aria-labelledby="mc-title">
@@ -1233,10 +1274,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <label>ชื่อเล่น (เลือกจากรายชื่อติดต่อ หรือพิมพ์เอง)<input id="vf-nick" type="text" autocomplete="off"></label>
     <div class="chips" id="vf-nicks"></div>
     <label>ภาค
-      <select id="vf-phak">
-        <option value="บางบอน">ภาคบางบอน (สีเขียว)</option>
-        <option value="บางขุนเทียน">ภาคบางขุนเทียน (สีเหลือง)</option>
-      </select>
+      <select id="vf-phak"></select>
     </label>
     <div class="frow">
       <label>วันที่ไปเยี่ยม<input id="vf-date" type="date"></label>
@@ -1835,6 +1873,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let store = emptyState();      // full state incl. tombstones (this is what gets synced)
   let done = new Set();          // views derived from `store`
   const monthly = { items: [], json: "" };
+  // The ภาค list is not written in this file: it is the ภาค level of the shared area tree (public.areas), cached for offline use
+  const PHAK_KEY = "bkk11-phaks";
+  let PHAKS = (() => { try { const c = JSON.parse(localStorage.getItem(PHAK_KEY) || "[]"); return Array.isArray(c) ? c.filter(x => typeof x === "string" && x) : []; } catch (e) { return []; } })();
+  const VCLS = ["bbn", "bkt", "c2", "c3", "c4", "c5"], VCOLOR = ["เขียว", "เหลือง", "ฟ้า", "ม่วง", "ส้ม", "ชมพู"];
+  const phakIdx = p => Math.max(0, PHAKS.indexOf(p)) % VCLS.length;
+  const phakCls = p => VCLS[phakIdx(p)];
+  // Who may use which feature (public.access_my -> { owner, features }). Closed by default; the owner is always allowed.
+  // The server enforces it (Edge Function + row-level security); this only decides what is shown. Until it is known the tabs stay as they are.
+  const ACCESS_KEY = "bkk11-access";
+  const FEATURE_LABEL = { items: "ต้องส่ง", maps: "แผนที่" };
+  let ACCESS = { known: false, owner: false, features: [] };
+  const can = f => ACCESS.known && (ACCESS.owner || ACCESS.features.includes(f));
+  const uiOpen = f => !ACCESS.known || can(f);
   const settings = { roomsTemplate: "", photosTemplate: "" };   // "" = use the built-in message
   let sigs = new Map();
   let lastData = null;
@@ -1951,7 +2002,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   function requireLogin(message) {
     setMemSession(null);
-    try { localStorage.removeItem(ELIG_KEY); localStorage.removeItem("bkk11-events"); } catch (e) {}
+    try { localStorage.removeItem(ELIG_KEY); localStorage.removeItem("bkk11-events"); localStorage.removeItem(ACCESS_KEY); } catch (e) {}
+    ACCESS = { known: false, owner: false, features: [] };
     for (const d of document.querySelectorAll("dialog[open]")) d.close();
     showLoginForm(message);
   }
@@ -2005,7 +2057,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       res = await go(s.access_token);
     }
     if (!res.ok) throw Object.assign(new Error(method + " " + res.status), { status: res.status, body: await res.text().catch(() => "") });
-    return res.status === 204 ? null : res.json();
+    const text = res.status === 204 ? "" : await res.text();
+    return text ? JSON.parse(text) : null;
   }
   const memGet = path => memReq("GET", path);
   // The admin API (sync / push) with the same member token; same silent refresh
@@ -2119,6 +2172,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // One PUT both pushes this device's state and returns the merged result from the server
   async function syncNow() {
     if (!memAuthed()) { setSyncStatus("ยังไม่ได้ล็อกอิน", true); return { ok: false, message: "ยังไม่ได้ล็อกอิน" }; }
+    if (ACCESS.known && !can("items")) { setSyncStatus("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฟีเจอร์ต้องส่ง", true); return { ok: false, message: "ไม่มีสิทธิ์" }; }
     if (syncing) { syncDirty = true; return { ok: false, message: "กำลังซิงก์อยู่ รอสักครู่แล้วลองอีกครั้ง" }; }
     syncing = true;
     syncDirty = false;
@@ -2219,6 +2273,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         : "เบราว์เซอร์นี้ไม่รองรับ push", true);
     }
     if (!memAuthed()) return setPushStatus("ล็อกอินก่อน แล้วจึงเปิดแจ้งเตือนได้", true);
+    if (ACCESS.known && !can("items")) return setPushStatus("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฟีเจอร์ต้องส่ง จึงเปิดแจ้งเตือนไม่ได้", true);
     setPushStatus("กำลังตรวจสอบ…");
     try {
       const res = await pushFetch("GET");
@@ -2380,10 +2435,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       b.textContent = n > 99 ? "99+" : String(n);
       b.hidden = !n;
     };
-    for (const id of ["items", "rooms", "photos", "monthly"]) put("#subtab-" + id + " .bdg", badgeParts[id]);
-    put("#tab-visits .bdg", badgeParts.visits);
-    const total = badgeParts.rooms + badgeParts.photos + badgeParts.items + badgeParts.monthly + badgeParts.visits;
-    put("#tab-items .bdg", badgeParts.rooms + badgeParts.photos + badgeParts.items + badgeParts.monthly);
+    const bp = uiOpen("items") ? badgeParts : { ...badgeParts, rooms: 0, photos: 0, items: 0, monthly: 0 };   // no counts for a feature the account may not use
+    for (const id of ["items", "rooms", "photos", "monthly"]) put("#subtab-" + id + " .bdg", bp[id]);
+    put("#tab-visits .bdg", bp.visits);
+    const total = bp.rooms + bp.photos + bp.items + bp.monthly + bp.visits;
+    put("#tab-items .bdg", bp.rooms + bp.photos + bp.items + bp.monthly);
     setBadge(total);
   }
   function setBadge(n) {
@@ -2436,22 +2492,21 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const UPCOMING_MAX = 2;
   const HISTORY_DAYS = 365;
 
-  const DEFAULT_ROOMS_TEMPLATE = [
+  const defaultRoomsTemplate = () => [
     "ข้อความนี้ส่งถึงผู้นำระดับภาคครับ",
     "",
     "ขออนุญาตยืนยันข้อมูลผู้เข้าร่วมห้องระลึก อ. ผู้มีพระคุณโดยมีรายละเอียดดังนี้",
     "",
     "วันที่ {วันที่จัดและเวลา}",
     "",
-    "ภาคบางบอน จำนวน {บางบอน} ท่าน",
-    "ภาคบางขุนเทียน จำนวน {บางขุนเทียน} ท่าน",
+    ...PHAKS.map(p => `ภาค${p} จำนวน {${p}} ท่าน`),
     "",
     "โดยผู้นำสามารถตรวจสอบได้จาก Link ด้านล่างนี้",
     "https://docs.google.com/spreadsheets/d/1GFecuxSa8tHV9hNvU3fv2ZKLCUnspOBDWjEwjasp2hA/edit?usp=sharing",
     "",
     "หากพบข้อมูลผิดพลาดสามารถแจ้งผ่านผมได้เลยครับ ขอบคุณครับ"
   ].join("\n");
-  const roomsTemplate = () => settings.roomsTemplate || DEFAULT_ROOMS_TEMPLATE;
+  const roomsTemplate = () => settings.roomsTemplate || defaultRoomsTemplate();
 
   // ---------- รูปสนทนาธรรม 4 ฝ่าย: who has not sent both pictures this month (status comes from BKK11-4DivisionMeeting) ----------
   const UPLOAD_URL = "https://tanawat40889.github.io/bkk11-4divisionmeeting/?openExternalBrowser=1";
@@ -2571,9 +2626,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   // {วันที่จัดและเวลา} -> 22 กันยายน 2569 เวลา 10:00-12:00 น.   ({วัน} = อังคาร, {รวม} = total, {ชื่อภาค} = head count)
   // Locked: each region always sends 3 people per round, whatever the board says
-  const REGION_DEFAULTS = { "บางบอน": 3, "บางขุนเทียน": 3 };
+  const regionDefaults = () => Object.fromEntries(PHAKS.map(p => [p, 3]));
   function roomsMessage(r, d) {
-    const regions = { ...(r.regions || {}), ...REGION_DEFAULTS };
+    const regions = { ...(r.regions || {}), ...regionDefaults() };
     const time = String(r.time || "").trim();
     const vars = {
       "วันที่จัดและเวลา": `${d.getUTCDate()} ${MONTH_FULL[d.getUTCMonth()]} ${d.getUTCFullYear() + 543}` + (time ? ` เวลา ${time}${/น\.?$/.test(time) ? "" : " น."}` : ""),
@@ -3170,13 +3225,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     tpl.oninput = () => {
       clearTimeout(tplTimer);
       tplTimer = setTimeout(() => {
-        settings.roomsTemplate = tpl.value === DEFAULT_ROOMS_TEMPLATE ? "" : tpl.value;
+        settings.roomsTemplate = tpl.value === defaultRoomsTemplate() ? "" : tpl.value;
         saveMonthly();
       }, 400);
     };
     $("rooms-tpl-reset").onclick = () => {
       settings.roomsTemplate = "";
-      tpl.value = DEFAULT_ROOMS_TEMPLATE;
+      tpl.value = defaultRoomsTemplate();
       saveMonthly();
     };
     const ptpl = $("photos-tpl-text");
@@ -3259,7 +3314,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     t.onclick = () => { showTab(t.dataset.tab); if (t.dataset.tab === "items") showSub(curSub); scrollTo(0, 0); };
     t.onkeydown = e => {
       const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-      if (k) showTab(tabs[(i + k + tabs.length) % tabs.length].dataset.tab, true);
+      if (!k) return;
+      const vis = tabs.filter(x => !x.hidden), j = vis.indexOf(t);
+      showTab(vis[(j + k + vis.length) % vis.length].dataset.tab, true);
     };
   });
   // Light/dark choice is per device (auto follows the phone); the early script in <head> applies it before first paint
@@ -3777,7 +3834,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("s-today").onclick = () => { const t = today(); sMonth = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); sSel = isoDay(t); renderSchedule(true); };
 
   // ---------- นัดเยี่ยมน้อง: a shared calendar (table public.visits, protected by row-level security) ----------
-  const VISIT_CLASS = { "บางบอน": "bbn", "บางขุนเทียน": "bkt" };
   const VISIT_STATUS = { coordinating: "กำลังประสานงานน้อง", coordinated: "ประสานงานน้องแล้ว" };
   const pad2 = n => String(n).padStart(2, "0");
   let vMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
@@ -3836,7 +3892,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     params.set("and", `(visit_date.gte.${isoDay(new Date(Date.UTC(y, m, 1)))},visit_date.lte.${isoDay(new Date(Date.UTC(y, m + 1, 0)))})`);
     try {
       const have = new Set((await memGet("/rest/v1/visits?" + params)).map(r => r.phak));
-      vMissing = Object.keys(VISIT_CLASS).filter(p => !have.has(p));
+      vMissing = PHAKS.filter(p => !have.has(p));
     } catch (e) {
       return;
     }
@@ -3846,7 +3902,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("v-cover-text").textContent = vMissing.length ? `เดือน${MONTH_FULL[m]}ยังไม่มีนัดเยี่ยมของ ${vMissing.map(p => "ภาค" + p).join(" และ ")}` : "";
   }
   function visitCard(r) {
-    const cls = VISIT_CLASS[r.phak] || "bbn";
+    const cls = phakCls(r.phak);
     const li = el("li", "card vcard");
     li.style.setProperty("--lc", "var(--v-" + cls + ")");
     const top = el("div", "ctop");
@@ -3923,7 +3979,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function drawShare() {
     const { sharer, who, when, text } = shareText(vShare.r, vShare.map);
     const card = $("vs-card");
-    card.style.setProperty("--lc", "var(--v-" + (VISIT_CLASS[vShare.r.phak] || "bbn") + ")");
+    card.style.setProperty("--lc", "var(--v-" + phakCls(vShare.r.phak) + ")");
     const nodes = [el("div", "sc-title", `${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`), el("div", null, "📅 " + when)];
     if (vShare.map) {
       const line = el("div", null, "📍 ");
@@ -3984,7 +4040,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       b.type = "button";
       b.setAttribute("aria-label", `${d} ${MONTH_FULL[m]} มี ${list.length} นัด`);
       const dots = el("span", "vdots");
-      list.slice(0, 4).forEach(r => dots.append(el("i", "vdot " + (VISIT_CLASS[r.phak] || "bbn"))));
+      list.slice(0, 4).forEach(r => dots.append(el("i", "vdot " + phakCls(r.phak))));
       if (list.length > 4) dots.append(el("small", null, "+" + (list.length - 4)));
       b.append(el("span", "vnum", String(d)), dots);
       b.onclick = () => { vSelDay = vSelDay === key ? "" : key; renderVisits(); };
@@ -4035,7 +4091,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("vf-last").value = row ? row.last_name || "" : "";
     $("vf-nick").value = row ? row.nickname || "" : "";
     showNicks([]);
-    $("vf-phak").value = row ? row.phak : VISIT_CLASS[myPhak] ? myPhak : "บางบอน";
+    $("vf-phak").value = row ? row.phak : PHAKS.includes(myPhak) ? myPhak : PHAKS[0] || "";
     $("vf-date").value = row ? row.visit_date : vSelDay || (isoDay(today()).slice(0, 7) === isoDay(vMonth).slice(0, 7) ? isoDay(today()) : isoDay(vMonth));
     $("vf-time").value = row && row.visit_time ? String(row.visit_time).slice(0, 5) : "";
     setVStatus(row ? row.status : "coordinating");
@@ -4106,7 +4162,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
           b.onclick = () => {
             $("vf-first").value = r.name_t || "";
             $("vf-last").value = r.saku_t || "";
-            if (VISIT_CLASS[r.phak_nt]) $("vf-phak").value = r.phak_nt;
+            if (PHAKS.includes(r.phak_nt)) $("vf-phak").value = r.phak_nt;
             $("vf-nick").value = nicks[0] || "";
             showNicks(nicks);
             $("vf-list").replaceChildren();
@@ -4172,13 +4228,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("tab-settings").onclick = openSettings;
   $("settings-close").onclick = () => $("settings").close();
   $("settings").addEventListener("click", e => { if (e.target === $("settings")) $("settings").close(); });
+  loadAccessCache();
+  applyAccess();   // tabs the cached verdict says are closed never show
   const initial = location.hash.slice(1);
   if (initial === "visits" || initial === "schedule") showTab(initial);
+  else if (!uiOpen("items")) showTab("visits");
   else { showTab("items"); showSub(SUBS.includes(initial) ? initial : "items"); }
   if (initial === "settings") openSettings();
   addEventListener("hashchange", () => {
     const id = location.hash.slice(1);
-    if (SUBS.includes(id)) { showTab("items"); showSub(id); }
+    if (SUBS.includes(id)) { if (uiOpen("items")) { showTab("items"); showSub(id); } else showTab("visits"); }
     else if (id === "visits" || id === "schedule") showTab(id);
     else if (id === "settings") openSettings();
   });
@@ -4202,15 +4261,163 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     };
     $("mpush").addEventListener("toggle", () => { if ($("mpush").open) refreshPush(); });
   }
+  // ภาค list from the area tree (public read); everything that shows a ภาค is repainted when it arrives
+  function paintPhaks() {
+    const lg = $("v-legend");
+    lg.replaceChildren(...PHAKS.map(p => { const sp = el("span"); sp.append(el("i", "vdot " + phakCls(p)), "ภาค" + p); return sp; }));
+    const sel = $("vf-phak"), cur = sel.value;
+    sel.replaceChildren(...PHAKS.map(p => { const o = el("option", null, `ภาค${p} (สี${VCOLOR[phakIdx(p)]})`); o.value = p; return o; }));
+    if (PHAKS.includes(cur)) sel.value = cur;
+  }
+  async function loadPhaks() {
+    if (!memAuthed()) return;
+    try {
+      const rows = await memGet("/rest/v1/areas?" + new URLSearchParams({ select: "name", level: "eq.phak", order: "sort_order,id", limit: "50" }));
+      const names = rows.map(r => r && r.name).filter(Boolean);
+      if (names.length && names.join("|") !== PHAKS.join("|")) {
+        PHAKS = names;
+        try { localStorage.setItem(PHAK_KEY, JSON.stringify(PHAKS)); } catch (e) {}
+        paintPhaks();
+        refreshAll();
+        if (!$("panel-visits").hidden) { renderVisits(); loadCoverage(); }
+      }
+    } catch (e) { /* keep the cached list */ }
+  }
   function afterLogin() {
-    syncNow();
-    if (getPref(PUSH_KEY) === "1") refreshPush();
+    loadPhaks();
     if (!$("panel-visits").hidden) loadVisits();
     else loadCoverage();
     if (!$("panel-schedule").hidden) loadManual();
+    loadAccess().finally(() => {   // sync / push only after we know whether this account may use ต้องส่ง
+      syncNow();
+      if (getPref(PUSH_KEY) === "1") refreshPush();
+    });
   }
 
   initBadgeAsk();
+  // ---------- who may use what: show/hide by the permission list; the owner gets a page to edit it ----------
+  function loadAccessCache() {
+    try {
+      const c = JSON.parse(localStorage.getItem(ACCESS_KEY) || "null"), s = memSession();
+      if (c && s && c.sub === jwtClaims(s.access_token).sub) ACCESS = { known: true, owner: !!c.owner, features: Array.isArray(c.features) ? c.features : [] };
+    } catch (e) {}
+  }
+  function applyAccess() {
+    const items = uiOpen("items");
+    $("tab-items").hidden = !items;
+    $("tab-maps").hidden = !uiOpen("maps");
+    $("open-access").hidden = !ACCESS.owner;
+    const cur = tabs.find(t => t.getAttribute("aria-selected") === "true");
+    if (!items && (!cur || cur.dataset.tab === "items")) showTab("visits");
+    refreshBadges();
+  }
+  async function loadAccess() {
+    if (!memAuthed()) return;
+    try {
+      const r = await memReq("POST", "/rest/v1/rpc/access_my", {});
+      ACCESS = { known: true, owner: !!(r && r.owner), features: r && Array.isArray(r.features) ? r.features : [] };
+      try { localStorage.setItem(ACCESS_KEY, JSON.stringify({ sub: jwtClaims(memSession().access_token).sub, owner: ACCESS.owner, features: ACCESS.features })); } catch (e) {}
+    } catch (e) {
+      if (e.status === 401) return;
+      if (!ACCESS.known) ACCESS = { known: true, owner: false, features: [] };   // cannot be read (and nothing cached): closed, like the server
+    }
+    applyAccess();
+  }
+
+  const accessErr = e => (e && (e.status === 401 || e.status === 403) ? "ไม่มีสิทธิ์ (เฉพาะเจ้าของระบบ)" : "ทำรายการไม่สำเร็จ ลองใหม่อีกครั้ง");
+  async function openAccess() {
+    if (!ACCESS.owner) return;
+    if ($("more").open) $("more").close();
+    if (!$("access").open) $("access").showModal();
+    await renderAccess();
+  }
+  async function renderAccess() {
+    const body = $("access-body");
+    let rows, log;
+    try {
+      [rows, log] = await Promise.all([memReq("POST", "/rest/v1/rpc/access_list", {}), memReq("POST", "/rest/v1/rpc/access_changes_list", { p_limit: 30 })]);
+    } catch (e) { body.replaceChildren(el("p", "warnline", accessErr(e))); return; }
+    const err = el("p", "warnline");
+    err.id = "access-err";
+    err.hidden = true;
+    const showErr = m => { err.textContent = m; err.hidden = !m; };
+    const secs = Object.keys(FEATURE_LABEL).map(key => accessSection(key, rows.filter(r => r.feature === key), showErr));
+    const hist = el("details", "acc-hist");
+    const ul = el("ul", "acc-log");
+    ul.append(...(log.length ? log : [{ at: "", action: "", target_name: "ยังไม่มีการเปลี่ยนแปลง" }]).map(c => el("li", null,
+      (c.at ? new Date(c.at).toLocaleString("th-TH", { dateStyle: "short", timeStyle: "short" }) + " · " : "") +
+      (c.action ? (c.action === "grant" ? "เพิ่ม " : "ถอน ") + (FEATURE_LABEL[c.feature] || c.feature) + " · " : "") + (c.target_name || ""))));
+    hist.append(el("summary", null, "ประวัติการเปลี่ยนแปลงล่าสุด"), ul);
+    body.replaceChildren(el("p", "hint", "เจ้าของเข้าใช้ได้ทุกฟีเจอร์เสมอ · ปิดไว้ก่อน เฉพาะคนที่เพิ่มในรายชื่อเท่านั้นที่ใช้ได้ · มีผลภายใน 1 นาที"), err, ...secs, hist);
+  }
+  function accessSection(key, rows, showErr) {
+    const label = FEATURE_LABEL[key];
+    const sec = el("section", "acc-sec");
+    sec.dataset.feature = key;
+    sec.append(el("h4", null, `${label} (${rows.length} คน)`));
+    const list = el("ul", "acc-list");
+    if (!rows.length) list.append(el("li", "acc-empty", "ยังไม่มีใครในรายชื่อ (ใช้ได้เฉพาะเจ้าของ)"));
+    for (const r of rows) {
+      const li = el("li", "acc-row");
+      const info = el("div", "acc-info");
+      info.append(el("b", null, r.name || "-"), el("small", null, [r.po, r.phak && "ภาค" + r.phak, r.khet && "เขต" + r.khet].filter(Boolean).join(" · ")));
+      if (r.granted_by) info.append(el("small", null, "เพิ่มโดย " + r.granted_by));
+      const b = el("button", "btn danger xs", "ถอน");
+      b.type = "button";
+      b.onclick = async () => {
+        if (!confirm(`ถอนสิทธิ์ ${label} ของ ${r.name}?`)) return;
+        b.disabled = true;
+        try { await memReq("POST", "/rest/v1/rpc/access_revoke", { p_id: r.id }); await renderAccess(); } catch (e) { b.disabled = false; showErr(accessErr(e)); }
+      };
+      li.append(info, b);
+      list.append(li);
+    }
+    const inp = el("input");
+    inp.type = "search";
+    inp.placeholder = "พิมพ์ชื่อเพื่อค้นหาและเพิ่ม";
+    inp.autocomplete = "off";
+    inp.setAttribute("aria-label", "ค้นหาสมาชิกเพื่อเพิ่มสิทธิ์ " + label);
+    const res = el("ul", "acc-results");
+    let timer = 0, seq = 0;
+    inp.oninput = () => {
+      clearTimeout(timer);
+      timer = setTimeout(async () => {
+        const q = inp.value.trim(), my = ++seq;
+        showErr("");
+        const toks = q.split(/\s+/).map(t => t.replace(/[*,()%\\]/g, "")).filter(Boolean).slice(0, 3);
+        if (q.length < 2 || !toks.length) { res.replaceChildren(); return; }
+        let found;
+        try {
+          const conds = toks.map(t => { const v = "*" + encodeURIComponent(t) + "*"; return `or(name_t.ilike.${v},saku_t.ilike.${v})`; });
+          found = await memGet(`/rest/v1/tokan?select=mt_co,name_t,saku_t,po_nt,phak_nt,sh_nt&and=(${conds.join(",")})&order=name_t&limit=20`);
+        } catch (e) { showErr(accessErr(e)); return; }
+        if (my !== seq) return;
+        res.replaceChildren(...(found.length ? found.map(m => {
+          const li = el("li", "acc-row");
+          const info = el("div", "acc-info");
+          info.append(el("b", null, [m.name_t, m.saku_t].filter(Boolean).join(" ")), el("small", null, [m.po_nt, m.phak_nt && "ภาค" + m.phak_nt, m.sh_nt && "เขต" + m.sh_nt].filter(Boolean).join(" · ")));
+          const add = el("button", "btn xs", "เพิ่ม");
+          add.type = "button";
+          add.onclick = async () => {
+            add.disabled = true;
+            try {
+              const id = await memReq("POST", "/rest/v1/rpc/access_grant", { p_feature: key, p_mt_co: m.mt_co });
+              if (id === null || id === undefined) { showErr("คนนี้มีสิทธิ์อยู่แล้ว"); add.disabled = false; return; }
+              await renderAccess();
+            } catch (e) { add.disabled = false; showErr(accessErr(e)); }
+          };
+          li.append(info, add);
+          return li;
+        }) : [el("li", "acc-empty", "ไม่พบสมาชิกที่ตรงกับคำค้น")]));
+      }, 300);
+    };
+    sec.append(list, inp, res);
+    return sec;
+  }
+  $("open-access").onclick = openAccess;
+  $("access-close").onclick = () => $("access").close();
+
+  paintPhaks();
   initMonthly();
   initSync();
   gateStart();
@@ -4218,6 +4425,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let lastPoll = Date.now();
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") return setBadge(badgeCount);
+    if (memAuthed()) loadAccess();   // a grant or a revoke by the owner shows as soon as the app comes back, not after the 20 s poll gap
     if (Date.now() - lastPoll > 20000) {
       lastPoll = Date.now();
       loadBoard();
@@ -4228,6 +4436,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     shownDay = today().getTime();
     refreshAll();
   });
+  setInterval(() => { if (document.visibilityState === "visible" && memAuthed()) loadAccess(); }, 120000);   // and every 2 minutes while it stays open
   addEventListener("pagehide", () => setBadge(badgeCount));
   // iOS can drop the pinned bars (menu, sub-tabs, calendar) after the in-app browser, another app or the screen lock was
   // shown on top of this page. Poke WebKit to lay them out and repaint again whenever the page comes back.
