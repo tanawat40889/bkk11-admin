@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-o/MQgEDUqyX9JiifyUbUMnJdIz/mC3svGykLMAcjrAg='; style-src 'self' https://fonts.googleapis.com 'sha256-WvwnduN56JX79VQqsRbCHXXCVZ3DFv9Q6Ihm/VO8oVA='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-oENifF8U4QZOv1rNwLvsPosKtG1NEkMhW7IYIK/OW/U='; style-src 'self' https://fonts.googleapis.com 'sha256-WvwnduN56JX79VQqsRbCHXXCVZ3DFv9Q6Ihm/VO8oVA='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -1135,6 +1135,17 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <button type="button" class="btn ghost" id="o-cancel">ยกเลิก</button>
       <button type="button" class="btn danger" id="o-reset">คืนค่าปกติ</button>
       <button type="button" class="btn" id="o-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="today" aria-labelledby="today-title">
+  <div class="form">
+    <h3 id="today-title">รายการวันนี้</h3>
+    <ul class="list" id="today-list"></ul>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="today-close">ปิด</button>
+      <button type="button" class="btn" id="today-open">ดูรายการทั้งหมด</button>
     </div>
   </div>
 </dialog>
@@ -2404,12 +2415,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // App icon badge (iOS 16.4+ installed web app; needs notification permission there)
   // Counts items due within BADGE_DAYS days (today included).
   const BADGE_DAYS = NOTIFY_DAYS;
-  const UPCOMING_DAYS = 7;   // นัดเยี่ยมที่ยังไม่ประสาน + รายการ: notified this many days ahead (same number as notify.mjs, so the push shows the same count)
+  const UPCOMING_DAYS = 7;   // นัดเยี่ยมที่ยังไม่ประสาน: notified this many days ahead (same number as notify.mjs, so the push shows the same count)
   const badgeOk = () => typeof navigator.setAppBadge === "function";
   const hasNotif = () => typeof Notification !== "undefined";
   let badgeCount = 0;
   // Counts shown as red bubbles on the tab icons; their sum goes on the app icon
-  const badgeParts = { rooms: 0, photos: 0, items: 0, monthly: 0, visits: 0, schedule: 0 };
+  const badgeParts = { rooms: 0, photos: 0, items: 0, monthly: 0, visits: 0 };
   function refreshBadges() {
     const put = (sel, n) => {
       const b = document.querySelector(sel);
@@ -2419,8 +2430,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const bp = uiOpen("items") ? badgeParts : { ...badgeParts, rooms: 0, photos: 0, items: 0, monthly: 0 };   // no counts for a feature the account may not use
     for (const id of ["items", "rooms", "photos", "monthly"]) put("#subtab-" + id + " .bdg", bp[id]);
     put("#tab-visits .bdg", bp.visits);
-    put("#tab-schedule .bdg", bp.schedule);
-    const total = bp.rooms + bp.photos + bp.items + bp.monthly + bp.visits + bp.schedule;
+    const total = bp.rooms + bp.photos + bp.items + bp.monthly + bp.visits;
     put("#tab-items .bdg", bp.rooms + bp.photos + bp.items + bp.monthly);
     setBadge(total);
   }
@@ -3623,11 +3633,33 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let sSel = "", sInit = false, sManual = [], sEdit = null;   // sManual = all rows of schedule_events (both sources)
   // only 'manual' rows can be edited here (mid set); 'pdf' rows are replaced by the weekly task. A row without source (before the column existed) counts as manual
   const manualEvent = r => ({ date: r.event_date, ...(r.end_date ? { endDate: r.end_date } : {}), time: r.event_time || "", place: r.place || "", who: r.who || "", title: r.title, ...(r.source === "pdf" ? {} : { mid: r.id }), row: r });
-  // รายการ notification: events that start within UPCOMING_DAYS days, or are running today (the daily push counts the same rows)
-  function refreshScheduleBadge() {
-    const t = today(), limit = new Date(t.getTime() + UPCOMING_DAYS * 864e5);
-    badgeParts.schedule = sManual.filter(r => { const s0 = parse(r.event_date), e0 = r.end_date ? parse(r.end_date) : s0; return (s0 <= t && e0 >= t) || (s0 >= t && s0 <= limit); }).length;
-    refreshBadges();
+  // รายการ has no number on its tab; instead the first time the app opens each morning, the events of today (starting or still running) pop up once
+  const TODAY_SEEN_KEY = "bkk11-today-seen";
+  function eventsToday() {
+    const k = isoDay(today());
+    return sManual.map(manualEvent).filter(e => e.date <= k && evEnd(e) >= k).sort((a, b) => ((a.time || "") < (b.time || "") ? -1 : 1));
+  }
+  function showTodayPopup() {
+    if (!memAuthed() || $("today").open) return;
+    const k = isoDay(today());
+    let seen = ""; try { seen = localStorage.getItem(TODAY_SEEN_KEY) || ""; } catch (e) {}
+    if (seen === k) return;
+    const list = eventsToday();
+    if (!list.length) return;
+    try { localStorage.setItem(TODAY_SEEN_KEY, k); } catch (e) {}
+    $("today-title").textContent = "รายการวันนี้ " + fmt(today());
+    $("today-list").replaceChildren(...list.map(e => {
+      const li = el("li", "card scard" + (evIsYmd(e) ? " ymd" : ""));
+      const main = el("div", "cmain");
+      main.append(el("div", "ctitle", e.title));
+      if (e.place) main.append(el("div", "meta", "📍 " + e.place));
+      if (e.who) main.append(el("span", "pill " + (evIsYmd(e) ? "ok" : "mute"), e.who));
+      const head = el("div", "chead");
+      head.append(el("div", "stime" + (e.time ? "" : " none"), e.time || "ทั้งวัน"), main);
+      li.append(head);
+      return li;
+    }));
+    $("today").showModal();
   }
   const EVENTS_KEY = "bkk11-events";   // last list read from the table, so the tab still works offline (cleared on sign-out)
   try { const c = JSON.parse(localStorage.getItem(EVENTS_KEY) || "null"); if (Array.isArray(c) && memAuthed()) sManual = c; } catch (e) {}
@@ -3640,7 +3672,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (e.status === 401) return;
       try { const c = JSON.parse(localStorage.getItem(EVENTS_KEY) || "null"); sManual = Array.isArray(c) ? c : []; } catch (er) { sManual = []; }
     }
-    refreshScheduleBadge();
+    showTodayPopup();
     if (!$("panel-schedule").hidden) renderSchedule();
   }
   const evEnd = e => e.endDate || e.date;
@@ -4223,6 +4255,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     refreshPush();
   }
   $("tab-settings").onclick = openSettings;
+  $("today-close").onclick = () => $("today").close();
+  $("today-open").onclick = () => { $("today").close(); showTab("schedule"); };
+  $("today").addEventListener("click", e => { if (e.target === $("today")) $("today").close(); });
   $("settings-close").onclick = () => $("settings").close();
   $("settings").addEventListener("click", e => { if (e.target === $("settings")) $("settings").close(); });
   loadAccessCache();
@@ -4284,7 +4319,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     loadPhaks();
     if (!$("panel-visits").hidden) loadVisits();
     else loadCoverage();
-    loadManual();   // the รายการ tab's notification number needs the events even while the tab is closed
+    loadManual();   // the morning popup needs the events even while the รายการ tab is closed
     loadAccess().finally(() => {   // sync / push only after we know whether this account may use ต้องส่ง
       syncNow();
       if (getPref(PUSH_KEY) === "1") refreshPush();
