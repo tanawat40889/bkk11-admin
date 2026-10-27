@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
+<title>จัดการสิทธิ์ · Admin รภ.11</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="access.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <h1>จัดการสิทธิ์การเข้าถึง</h1>
+    <span class="who" id="who"></span>
+    <a class="btn ghost" href="./" id="back">← กลับแอป Admin</a>
+    <button type="button" class="btn ghost" id="logout" hidden>ออกจากระบบ</button>
+  </div>
+</header>
+
+<main>
+  <p class="loading" id="loading" role="status">กำลังโหลด…</p>
+
+  <section class="card narrow" id="login" hidden>
+    <h2>เข้าสู่ระบบ</h2>
+    <p class="hint">ใช้บัญชีเดียวกับโทกัง · หน้านี้เปิดได้เฉพาะเจ้าของระบบ</p>
+    <form id="login-form" autocomplete="off">
+      <label>ชื่อ<input id="login-name" type="text" required maxlength="100" autocomplete="off"></label>
+      <label>รหัสสมาชิก<input id="login-code" type="password" required maxlength="100" autocomplete="off" inputmode="numeric"></label>
+      <button type="submit" class="btn" id="login-go">เข้าสู่ระบบ</button>
+      <p class="err" id="login-err" role="alert" hidden></p>
+    </form>
+  </section>
+
+  <section class="card narrow" id="denied" hidden>
+    <h2>เปิดหน้านี้ไม่ได้</h2>
+    <p id="denied-text">หน้านี้สำหรับเจ้าของระบบเท่านั้น</p>
+  </section>
+
+  <section id="app" hidden>
+    <div class="stats" id="stats"></div>
+
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="ค้นหาชื่อ ตำแหน่ง ภาค เขต" aria-label="ค้นหา" autocomplete="off">
+      <select id="mode" aria-label="แสดง">
+        <option value="all">แสดงทั้งหมด</option>
+        <option value="some">มีสิทธิ์อย่างน้อย 1 อย่าง</option>
+        <option value="none">ยังไม่มีสิทธิ์</option>
+      </select>
+      <button type="button" class="btn ghost" id="reload">รีเฟรช</button>
+      <span class="status" id="status" role="status" aria-live="polite"></span>
+    </div>
+
+    <div class="tablewrap">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th scope="col">ชื่อ</th>
+            <th scope="col">ตำแหน่ง</th>
+            <th scope="col">ภาค · เขต</th>
+            <th scope="col">เข้าใช้ล่าสุด</th>
+            <th scope="col" class="chkcol">ต้องส่ง<small id="cnt-items"></small></th>
+            <th scope="col" class="chkcol">แผนที่<small id="cnt-maps"></small></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="empty" id="empty" hidden>ไม่พบรายชื่อที่ตรงกับที่ค้นหา</p>
+    <p class="hint">แสดงเฉพาะคนที่ลงทะเบียนแล้ว (เคยล็อกอินเข้าระบบอย่างน้อยหนึ่งครั้ง) · ติ๊ก = ใช้ได้ · เอาติ๊กออก = ใช้ไม่ได้ · มีผลภายใน 1 นาที · เจ้าของใช้ได้ทุกอย่างเสมอ</p>
+
+    <details class="hist">
+      <summary>ประวัติการเปลี่ยนแปลงล่าสุด</summary>
+      <ul id="log"></ul>
+    </details>
+  </section>
+</main>
+<script src="access.js"></script>
+</body>
+</html>
