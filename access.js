@@ -5,7 +5,7 @@
   const URL_ = "https://cqdzfsucpivsgznfpjxl.supabase.co";
   const KEY = "sb_publishable_XkUBjE3M7HUiuDv7YwsbKA_mSu0ToEc";
   const SESSION_KEY = "tokan_session_v1";   // shared with โทกัง / Admin / แผนที่ (same origin)
-  const FEATURES = [["items", "ต้องส่ง"], ["maps", "แผนที่"]];
+  const FEATURES = [["items", "ต้องส่ง"], ["maps", "แผนที่"], ["access", "จัดการสิทธิ์"]];
   const LABEL = Object.fromEntries(FEATURES);
 
   const $ = id => document.getElementById(id);
@@ -63,7 +63,8 @@
     (($("login-name").value ? $("login-code") : $("login-name"))).focus();
   }
 
-  let people = [], mode = "all", query = "";
+  let isOwner = false;   // only the owner may tick the "จัดการสิทธิ์" column (the database enforces it too)
+  let people = [], mode = "all", query = "", faFilter = "", sortKey = "name", sortDir = 1;
   const norm = s => String(s == null ? "" : s).toLowerCase().replace(/\s+/g, "");
   const has = (p, f) => p.is_owner || (p.features || []).includes(f);
   const fmtDate = v => { if (!v) return "–"; const d = new Date(v); return isNaN(d) ? "–" : d.toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" }); };
@@ -77,31 +78,59 @@
     for (const [k] of FEATURES) $("cnt-" + k).textContent = n(k) + " คน";
   }
 
+  const th = (a, b) => String(a || "").localeCompare(String(b || ""), "th");
+  const SORTS = {
+    name: (a, b) => th(a.name, b.name),
+    po: (a, b) => th(a.po, b.po),
+    fa: (a, b) => th(a.fa, b.fa),
+    area: (a, b) => th(a.phak, b.phak) || th(a.khet, b.khet),
+    when: (a, b) => (Date.parse(a.last_login) || 0) - (Date.parse(b.last_login) || 0),
+    items: (a, b) => Number(has(a, "items")) - Number(has(b, "items")),
+    maps: (a, b) => Number(has(a, "maps")) - Number(has(b, "maps")),
+    access: (a, b) => Number(has(a, "access")) - Number(has(b, "access"))
+  };
+  const sorted = list => list.map((p, i) => [p, i]).sort((x, y) => sortDir * SORTS[sortKey](x[0], y[0]) || th(x[0].name, y[0].name) || x[1] - y[1]).map(x => x[0]);
+
+  // ฝ่าย filter lists the ฝ่าย that exist in the data
+  function renderFaOptions() {
+    const sel = $("fa"), faList = [...new Set(people.map(p => p.fa).filter(Boolean))].sort(th);
+    sel.replaceChildren(new Option("ทุกฝ่าย", ""), ...faList.map(f => new Option(f, f)));
+    if (!faList.includes(faFilter)) faFilter = "";
+    sel.value = faFilter;
+  }
+  function renderSort() {
+    for (const h of document.querySelectorAll("#tbl thead th[data-sort]")) h.setAttribute("aria-sort", h.dataset.sort === sortKey ? (sortDir === 1 ? "ascending" : "descending") : "none");
+    $("sortkey").value = sortKey;
+    $("sortdir").textContent = sortDir === 1 ? "↑" : "↓";
+  }
+
   function visible() {
     const q = norm(query);
     return people.filter(p => {
+      if (faFilter && p.fa !== faFilter) return false;
       if (mode === "some" && !(p.is_owner || (p.features || []).length)) return false;
       if (mode === "none" && (p.is_owner || (p.features || []).length)) return false;
-      return !q || norm([p.name, p.po, p.phak, p.khet].join(" ")).includes(q);
+      return !q || norm([p.name, p.po, p.fa, p.phak, p.khet].join(" ")).includes(q);
     });
   }
 
   function renderRows() {
-    const list = visible();
+    const list = sorted(visible());
+    renderSort();
     $("rows").replaceChildren(...list.map(p => {
       const tr = el("tr");
       tr.dataset.ref = p.ref;
       const nm = el("td", "nm"), name = el("span", "name", p.name || "-");
       nm.append(name);
       if (p.is_owner) nm.append(el("span", "badge", "เจ้าของ"));
-      tr.append(nm, el("td", "po sub", p.po || ""), el("td", "ar sub", [p.phak && "ภาค" + p.phak, p.khet && "เขต" + p.khet].filter(Boolean).join(" · ")), el("td", "when", fmtDate(p.last_login)));
+      tr.append(nm, el("td", "po sub", p.po || ""), el("td", "fa sub", p.fa || ""), el("td", "ar sub", [p.phak && "ภาค" + p.phak, p.khet && "เขต" + p.khet].filter(Boolean).join(" · ")), el("td", "when", fmtDate(p.last_login)));
       for (const [key, label] of FEATURES) {
         const td = el("td", "chk"), lab = el("label"), cb = el("input");
         cb.type = "checkbox";
         cb.dataset.feature = key;
         cb.checked = has(p, key);
-        cb.disabled = !!p.is_owner;
-        cb.title = p.is_owner ? "เจ้าของใช้ได้ทุกอย่างเสมอ" : "";
+        cb.disabled = !!p.is_owner || (key === "access" && !isOwner);
+        cb.title = p.is_owner ? "เจ้าของใช้ได้ทุกอย่างเสมอ" : key === "access" && !isOwner ? "เฉพาะเจ้าของที่ติ๊กช่องนี้ได้" : "";
         cb.setAttribute("aria-label", `${label}: ${p.name}`);
         cb.addEventListener("change", () => toggle(p, key, cb, tr));
         lab.append(cb, el("span", "sr", label));
@@ -131,7 +160,7 @@
       cb.checked = !want;
       setStatus(e.status === 403 || e.status === 401 ? "ไม่มีสิทธิ์ทำรายการนี้ (เฉพาะเจ้าของระบบ)" : "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง", true);
     } finally {
-      cb.disabled = !!p.is_owner;
+      cb.disabled = !!p.is_owner || (key === "access" && !isOwner);
       tr.classList.remove("saving");
     }
   }
@@ -152,10 +181,11 @@
     } catch (e) {
       if (e.status === 401) return start();
       show("denied");
-      $("denied-text").textContent = e.status === 403 ? "หน้านี้สำหรับเจ้าของระบบเท่านั้น" : "โหลดรายชื่อไม่สำเร็จ ลองรีเฟรชหน้านี้อีกครั้ง";
+      $("denied-text").textContent = e.status === 403 ? "หน้านี้เปิดได้เฉพาะเจ้าของระบบและคนที่ได้รับสิทธิ์จัดการสิทธิ์" : "โหลดรายชื่อไม่สำเร็จ ลองรีเฟรชหน้านี้อีกครั้ง";
       return;
     }
     renderStats();
+    renderFaOptions();
     renderRows();
     loadLog();
   }
@@ -171,14 +201,15 @@
       show("denied"); $("denied-text").textContent = "ตรวจสอบสิทธิ์ไม่ได้ ลองรีเฟรชหน้านี้อีกครั้ง"; return;
     }
     const prof = (load() || {}).profile || {};
-    if (!me || !me.owner) {
+    if (!me || !(me.owner || (Array.isArray(me.features) && me.features.includes("access")))) {
       show("denied");
       $("who").textContent = prof.name || "";
-      $("denied-text").textContent = "หน้านี้สำหรับเจ้าของระบบเท่านั้น (บัญชีนี้ไม่ใช่เจ้าของ) · ถ้าเข้าด้วยบัญชีอื่น กด ออกจากระบบ แล้วเข้าใหม่";
+      $("denied-text").textContent = "บัญชีนี้ยังไม่ได้รับสิทธิ์จัดการสิทธิ์ (เปิดได้เฉพาะเจ้าของระบบและคนที่เจ้าของติ๊กให้) · ถ้าเข้าด้วยบัญชีอื่น กด ออกจากระบบ แล้วเข้าใหม่";
       return;
     }
+    isOwner = !!me.owner;
     show("app");
-    $("who").textContent = prof.name || "";
+    $("who").textContent = (prof.name || "") + (isOwner ? " · เจ้าของ" : "");
     await loadPeople();
   }
 
@@ -204,6 +235,15 @@
   $("reload").addEventListener("click", loadPeople);
   $("q").addEventListener("input", e => { query = e.target.value; renderRows(); });
   $("mode").addEventListener("change", e => { mode = e.target.value; renderRows(); });
+  $("fa").addEventListener("change", e => { faFilter = e.target.value; renderRows(); });
+  // click a column title to sort by it; click again to flip the direction (a phone uses the sort box instead)
+  for (const h of document.querySelectorAll("#tbl thead th[data-sort]")) h.querySelector("button").addEventListener("click", () => {
+    sortDir = sortKey === h.dataset.sort ? -sortDir : 1;
+    sortKey = h.dataset.sort;
+    renderRows();
+  });
+  $("sortkey").addEventListener("change", e => { sortKey = e.target.value; renderRows(); });
+  $("sortdir").addEventListener("click", () => { sortDir = -sortDir; renderRows(); });
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && !$("app").hidden) loadPeople(); });
 
   start();

@@ -20,7 +20,6 @@
   <div class="top-in">
     <h1>จัดการสิทธิ์การเข้าถึง</h1>
     <span class="who" id="who"></span>
-    <a class="btn ghost" href="./" id="back">← กลับแอป Admin</a>
     <button type="button" class="btn ghost" id="logout" hidden>ออกจากระบบ</button>
   </div>
 </header>
@@ -30,7 +29,7 @@
 
   <section class="card narrow" id="login" hidden>
     <h2>เข้าสู่ระบบ</h2>
-    <p class="hint">ใช้บัญชีเดียวกับโทกัง · หน้านี้เปิดได้เฉพาะเจ้าของระบบ</p>
+    <p class="hint">ใช้บัญชีเดียวกับโทกัง · หน้านี้เปิดได้เฉพาะเจ้าของระบบและคนที่เจ้าของติ๊กสิทธิ์ให้</p>
     <form id="login-form" autocomplete="off">
       <label>ชื่อ<input id="login-name" type="text" required maxlength="100" autocomplete="off"></label>
       <label>รหัสสมาชิก<input id="login-code" type="password" required maxlength="100" autocomplete="off" inputmode="numeric"></label>
@@ -41,7 +40,7 @@
 
   <section class="card narrow" id="denied" hidden>
     <h2>เปิดหน้านี้ไม่ได้</h2>
-    <p id="denied-text">หน้านี้สำหรับเจ้าของระบบเท่านั้น</p>
+    <p id="denied-text">หน้านี้เปิดได้เฉพาะเจ้าของระบบและคนที่ได้รับสิทธิ์จัดการสิทธิ์</p>
   </section>
 
   <section id="app" hidden>
@@ -49,11 +48,20 @@
 
     <div class="toolbar">
       <input type="search" id="q" placeholder="ค้นหาชื่อ ตำแหน่ง ภาค เขต" aria-label="ค้นหา" autocomplete="off">
+      <select id="fa" aria-label="ฝ่าย"><option value="">ทุกฝ่าย</option></select>
       <select id="mode" aria-label="แสดง">
         <option value="all">แสดงทั้งหมด</option>
         <option value="some">มีสิทธิ์อย่างน้อย 1 อย่าง</option>
         <option value="none">ยังไม่มีสิทธิ์</option>
       </select>
+      <span class="sortbox">
+        <select id="sortkey" aria-label="เรียงตาม">
+          <option value="name">เรียงตามชื่อ</option><option value="po">เรียงตามตำแหน่ง</option><option value="fa">เรียงตามฝ่าย</option>
+          <option value="area">เรียงตามภาค · เขต</option><option value="when">เรียงตามเข้าใช้ล่าสุด</option>
+          <option value="items">เรียงตามต้องส่ง</option><option value="maps">เรียงตามแผนที่</option><option value="access">เรียงตามจัดการสิทธิ์</option>
+        </select>
+        <button type="button" class="btn ghost" id="sortdir" aria-label="สลับน้อยไปมาก / มากไปน้อย">↑</button>
+      </span>
       <button type="button" class="btn ghost" id="reload">รีเฟรช</button>
       <span class="status" id="status" role="status" aria-live="polite"></span>
     </div>
@@ -62,19 +70,21 @@
       <table id="tbl">
         <thead>
           <tr>
-            <th scope="col">ชื่อ</th>
-            <th scope="col">ตำแหน่ง</th>
-            <th scope="col">ภาค · เขต</th>
-            <th scope="col">เข้าใช้ล่าสุด</th>
-            <th scope="col" class="chkcol">ต้องส่ง<small id="cnt-items"></small></th>
-            <th scope="col" class="chkcol">แผนที่<small id="cnt-maps"></small></th>
+            <th scope="col" data-sort="name"><button type="button" class="sortbtn">ชื่อ</button></th>
+            <th scope="col" data-sort="po"><button type="button" class="sortbtn">ตำแหน่ง</button></th>
+            <th scope="col" data-sort="fa"><button type="button" class="sortbtn">ฝ่าย</button></th>
+            <th scope="col" data-sort="area"><button type="button" class="sortbtn">ภาค · เขต</button></th>
+            <th scope="col" data-sort="when"><button type="button" class="sortbtn">เข้าใช้ล่าสุด</button></th>
+            <th scope="col" class="chkcol" data-sort="items"><button type="button" class="sortbtn">ต้องส่ง</button><small id="cnt-items"></small></th>
+            <th scope="col" class="chkcol" data-sort="maps"><button type="button" class="sortbtn">แผนที่</button><small id="cnt-maps"></small></th>
+            <th scope="col" class="chkcol" data-sort="access"><button type="button" class="sortbtn">จัดการสิทธิ์</button><small id="cnt-access"></small></th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
     <p class="empty" id="empty" hidden>ไม่พบรายชื่อที่ตรงกับที่ค้นหา</p>
-    <p class="hint">แสดงเฉพาะคนที่ลงทะเบียนแล้ว (เคยล็อกอินเข้าระบบอย่างน้อยหนึ่งครั้ง) · ติ๊ก = ใช้ได้ · เอาติ๊กออก = ใช้ไม่ได้ · มีผลภายใน 1 นาที · เจ้าของใช้ได้ทุกอย่างเสมอ</p>
+    <p class="hint">แสดงเฉพาะคนที่ลงทะเบียนแล้ว (เคยล็อกอินเข้าระบบอย่างน้อยหนึ่งครั้ง) · ติ๊ก = ใช้ได้ · เอาติ๊กออก = ใช้ไม่ได้ · มีผลภายใน 1 นาที · เจ้าของใช้ได้ทุกอย่างเสมอ · ช่อง "จัดการสิทธิ์" (ให้คนอื่นเปิดหน้านี้ได้) เจ้าของเป็นคนติ๊กเท่านั้น</p>
 
     <details class="hist">
       <summary>ประวัติการเปลี่ยนแปลงล่าสุด</summary>
