@@ -6,7 +6,7 @@
   const KEY = "sb_publishable_XkUBjE3M7HUiuDv7YwsbKA_mSu0ToEc";
   const SESSION_KEY = "tokan_session_v1";   // shared with โทกัง / Admin / แผนที่ (same origin)
   const FEATURES = [["items", "ต้องส่ง"], ["maps", "แผนที่"], ["access", "จัดการสิทธิ์"]];
-  const LABEL = Object.fromEntries(FEATURES);
+  const LABEL = { ...Object.fromEntries(FEATURES), signin: "เข้าระบบ" };   // signin = the right to sign in at all (not a feature: access_signin_set)
 
   const $ = id => document.getElementById(id);
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
@@ -45,8 +45,8 @@
       if (!s) throw Object.assign(new Error("expired"), { status: 401 });
       r = await go(s.access_token);
     }
-    if (!r.ok) throw Object.assign(new Error(fn + " " + r.status), { status: r.status });
     const t = await r.text();
+    if (!r.ok) { let detail = ""; try { detail = JSON.parse(t).message || ""; } catch (e) {} throw Object.assign(new Error(fn + " " + r.status), { status: r.status, detail }); }
     return t ? JSON.parse(t) : null;
   }
 
@@ -67,6 +67,7 @@
   let people = [], mode = "all", query = "", faFilter = "", sortKey = "name", sortDir = 1;
   const norm = s => String(s == null ? "" : s).toLowerCase().replace(/\s+/g, "");
   const has = (p, f) => p.is_owner || (p.features || []).includes(f);
+  const canSignIn = p => p.signin !== false;   // false = sign-in rights withdrawn
   const fmtDate = v => { if (!v) return "–"; const d = new Date(v); return isNaN(d) ? "–" : d.toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" }); };
 
   function setStatus(msg, bad) { const s = $("status"); s.textContent = msg || ""; s.classList.toggle("bad", !!bad); }
@@ -74,8 +75,9 @@
   function renderStats() {
     const n = f => people.filter(p => has(p, f)).length;
     $("stats").replaceChildren(
-      ...[["ลงทะเบียนแล้ว", people.length], ...FEATURES.map(([k, l]) => ["ใช้ " + l + " ได้", n(k)])].map(([label, v]) => { const d = el("div", "stat"); d.append(el("b", null, String(v)), el("span", null, label)); return d; }));
+      ...[["ลงทะเบียนแล้ว", people.length], ["เข้าระบบได้", people.filter(canSignIn).length], ...FEATURES.map(([k, l]) => ["ใช้ " + l + " ได้", n(k)])].map(([label, v]) => { const d = el("div", "stat"); d.append(el("b", null, String(v)), el("span", null, label)); return d; }));
     for (const [k] of FEATURES) $("cnt-" + k).textContent = n(k) + " คน";
+    $("cnt-signin").textContent = people.filter(canSignIn).length + " คน";
   }
 
   const th = (a, b) => String(a || "").localeCompare(String(b || ""), "th");
@@ -85,6 +87,7 @@
     fa: (a, b) => th(a.fa, b.fa),
     area: (a, b) => th(a.phak, b.phak) || th(a.khet, b.khet),
     when: (a, b) => (Date.parse(a.last_login) || 0) - (Date.parse(b.last_login) || 0),
+    signin: (a, b) => Number(canSignIn(a)) - Number(canSignIn(b)),
     items: (a, b) => Number(has(a, "items")) - Number(has(b, "items")),
     maps: (a, b) => Number(has(a, "maps")) - Number(has(b, "maps")),
     access: (a, b) => Number(has(a, "access")) - Number(has(b, "access"))
@@ -124,13 +127,13 @@
       nm.append(name);
       if (p.is_owner) nm.append(el("span", "badge", "เจ้าของ"));
       tr.append(nm, el("td", "po sub", p.po || ""), el("td", "fa sub", p.fa || ""), el("td", "ar sub", [p.phak && "ภาค" + p.phak, p.khet && "เขต" + p.khet].filter(Boolean).join(" · ")), el("td", "when", fmtDate(p.last_login)));
-      for (const [key, label] of FEATURES) {
+      for (const [key, label] of [["signin", "เข้าระบบ"], ...FEATURES]) {
         const td = el("td", "chk"), lab = el("label"), cb = el("input");
         cb.type = "checkbox";
         cb.dataset.feature = key;
-        cb.checked = has(p, key);
+        cb.checked = key === "signin" ? canSignIn(p) : has(p, key);
         cb.disabled = !!p.is_owner || (key === "access" && !isOwner);
-        cb.title = p.is_owner ? "เจ้าของใช้ได้ทุกอย่างเสมอ" : key === "access" && !isOwner ? "เฉพาะเจ้าของที่ติ๊กช่องนี้ได้" : "";
+        cb.title = p.is_owner ? "เจ้าของใช้ได้ทุกอย่างเสมอ" : key === "access" && !isOwner ? "เฉพาะเจ้าของที่ติ๊กช่องนี้ได้" : key === "signin" && !canSignIn(p) ? "ถูกปลดสิทธิ์: ติ๊กเพื่อคืนสิทธิ์ (ต้องออกลิงก์ใหม่ให้เขา)" : "";
         cb.setAttribute("aria-label", `${label}: ${p.name}`);
         cb.addEventListener("change", () => toggle(p, key, cb, tr));
         lab.append(cb, el("span", "sr", label));
@@ -149,16 +152,24 @@
     tr.classList.add("saving");
     setStatus("กำลังบันทึก…");
     try {
-      const on = await rpc("access_set", { p_ref: p.ref, p_feature: key, p_on: want });
-      p.features = (p.features || []).filter(f => f !== key);
-      if (on) p.features.push(key);
+      let on;
+      if (key === "signin") {
+        on = await rpc("access_signin_set", { p_ref: p.ref, p_on: want });
+        p.signin = !!on;
+      } else {
+        on = await rpc("access_set", { p_ref: p.ref, p_feature: key, p_on: want });
+        p.features = (p.features || []).filter(f => f !== key);
+        if (on) p.features.push(key);
+      }
       cb.checked = !!on;
       renderStats();
-      setStatus(`บันทึกแล้ว: ${p.name} · ${LABEL[key]} ${on ? "ใช้ได้" : "ใช้ไม่ได้"}`);
+      setStatus(key === "signin"
+        ? `บันทึกแล้ว: ${p.name} · ${on ? "คืนสิทธิ์เข้าระบบ (ต้องออกลิงก์ใหม่ให้เขา)" : "ปลดสิทธิ์แล้ว ออกจากระบบทุกเครื่อง"}`
+        : `บันทึกแล้ว: ${p.name} · ${LABEL[key]} ${on ? "ใช้ได้" : "ใช้ไม่ได้"}`);
       loadLog();
     } catch (e) {
       cb.checked = !want;
-      setStatus(e.status === 403 || e.status === 401 ? "ไม่มีสิทธิ์ทำรายการนี้ (เฉพาะเจ้าของระบบ)" : "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง", true);
+      setStatus(e.status === 403 || e.status === 401 ? "ไม่มีสิทธิ์ทำรายการนี้ (เฉพาะเจ้าของระบบ)" : e.status === 400 && e.detail ? e.detail : "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง", true);
     } finally {
       cb.disabled = !!p.is_owner || (key === "access" && !isOwner);
       tr.classList.remove("saving");
@@ -211,6 +222,8 @@
     show("app");
     $("who").textContent = (prof.name || "") + (isOwner ? " · เจ้าของ" : "");
     await loadPeople();
+    // the link to the area page: only for people the database lets edit areas (ยุวชนชาย รวมภาค)
+    rpc("is_ymd_rwp_leader").then(ok => { $("open-areas").hidden = ok !== true; }).catch(() => {});
   }
 
   // ---------- events ----------

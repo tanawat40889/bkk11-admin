@@ -20,6 +20,7 @@
   <div class="top-in">
     <h1>จัดการสิทธิ์การเข้าถึง</h1>
     <span class="who" id="who"></span>
+    <a class="btn ghost" id="open-areas" href="areas.html" hidden>จัดการพื้นที่</a>
     <button type="button" class="btn ghost" id="logout" hidden>ออกจากระบบ</button>
   </div>
 </header>
@@ -58,6 +59,7 @@
         <select id="sortkey" aria-label="เรียงตาม">
           <option value="name">เรียงตามชื่อ</option><option value="po">เรียงตามตำแหน่ง</option><option value="fa">เรียงตามฝ่าย</option>
           <option value="area">เรียงตามภาค · เขต</option><option value="when">เรียงตามเข้าใช้ล่าสุด</option>
+          <option value="signin">เรียงตามเข้าระบบ</option>
           <option value="items">เรียงตามต้องส่ง</option><option value="maps">เรียงตามแผนที่</option><option value="access">เรียงตามจัดการสิทธิ์</option>
         </select>
         <button type="button" class="btn ghost" id="sortdir" aria-label="สลับน้อยไปมาก / มากไปน้อย">↑</button>
@@ -75,6 +77,7 @@
             <th scope="col" data-sort="fa"><button type="button" class="sortbtn">ฝ่าย</button></th>
             <th scope="col" data-sort="area"><button type="button" class="sortbtn">ภาค · เขต</button></th>
             <th scope="col" data-sort="when"><button type="button" class="sortbtn">เข้าใช้ล่าสุด</button></th>
+            <th scope="col" class="chkcol" data-sort="signin"><button type="button" class="sortbtn">เข้าระบบ</button><small id="cnt-signin"></small></th>
             <th scope="col" class="chkcol" data-sort="items"><button type="button" class="sortbtn">ต้องส่ง</button><small id="cnt-items"></small></th>
             <th scope="col" class="chkcol" data-sort="maps"><button type="button" class="sortbtn">แผนที่</button><small id="cnt-maps"></small></th>
             <th scope="col" class="chkcol" data-sort="access"><button type="button" class="sortbtn">จัดการสิทธิ์</button><small id="cnt-access"></small></th>
@@ -85,6 +88,7 @@
     </div>
     <p class="empty" id="empty" hidden>ไม่พบรายชื่อที่ตรงกับที่ค้นหา</p>
     <p class="hint">แสดงเฉพาะคนที่ลงทะเบียนแล้ว (เคยล็อกอินเข้าระบบอย่างน้อยหนึ่งครั้ง) · ติ๊ก = ใช้ได้ · เอาติ๊กออก = ใช้ไม่ได้ · มีผลภายใน 1 นาที · เจ้าของใช้ได้ทุกอย่างเสมอ · ช่อง "จัดการสิทธิ์" (ให้คนอื่นเปิดหน้านี้ได้) เจ้าของเป็นคนติ๊กเท่านั้น</p>
+    <p class="hint">ช่อง "เข้าระบบ": เอาติ๊กออก = ปลดสิทธิ์ ลิงก์/QR ของคนนั้นใช้ไม่ได้ ออกจากระบบทุกเครื่อง และเข้าไม่ได้ทุกวิธี (รวมพิมพ์ชื่อเอง) จนกว่าจะติ๊กคืน · ติ๊กคืนแล้วต้องออกลิงก์ใหม่ให้เขา (ที่หน้ารายละเอียดสมาชิกในโทกัง) · ปลดเจ้าของหรือตัวเองไม่ได้ · ปลดคนที่ถือสิทธิ์จัดการสิทธิ์ ต้องเป็นเจ้าของ</p>
 
     <details class="hist">
       <summary>ประวัติการเปลี่ยนแปลงล่าสุด</summary>

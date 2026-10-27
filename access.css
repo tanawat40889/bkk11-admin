@@ -47,7 +47,7 @@ input[type="text"], input[type="password"], input[type="search"], select { width
 .loading { text-align: center; padding: 48px 0; }
 .err { padding: 10px 12px; font-size: .875rem; color: var(--bad); background: var(--bad-bg); border-radius: 10px; }
 
-.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 .stat { padding: 16px 20px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
 .stat b { display: block; font-size: 1.75rem; line-height: 1.2; }
 .stat span { color: var(--mute); font-size: .875rem; }
