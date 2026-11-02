@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-oENifF8U4QZOv1rNwLvsPosKtG1NEkMhW7IYIK/OW/U='; style-src 'self' https://fonts.googleapis.com 'sha256-pw8tFYYCWOP8uu+E6mo3DGdpuiNB8HarmPFvGD+yXRE='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-vbh67dKA8mQb3VxaQE9RIXzArtTCZrVVtefUOT1bYdQ='; style-src 'self' https://fonts.googleapis.com 'sha256-pw8tFYYCWOP8uu+E6mo3DGdpuiNB8HarmPFvGD+yXRE='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -2690,7 +2690,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const doneRooms = upAll.filter(isDoneRoom);
     badgeParts.rooms = upAll.filter(x => {
       const n = diff(roomDeadline(x.r.date, store.roomDates), t);
-      return n >= 0 && n <= ROOMS_NOTIFY_DAYS && !isDoneRoom(x);
+      return n <= ROOMS_NOTIFY_DAYS && !isDoneRoom(x);   // a passed deadline (round still ahead) keeps counting until ticked
     }).length;
     refreshBadges();
     const roomCard = (x, i, finished) => {
@@ -2768,7 +2768,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const doneItems = items.filter(isDone);
     const upcoming = open.filter(x => !x.d || x.d >= t);
     const overdue = open.filter(x => x.d && x.d < t).reverse();
-    badgeParts.items = upcoming.filter(x => x.d && diff(x.d, t) <= BADGE_DAYS).length;
+    badgeParts.items = upcoming.filter(x => x.d && diff(x.d, t) <= BADGE_DAYS).length + overdue.length;   // overdue ones keep counting until ticked
     refreshBadges();
 
     const emptyText = doneItems.length ? "ทำครบทุกรายการแล้ว" : "ไม่มีรายการ";
@@ -3916,10 +3916,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     } catch (e) {
       return;
     }
-    // visits still being coordinated that are dated in the next UPCOMING_DAYS days (today included): one notification each
+    // visits still being coordinated that are dated up to UPCOMING_DAYS days ahead (today included) or already past: one notification each
     try {
       const soon = new URLSearchParams({ select: "id", status: "eq.coordinating" });
-      soon.set("and", `(visit_date.gte.${isoDay(t)},visit_date.lte.${isoDay(new Date(t.getTime() + UPCOMING_DAYS * 864e5))})`);
+      soon.set("visit_date", "lte." + isoDay(new Date(t.getTime() + UPCOMING_DAYS * 864e5)));
       pending = (await memGet("/rest/v1/visits?" + soon)).length;
     } catch (e) {}
     badgeParts.visits = vMissing.length + pending;
