@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-vbh67dKA8mQb3VxaQE9RIXzArtTCZrVVtefUOT1bYdQ='; style-src 'self' https://fonts.googleapis.com 'sha256-F4RD5pvqrK71AMEsnWs/q78U9PvyveNVQbmv/CET7Yk='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-vbh67dKA8mQb3VxaQE9RIXzArtTCZrVVtefUOT1bYdQ='; style-src 'self' https://fonts.googleapis.com 'sha256-6tY/K00mulo1B0U9YzDFZbx8vy8BWkzxBu1r7qfN1Ak='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -14,7 +14,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Admin รภ.11">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,7 +51,7 @@
   --sar: env(safe-area-inset-right, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --bar: #0b2a6f;
-  --tabs-h: 59px;
+  --tabs-h: 0px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -107,7 +107,7 @@
 }
 * { box-sizing: border-box; margin: 0; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-bottom: calc(100px + var(--sab)); }   /* keep things scrolled into view clear of the floating menu */
 button { touch-action: manipulation; }
 body {
   font-family: "Noto Sans Thai", system-ui, sans-serif;
@@ -123,40 +123,46 @@ header {
   gap: 14px;
   background: var(--card);
   border-bottom: 1px solid var(--line);
-  padding: calc(var(--sat) + 12px) max(16px, var(--sar)) 12px max(16px, var(--sal));
+  padding: calc(var(--sat) + 22px) max(16px, var(--sar)) 12px max(16px, var(--sal));
 }
 header img { flex: none; width: 96px; height: auto; }
-main { padding: 0 max(16px, var(--sar)) calc(32px + var(--sab)) max(16px, var(--sal)); max-width: 640px; margin: 0 auto; }
+main { padding: 0 max(16px, var(--sar)) calc(120px + var(--sab)) max(16px, var(--sal)); max-width: 640px; margin: 0 auto; }
 section { margin-top: 16px; }
 
+/* Floating glass menu at the bottom: icons only, the red badge is the only text */
 .tabs {
-  position: sticky;
-  top: var(--sat);
-  z-index: 5;
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: calc(var(--sab) + 12px);
+  transform: translateX(-50%);
   display: flex;
-  justify-content: center;
-  padding: 0 var(--sar) 0 var(--sal);
-  background: var(--card);
-  border-bottom: 1px solid var(--line);
+  gap: 4px;
+  width: min(calc(100% - 24px - var(--sal) - var(--sar)), 420px);
+  padding: 6px;
+  background: color-mix(in srgb, var(--card) 72%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 8px 28px rgba(8, 20, 50, .22), inset 0 1px 0 rgba(255, 255, 255, .45);
 }
 .tab {
   flex: 1;
-  max-width: 200px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  min-height: 58px;
-  padding: 6px 2px 4px;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0;
   font: inherit;
-  font-size: .6875rem;
-  font-weight: 500;
-  line-height: 1.2;
-  color: var(--mute);
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
   background: transparent;
   border: 0;
+  border-radius: 22px;
   cursor: pointer;
+  transition: background .2s ease, color .2s ease;
 }
+.tab > span:not(.bdg) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .tab { position: relative; }
 .hbtns { display: flex; flex: none; align-self: flex-start; gap: 2px; margin: -6px 0 0 auto; }
 .ibtn {
@@ -258,7 +264,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .swact .sw-del { background: #dc2626; }
 .swbody { position: relative; background: var(--card); transition: transform .2s ease; touch-action: pan-y; }
 .swbody.drag { transition: none; }
-.fab { position: fixed; z-index: 6; right: max(16px, var(--sar)); bottom: calc(20px + var(--sab)); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; color: var(--brand-ink); background: var(--brand); border: 0; border-radius: 50%; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); cursor: pointer; }
+.fab { position: fixed; z-index: 6; right: max(16px, var(--sar)); bottom: calc(96px + var(--sab)); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; color: var(--brand-ink); background: var(--brand); border: 0; border-radius: 50%; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); cursor: pointer; }
 .fab svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
 .stag { display: inline-block; margin-left: 6px; padding: 0 6px; font-size: .6875rem; color: var(--mute); border: 1px solid var(--line); border-radius: 999px; vertical-align: middle; }
 .vside { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-right: 12px; }
@@ -318,7 +324,7 @@ a.morebtn { text-decoration: none; }
 a.tab { text-decoration: none; }
 .bdg {
   position: absolute;
-  top: 2px;
+  top: 4px;
   left: calc(50% + 6px);
   min-width: 18px;
   height: 18px;
@@ -340,8 +346,9 @@ a.tab { text-decoration: none; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.tab { border-bottom: 3px solid transparent; }
-.tab[aria-selected="true"] { color: var(--brand); font-weight: 700; border-bottom-color: var(--brand); }
+.tab svg { width: 28px; height: 28px; stroke-width: 1.9; }
+.tab[aria-selected="true"] { color: var(--brand); background: color-mix(in srgb, var(--brand) 16%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand) 28%, transparent); }
+.tab .bdg { box-shadow: 0 0 0 2px color-mix(in srgb, var(--card) 85%, transparent); }
 
 .list { display: grid; gap: 12px; margin-top: 12px; list-style: none; padding: 0; }
 .card {
@@ -670,7 +677,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 .toast {
   position: fixed;
   left: 50%;
-  bottom: calc(var(--sab) + 28px);
+  bottom: calc(var(--sab) + 96px);
   transform: translateX(-50%);
   z-index: 120;
   max-width: min(92vw, 460px);
@@ -701,19 +708,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   :root { --maxw: 1120px; --gutter: max(24px, var(--sal), var(--sar), calc((100% - var(--maxw)) / 2)); }
   header { padding-left: var(--gutter); padding-right: var(--gutter); }
   header img { width: 120px; }
-  .tabs {
-    justify-content: flex-start;
-    gap: 4px;
-    padding: 0 var(--gutter);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab { flex: 0 0 auto; max-width: none; flex-direction: row; gap: 10px; min-height: 54px; padding: 0 22px; font-size: .9375rem; border-bottom: 3px solid transparent; }
-  .tab[aria-selected="true"] { border-bottom-color: var(--brand); }
-  .tab svg { width: 22px; height: 22px; }
-  .bdg { position: static; margin-left: 2px; }
-  main { max-width: var(--maxw); padding: 0 max(24px, var(--sar)) calc(56px + var(--sab)) max(24px, var(--sal)); }
+  main { max-width: var(--maxw); padding: 0 max(24px, var(--sar)) calc(120px + var(--sab)) max(24px, var(--sal)); }
   section { margin-top: 24px; }
   #items, #overdue, #done, #rooms, #rooms-done, #rooms-past {
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -721,7 +716,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   #mjson-text { min-height: 240px; }
   #sub-monthly { max-width: 760px; }
-  :root { --tabs-h: 55px; }
   .subtabs { margin: 0; padding-left: 0; padding-right: 0; }
   .subtab { flex: none; padding: 0 20px; font-size: .9375rem; }
   dialog { width: min(90vw, 640px); }
@@ -966,7 +960,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <span class="bdg" hidden></span>
   </button>
 </div>
-  <a class="tab tablink" id="tab-maps" href="https://tanawat40889.github.io/bkk11-ymdgooglemaps/" target="_blank" rel="noopener">
+  <a class="tab tablink" id="tab-maps" href="https://tanawat40889.github.io/bkk11-ymdgooglemaps/" target="_blank" rel="noopener" aria-label="แผนที่">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
     <span>แผนที่</span>
   </a>
