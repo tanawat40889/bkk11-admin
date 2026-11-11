@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-T5Kps4RIvljppOpZSQMKNHCgxAV2O7M8vkhoQH8ublE='; style-src 'self' https://fonts.googleapis.com 'sha256-nIBXaDcLPwgZAhbkz7cBwkIWE1/Nrha+eAD3awMFjZk='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-+PbtLfx9LRigF6x92OlCCPFuwVl2LDxIZfi6nz3+sSk='; style-src 'self' https://fonts.googleapis.com 'sha256-mTxnr7z7yvf2uy/go9jn7E7cOEseUQuuHrlsedOpYXw='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -323,6 +323,12 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .sstick .vlegend { flex-wrap: nowrap; align-items: center; gap: 6px 14px; margin: 6px 0 0; white-space: nowrap; }
 .sstick.mini .vcell:not(.cur), .sstick.mini .vlegend { display: none; }
 .sstick.mini .vhead { margin-bottom: 4px; }
+.stog { display: none; align-items: center; justify-content: center; gap: 6px; min-height: 34px; margin: 6px auto 0; padding: 0 16px; font: inherit; font-size: .8125rem; font-weight: 700; color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--card)); border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; }
+.sstick.mini .stog, .sstick.pin .stog { display: flex; }
+.stog svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.stog .t-fold, .sstick.pin .stog .t-open { display: none; }
+.sstick.pin .stog .t-fold { display: inline; }
+.sstick.pin .stog svg { transform: rotate(180deg); }
 .sstick.mini .vnav { width: 34px; height: 34px; }
 #panel-schedule { overflow-anchor: none; }   /* the calendar shrinking must not make the browser re-scroll the list */
 .scal { gap: 3px; }
@@ -1148,6 +1154,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       </div>
       <div class="vcal scal" id="s-cal" aria-label="ปฏิทินรายการ"></div>
       <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span><button type="button" class="addcal addmonth" id="s-addmonth"></button></div>
+      <button type="button" class="stog" id="s-tog" aria-label="ขยายปฏิทิน" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="t-open">ดูปฏิทินทั้งเดือน</span><span class="t-fold">ย่อปฏิทิน</span></button>
     </div>
     <ul class="list" id="s-list"></ul>
     <button type="button" class="fab" id="s-add" aria-label="เพิ่มรายการ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -3799,7 +3806,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const evEnd = e => e.endDate || e.date;
   const evIsYmd = e => YMD_WHO.test(e.who || "");
   // The month grid. Cells carry their week number; in the collapsed (.mini) state only the week being scrolled through shows
-  let sEvs = [], sWk = -1, sCells = [], sMini = false, sGroups = [], sRaf = 0;
+  let sEvs = [], sWk = -1, sCells = [], sMini = false, sOpen = false, sGroups = [], sRaf = 0;   // sOpen: the user pulled the calendar open while scrolled
   function drawCal() {
     const evs = sEvs;
     const y = sMonth.getUTCFullYear(), m = sMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
@@ -3822,6 +3829,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       b.append(el("span", "vnum", String(d)), dots);
       b.onclick = () => {
         sSel = sSel === key ? "" : key;
+        sOpen = false;
         renderSchedule(!!sSel);
       };
       sCells.push(b);
@@ -3856,6 +3864,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const panel = $("panel-schedule");
     if (panel.hidden || sWide()) { if (sMini) setMini(false); return; }
     const hh = document.querySelector("header").offsetHeight, top = panel.getBoundingClientRect().top - hh;   // < 0 once the calendar is stuck under the header
+    if (sOpen && top > -8) sOpen = false;   // back at the top: the calendar is whole anyway
+    const tg = $("s-tog"), st = $("s-stick");
+    st.classList.toggle("pin", sOpen);
+    tg.setAttribute("aria-expanded", String(sOpen || !sMini && top >= -24));
+    tg.setAttribute("aria-label", sOpen ? "ย่อปฏิทิน" : "ขยายปฏิทิน");
+    if (sOpen) { if (sMini) setMini(false); return; }
     if (sMini ? top > -8 : top < -24) { setMini(!sMini); if (!sMini) return; }
     if (!sMini) return;
     const sb = $("s-stick").getBoundingClientRect().bottom;
@@ -3863,6 +3877,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     for (const x of sGroups) { if (x.getBoundingClientRect().top <= sb + 2) g = x; else break; }
     if (g) setMini(true, g.dataset.day);
   }
+  $("s-tog").onclick = () => { sOpen = !sOpen; sSync(); $("panel-schedule").style.setProperty("--sstick", $("s-stick").offsetHeight + "px"); };
   const sQueue = () => { if (!sRaf) sRaf = requestAnimationFrame(sSync); };
   addEventListener("scroll", sQueue, { passive: true });
   addEventListener("resize", sQueue);
@@ -3955,7 +3970,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function scrollToDay(key, smooth) {
     const g = [...$("s-list").querySelectorAll(".sgroup")].find(x => x.dataset.day >= key);
     if (!g) return;
-    if (!sWide()) setMini(true, g.dataset.day);   // we are about to scroll down: the calendar collapses to that day's week first
+    if (!sWide() && !sOpen) setMini(true, g.dataset.day);   // we are about to scroll down: the calendar collapses to that day's week first
     g.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
   }
   function moveSMonth(delta) {
