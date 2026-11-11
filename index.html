@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-KO9URYiTTaAM1crvHJQkk8MusvmZNHJe/SYFjgqDb8g='; style-src 'self' https://fonts.googleapis.com 'sha256-1otdNe5cOCP0Mup4tys2NB3Hjt5ncEmxCBQnC7OhQ3k='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-10J/+RwqDaKLDvI3mzyKM9nCei+AwyltRfCTuiJhw4I='; style-src 'self' https://fonts.googleapis.com 'sha256-dj/rhMBXXWMrc6l58aQjM5q/+++uTBTi2jbqU08nXgU='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -266,6 +266,42 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .swact .sw-del { background: #dc2626; }
 .swbody { position: relative; background: var(--card); transition: transform .2s ease; touch-action: pan-y; }
 .swbody.drag { transition: none; }
+/* ฐานข้อมูล YMD (the former YMD DB app) */
+.ysearch { margin-top: 12px; }
+.ystat { margin-top: 10px; }
+.chips button[aria-pressed="true"] { color: var(--brand-ink); background: var(--brand); }
+.ybtns { display: flex; gap: 8px; }
+.ysec { margin: 18px 0 0; font-size: .9375rem; color: var(--mute); }
+.ycard.st-Active { --lc: var(--ok); }
+.ycard.st-Visiting { --lc: var(--warn); }
+.ycard.st-Passive { --lc: var(--mute); }
+.ycard .ctop { align-items: center; }
+.ycard .cmain { padding: 8px 0 8px 12px; }
+.ycard .ctitle { overflow-wrap: anywhere; }
+.ycard .stag { margin-left: 6px; }
+.ysub { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; }
+.ybadge { padding: 0 8px; font-size: .75rem; font-weight: 700; line-height: 1.5; color: #fff; border-radius: 999px; }
+.ybadge.Active { background: var(--ok); }
+.ybadge.Visiting { background: var(--warn); }
+.ybadge.Passive { background: var(--mute); }
+.ykhet { padding: 0 8px; font-size: .75rem; line-height: 1.5; color: var(--brand); border: 1px solid var(--brand); border-radius: 999px; }
+.yact { display: flex; flex: none; align-items: center; gap: 2px; padding-right: 6px; }
+.yb { display: grid; place-items: center; width: 44px; height: 44px; color: var(--brand); border-radius: 50%; }
+.yb.off { opacity: .3; }
+.yb svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.swact .sw-fav { background: #d97706; }
+.swact .sw-tok { background: #7c3aed; }
+.ynote-form { padding: 12px 0 0; }
+.ylink { display: grid; gap: 8px; }
+.ylinkcur { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .875rem; }
+.yextra { display: grid; gap: 12px; }
+.form label.fck { display: flex; align-items: center; gap: 10px; font-size: .9375rem; color: var(--ink); }
+.form label.fck input { flex: none; width: 22px; height: 22px; min-height: 0; }
+.ycols { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; max-height: 40dvh; overflow: auto; }
+.ycols li { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.ycols label { flex: 1; display: flex; align-items: center; gap: 10px; font-size: .9375rem; color: var(--ink); }
+.ycols label input { flex: none; width: 22px; height: 22px; min-height: 0; }
+.ycols .stag { margin: 0; }
 .fab { position: fixed; z-index: 6; right: max(16px, var(--sar)); bottom: calc(96px + var(--sab)); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; color: var(--brand-ink); background: var(--brand); border: 0; border-radius: 50%; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); cursor: pointer; }
 .fab svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
 .stag { display: inline-block; margin-left: 6px; padding: 0 6px; font-size: .6875rem; color: var(--mute); border: 1px solid var(--line); border-radius: 999px; vertical-align: middle; }
@@ -323,7 +359,6 @@ a.morebtn { text-decoration: none; }
 .sbox.stale { border-color: var(--warn); }
 .seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .tablist { display: contents; }
-a.tab { text-decoration: none; }
 .bdg {
   position: absolute;
   top: 4px;
@@ -961,11 +996,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <span>รายการ</span>
     <span class="bdg" hidden></span>
   </button>
-</div>
-  <a class="tab tablink" id="tab-maps" href="https://tanawat40889.github.io/bkk11-ymdgooglemaps/" target="_blank" rel="noopener" aria-label="แผนที่">
+  <button class="tab" role="tab" id="tab-ymd" data-tab="ymd" aria-controls="panel-ymd" aria-selected="false" tabindex="-1" aria-label="ฐานข้อมูล YMD">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
-    <span>แผนที่</span>
-  </a>
+    <span>YMD DB</span>
+  </button>
+</div>
 </nav>
 
 <main>
@@ -1028,6 +1063,48 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
           <ul class="list" id="monthly-done"></ul>
         </details>
       </div>
+    </div>
+  </section>
+  <section id="panel-ymd" role="tabpanel" aria-labelledby="tab-ymd" hidden>
+    <div class="subtabs" role="tablist" aria-label="หมวด">
+      <button type="button" class="subtab" role="tab" id="ysub-people" data-ysub="people" aria-controls="ysub-people-p" aria-selected="true">รายชื่อ YMD</button>
+      <button type="button" class="subtab" role="tab" id="ysub-notes" data-ysub="notes" aria-controls="ysub-notes-p" aria-selected="false" tabindex="-1">บันทึกสถานที่</button>
+    </div>
+    <div class="subpanel" id="ysub-people-p" role="tabpanel" aria-labelledby="ysub-people">
+      <input type="search" class="field ysearch" id="y-q" placeholder="ค้นหาชื่อเล่น โน้ต เขต" autocomplete="off" aria-label="ค้นหาชื่อเล่น โน้ต เขต">
+      <div class="chips ystat" id="y-stat" role="group" aria-label="สถานะ">
+        <button type="button" data-status="Active" aria-pressed="true">Active</button>
+        <button type="button" data-status="Visiting" aria-pressed="false">Visiting</button>
+        <button type="button" data-status="Passive" aria-pressed="false">Passive</button>
+        <button type="button" data-status="all" aria-pressed="false">ทั้งหมด</button>
+      </div>
+      <div class="vtop">
+        <h3 id="y-title"></h3>
+        <span class="ybtns">
+          <button type="button" class="btn sm ghost" id="y-cols">คอลัมน์</button>
+          <button type="button" class="btn sm" id="y-add">+ เพิ่มรายชื่อ</button>
+        </span>
+      </div>
+      <p class="warnline" id="y-error" hidden></p>
+      <div id="y-fav-wrap" hidden>
+        <h3 class="ysec">รายการโปรด</h3>
+        <ul class="list" id="y-fav"></ul>
+        <h3 class="ysec" id="y-rest-title">รายชื่ออื่น</h3>
+      </div>
+      <ul class="list" id="y-list"></ul>
+      <p class="empty" id="y-empty" hidden></p>
+    </div>
+    <div class="subpanel" id="ysub-notes-p" role="tabpanel" aria-labelledby="ysub-notes" hidden>
+      <div class="form ynote-form">
+        <label>ชื่อสถานที่<input id="yn-name" type="text" autocomplete="off" maxlength="200"></label>
+        <label>ลิงก์ Google Maps<input id="yn-map" type="url" inputmode="url" autocomplete="off" placeholder="วางลิงก์ Google Maps ที่นี่"></label>
+        <label>โน้ต (ถ้ามี)<input id="yn-text" type="text" autocomplete="off" maxlength="300"></label>
+        <p class="warnline" id="yn-err" hidden></p>
+        <button type="button" class="btn" id="yn-add">+ เพิ่มสถานที่</button>
+        <p class="hint">บันทึกไว้ในเครื่องนี้เท่านั้น</p>
+      </div>
+      <ul class="list" id="yn-list"></ul>
+      <p class="empty" id="yn-empty" hidden>ยังไม่มีสถานที่ที่บันทึกไว้ ลองเพิ่มด้านบนได้เลย</p>
     </div>
   </section>
   <section id="panel-visits" role="tabpanel" aria-labelledby="tab-visits" hidden>
@@ -1264,6 +1341,55 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <button type="button" class="btn danger" id="vf-del">ลบ</button>
       <button type="button" class="btn ghost" id="vf-cancel">ยกเลิก</button>
       <button type="button" class="btn" id="vf-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="yform" aria-labelledby="yform-title">
+  <div class="form">
+    <h3 id="yform-title">เพิ่มรายชื่อ</h3>
+    <label>ชื่อเล่น *<input id="yf-nick" type="text" maxlength="100" autocomplete="off"></label>
+    <label>ลิงก์ Google Maps<input id="yf-map" type="url" inputmode="url" maxlength="1000" autocomplete="off"></label>
+    <div>
+      <button type="button" class="btn sm ghost" id="yf-loc">ใช้ตำแหน่งปัจจุบันของฉัน</button>
+      <p class="hint" id="yf-lochint">ยืนอยู่หน้าบ้านน้อง แล้วกดปุ่มนี้เพื่อใส่ลิงก์ Google Maps ให้อัตโนมัติ</p>
+    </div>
+    <div class="frow">
+      <label>สถานะ<select id="yf-status"></select></label>
+      <label>เบอร์โทร<input id="yf-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="off"></label>
+    </div>
+    <label>โน้ต<input id="yf-note" type="text" maxlength="500" autocomplete="off"></label>
+    <div class="ylink">
+      <span class="hint">ผูกกับสมาชิกโทกัง</span>
+      <div class="ylinkcur" id="yf-linkcur"></div>
+      <input id="yf-linkq" type="search" placeholder="พิมพ์ชื่อหรือนามสกุลเพื่อค้นหาสมาชิก" autocomplete="off" aria-label="ค้นหาสมาชิกโทกัง">
+      <ul class="mslist" id="yf-linklist"></ul>
+    </div>
+    <div class="yextra" id="yf-extra"></div>
+    <p class="warnline" id="yf-err"></p>
+    <div class="btns">
+      <button type="button" class="btn danger" id="yf-del">ลบ</button>
+      <button type="button" class="btn ghost" id="yf-cancel">ยกเลิก</button>
+      <button type="button" class="btn" id="yf-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ycols" aria-labelledby="ycols-title">
+  <div class="form">
+    <h3 id="ycols-title">คอลัมน์</h3>
+    <p class="hint">ติ๊กเลือกข้อมูลที่จะแสดงบนการ์ด (จำไว้ในเครื่องนี้) และเพิ่มคอลัมน์ใหม่ได้ ทุกคนที่ใช้ระบบนี้จะเห็นคอลัมน์ที่เพิ่ม</p>
+    <ul class="ycols" id="ycols-list"></ul>
+    <div class="frow">
+      <label>ชื่อคอลัมน์ใหม่<input id="yc-label" type="text" maxlength="50" autocomplete="off"></label>
+      <label>ชนิด
+        <select id="yc-type"><option value="text">ข้อความ</option><option value="number">ตัวเลข</option><option value="checkbox">ติ๊กถูก</option></select>
+      </label>
+    </div>
+    <p class="warnline" id="yc-err" hidden></p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="yc-close">ปิด</button>
+      <button type="button" class="btn" id="yc-add">เพิ่มคอลัมน์</button>
     </div>
   </div>
 </dialog>
@@ -1976,7 +2102,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   function requireLogin(message) {
     setMemSession(null);
-    try { localStorage.removeItem(ELIG_KEY); localStorage.removeItem("bkk11-events"); localStorage.removeItem(ACCESS_KEY); } catch (e) {}
+    try { localStorage.removeItem(ELIG_KEY); localStorage.removeItem("bkk11-events"); localStorage.removeItem(ACCESS_KEY); localStorage.removeItem("ymd_places_cache"); } catch (e) {}
     ACCESS = { known: false, owner: false, features: [] };
     for (const d of document.querySelectorAll("dialog[open]")) d.close();
     showLoginForm(message);
@@ -3259,6 +3385,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       try { history.replaceState(null, "", "#visits"); } catch (e) {}
       loadVisits();
     }
+    if (id === "ymd") {
+      try { history.replaceState(null, "", "#ymd"); } catch (e) {}
+      loadYmd();
+    }
     if (id === "schedule") {
       try { history.replaceState(null, "", "#schedule"); } catch (e) {}
       renderSchedule();
@@ -3548,7 +3678,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   };
 
   // Swipe a card to the left to reveal its action buttons (แก้ไข / ลบ); a tap on an opened card closes it
-  const SW_W = 144;
   let swOpen = null;
   function closeSwipe() {
     if (!swOpen) return;
@@ -3559,6 +3688,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   document.addEventListener("pointerdown", e => { if (swOpen && !swOpen.contains(e.target)) closeSwipe(); }, true);
   function makeSwipe(li, body, actions) {
+    const SW_W = actions.length * 72;   // each action button is 72px wide
     const act = el("div", "swact");
     for (const a of actions) {
       const b = el("button", a.cls, a.label);
@@ -4237,6 +4367,442 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!$("settings").open) $("settings").showModal();
     refreshPush();
   }
+  // ---------- ฐานข้อมูล YMD (was the separate YMD DB app): the contact book bkk11_contacts + its custom columns, behind the `maps` permission.
+  // Favourites, the ticked columns, the offline copy and the saved places keep the old app's localStorage keys, so they carry over on this device.
+  const Y_FAV = "ymd_favorites", Y_CACHE = "ymd_places_cache", Y_VIS = "ymd_visible_cols", Y_NOTES = "ymd_custom_places", Y_SEED = "ymd_custom_seeded_v1", Y_SEEDN = "ymd_custom_seeded_names";
+  const TOKAN_URL = "https://tanawat40889.github.io/bkk11-tokan/";
+  const Y_STATUSES = ["Active", "Visiting", "Passive"];
+  const Y_BUILTIN = [{ key: "status", label: "สถานะ" }, { key: "district", label: "เขต" }, { key: "note", label: "โน้ต" }, { key: "phone", label: "เบอร์โทร" }];
+  const Y_PHONE = /^[0-9+() -]{1,20}$/;
+  const Y_DEFAULT_PLACES = [
+  {
+    name: "สมาคมสร้างคุณค่าในประเทศไทย สำนักงานใหญ่",
+    googleMap: "https://www.google.com/maps/place/%E0%B8%AA%E0%B8%A1%E0%B8%B2%E0%B8%84%E0%B8%A1%E0%B8%AA%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B9%83%E0%B8%99%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%97%E0%B8%A8%E0%B9%84%E0%B8%97%E0%B8%A2+%E0%B8%AA%E0%B8%B3%E0%B8%99%E0%B8%B1%E0%B8%81%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88/@13.9049052,100.5052611,17z/data=!3m1!4b1!4m6!3m5!1s0x30e284ed1b2cab13:0x4124d6c438427939!8m2!3d13.9049052!4d100.5052611!16s%2Fg%2F1hm1z3b7h",
+    note: "102 ถ.ติวานนท์ ต.ปากเกร็ด อ.ปากเกร็ด นนทบุรี",
+  },
+  {
+    name: "สมาคมสร้างคุณค่าในประเทศไทย สาขาธนบุรี",
+    googleMap: "https://www.google.com/maps/place/%E0%B8%AA%E0%B8%A1%E0%B8%B2%E0%B8%84%E0%B8%A1%E0%B8%AA%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B9%83%E0%B8%99%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%97%E0%B8%A8%E0%B9%84%E0%B8%97%E0%B8%A2+%E0%B8%AA%E0%B8%B2%E0%B8%82%E0%B8%B2%E0%B8%98%E0%B8%99%E0%B8%9A%E0%B8%B8%E0%B8%A3%E0%B8%B5/@13.7043452,100.4847768,17z/data=!4m6!3m5!1s0x30e299aee0cb7eab:0x489ca1c335f4cbd1!8m2!3d13.7043452!4d100.4869655!16s%2Fg%2F11swpp6871",
+    note: "192/1 ถนนมไหสวรรย์ แขวงสำเหร่ เขตธนบุรี กรุงเทพฯ",
+  },
+  {
+    name: "Big C ท่าข้าม",
+    googleMap: "https://www.google.com/maps/place/%E0%B8%9A%E0%B8%B4%E0%B9%8A%E0%B8%81%E0%B8%8B%E0%B8%B5+%E0%B8%8B%E0%B8%B9%E0%B9%80%E0%B8%9B%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B9%80%E0%B8%8B%E0%B9%87%E0%B8%99%E0%B9%80%E0%B8%95%E0%B8%AD%E0%B8%A3%E0%B9%8C+%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%A3%E0%B8%B2%E0%B8%A1+2+%E0%B8%AA%E0%B8%B2%E0%B8%82%E0%B8%B2+1/@13.651897,100.3955262,13z/data=!4m6!3m5!1s0x30e2bce442214451:0x499df6e88afaaf3!8m2!3d13.6615153!4d100.4405341!16s%2Fg%2F1thpt8ng",
+    note: "127 ถ.พระราม 2 แขวงแสมดำ เขตบางขุนเทียน (บิ๊กซี ซูเปอร์เซ็นเตอร์ พระราม 2 สาขา 1)",
+  },
+  {
+    name: "คริสต้า BKK11",
+    googleMap: "https://maps.app.goo.gl/T4tgV9idLhis14Q39?g_st=ipc",
+    note: null,
+  },
+  {
+    name: "คริสต้า BKK7",
+    googleMap: "https://maps.app.goo.gl/dJm7BSKhmowGSjtBA?g_st=ipc",
+    note: null,
+  },
+];
+  const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const Y = { people: [], columns: [], favs: new Set(lsGet(Y_FAV, [])), vis: lsGet(Y_VIS, {}), notes: lsGet(Y_NOTES, []), q: "", status: "Active", loaded: 0, loading: false, editId: null, link: { mtCo: null, name: "" }, linkOrig: null, linkSeq: 0, linkTimer: 0 };
+  const yId = p => "id:" + p.id;
+  const yVisible = k => Y.vis[k] !== false;
+  const yMap = r => ({ id: r.id, mtCo: r.mt_co, nickname: r.nickname || "", googleMap: r.google_map, status: r.status, khet: r.tokan ? r.tokan.sh_nt : null, phone: r.phone, note: r.note, extra: r.extra || {} });
+  const ySort = () => Y.people.sort((a, b) => a.nickname.localeCompare(b.nickname, "th"));
+  const yCache = () => lsSet(Y_CACHE, { people: Y.people, columns: Y.columns });
+  const yErr = msg => { $("y-error").textContent = msg || ""; $("y-error").hidden = !msg; };
+  const yDescribe = e => e.status === undefined ? "บันทึกไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่" : e.status === 401 || e.status === 403 ? "ไม่มีสิทธิ์ทำรายการนี้ ลองเข้าสู่ระบบใหม่" : "บันทึกไม่สำเร็จ: " + (e.status || "");
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const svgIcon = (...ds) => {
+    const s = document.createElementNS(SVGNS, "svg");
+    s.setAttribute("viewBox", "0 0 24 24");
+    s.setAttribute("aria-hidden", "true");
+    for (const d of ds) { const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); s.append(p); }
+    return s;
+  };
+  const IC_PHONE = "M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z";
+  const IC_PIN = ["M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z", "M12 8.8a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4z"];
+
+  function ySeedPlaces() {
+    let seeded = new Set(lsGet(Y_SEEDN, []));
+    if (localStorage.getItem(Y_SEED)) Y_DEFAULT_PLACES.slice(0, 3).forEach(d => seeded.add(d.name));
+    const have = new Set(Y.notes.map(p => p.name));
+    let added = false;
+    for (const d of Y_DEFAULT_PLACES) {
+      if (seeded.has(d.name)) continue;
+      if (!have.has(d.name)) { Y.notes.push({ id: yUuid(), name: d.name, googleMap: d.googleMap, note: d.note || null, createdAt: Date.now() }); added = true; }
+      seeded.add(d.name);
+    }
+    if (added) lsSet(Y_NOTES, Y.notes);
+    lsSet(Y_SEEDN, [...seeded]);
+  }
+  const yUuid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(36).slice(2));
+
+  // Load the contact book (and show the offline copy first / when the network is down)
+  async function loadYmd(force) {
+    if (!memAuthed() || Y.loading) return;
+    if (ACCESS.known && !can("maps")) {
+      Y.people = []; Y.columns = [];
+      try { localStorage.removeItem(Y_CACHE); } catch (e) {}
+      yRender();
+      return yErr("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฐานข้อมูล YMD กรุณาติดต่อผู้ดูแลระบบ");
+    }
+    if (!force && Y.loaded && Date.now() - Y.loaded < 60000) return;
+    Y.loading = true;
+    try {
+      const [rows, cols] = await Promise.all([
+        memGet("/rest/v1/bkk11_contacts?select=*,tokan(sh_nt)&order=nickname"),
+        memGet("/rest/v1/bkk11_contact_columns?select=*&order=sort,id")
+      ]);
+      Y.people = (rows || []).map(yMap);
+      Y.columns = cols || [];
+      Y.loaded = Date.now();
+      ySort();
+      for (const p of Y.people) {   // favourites saved by the old app as "nickname|map|note" become id based
+        const old = `${p.nickname}|${p.googleMap || ""}|${p.note || ""}`;
+        if (Y.favs.has(old)) { Y.favs.delete(old); Y.favs.add(yId(p)); lsSet(Y_FAV, [...Y.favs]); }
+      }
+      yCache();
+      yErr("");
+    } catch (e) {
+      if (e.status === 401) { /* signed out: the login screen is up */ }
+      else if (e.status === undefined) yErr(Y.people.length ? "ออฟไลน์ แสดงข้อมูลที่เก็บไว้ในเครื่อง" : "เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง");
+      else yErr("โหลดข้อมูลไม่สำเร็จ");
+    } finally {
+      Y.loading = false;
+      yRender();
+    }
+  }
+
+  function yParts(p) {
+    const parts = [];
+    if (yVisible("note") && p.note) parts.push(p.note);
+    for (const c of Y.columns) {
+      if (!yVisible(c.key)) continue;
+      const v = (p.extra || {})[c.key];
+      if (c.type === "checkbox") { if (v === true) parts.push(c.label); }
+      else if (v !== undefined && v !== null && v !== "") parts.push(c.label + ": " + v);
+    }
+    return parts;
+  }
+  function yRender() {
+    const q = Y.q.toLowerCase().trim();
+    const hay = p => (p.nickname + " " + (p.note || "") + " " + (p.khet || "") + " " + Object.values(p.extra || {}).filter(v => typeof v === "string").join(" ")).toLowerCase();
+    const list = Y.people.filter(p => (Y.status === "all" || p.status === Y.status) && (!q || hay(p).includes(q)));
+    const favs = list.filter(p => Y.favs.has(yId(p))), rest = list.filter(p => !Y.favs.has(yId(p)));
+    $("y-fav-wrap").hidden = !favs.length;
+    $("y-fav").replaceChildren(...favs.map(yCard));
+    $("y-list").replaceChildren(...rest.map(yCard));
+    $("y-title").textContent = (q || Y.status !== "all" ? "ผลการค้นหา" : "รายชื่อทั้งหมด") + " (" + list.length + ")";
+    $("y-empty").textContent = Y.people.length ? "ไม่พบชื่อที่ค้นหา" : "ยังไม่มีรายชื่อ";
+    $("y-empty").hidden = list.length > 0;
+  }
+  function yCard(p) {
+    const fav = Y.favs.has(yId(p));
+    const known = !!p.status && yVisible("status") && Y_STATUSES.includes(p.status);
+    const li = el("li", "card ycard" + (known ? " st-" + p.status : ""));
+    const top = el("div", "ctop");
+    const main = el("div", "cmain");
+    const name = el("div", "ctitle", p.nickname);
+    if (p.mtCo) name.append(el("span", "stag", "โทกัง"));
+    main.append(name);
+    const sub = el("div", "meta ysub");
+    if (known) sub.append(el("span", "ybadge " + p.status, p.status));
+    if (yVisible("district") && p.khet) sub.append(el("span", "ykhet", p.khet));
+    const parts = yParts(p);
+    if (parts.length) sub.append(el("span", null, parts.join(" · ")));
+    if (sub.childNodes.length) main.append(sub);
+    const act = el("div", "yact");
+    const phone = yVisible("phone") && Y_PHONE.test(p.phone || "") ? p.phone : null;
+    const call = el(phone ? "a" : "span", "yb call" + (phone ? "" : " off"));
+    call.setAttribute("aria-label", phone ? "โทร " + p.nickname : "ไม่มีเบอร์โทร");
+    if (phone) call.href = "tel:" + phone;
+    call.append(svgIcon(IC_PHONE));
+    const url = safeUrl(p.googleMap);
+    const pin = el(url ? "a" : "span", "yb pin" + (url ? "" : " off"));
+    pin.setAttribute("aria-label", url ? "เปิด Google Maps ของ " + p.nickname : "ไม่มีลิงก์ Google Maps");
+    if (url) { pin.href = url; pin.target = "_blank"; pin.rel = "noopener noreferrer"; }
+    pin.append(svgIcon(...IC_PIN));
+    act.append(call, pin);
+    top.append(main, act);
+    const acts = [
+      { label: fav ? "เลิกโปรด" : "โปรด", cls: "sw-fav", fn: () => yToggleFav(p) },
+      { label: "แก้ไข", cls: "sw-edit", fn: () => yOpen(p) }
+    ];
+    if (p.mtCo) acts.push({ label: "โทกัง", cls: "sw-tok", fn: () => window.open(TOKAN_URL + "?m=" + encodeURIComponent(p.mtCo), "_blank", "noopener") });
+    makeSwipe(li, top, acts);
+    return li;
+  }
+  function yToggleFav(p) {
+    const id = yId(p);
+    if (Y.favs.has(id)) Y.favs.delete(id); else Y.favs.add(id);
+    lsSet(Y_FAV, [...Y.favs]);
+    yRender();
+  }
+
+  // ---- add / edit a contact
+  function yLinkCur() {
+    const box = $("yf-linkcur");
+    box.replaceChildren();
+    if (Y.link.mtCo) {
+      const b = el("button", "btn xs ghost", "ยกเลิกการผูก");
+      b.type = "button";
+      b.onclick = () => { Y.link = { mtCo: null, name: "" }; yLinkCur(); };
+      box.append(el("span", null, "ผูกกับ " + (Y.link.name || "รหัส " + Y.link.mtCo)), b);
+    } else box.textContent = "ยังไม่ผูกกับสมาชิก";
+  }
+  const yMember = m => ((m.name_t || "") + " " + (m.saku_t || "")).trim();
+  async function yLinkSearch(q) {
+    const seq = ++Y.linkSeq, list = $("yf-linklist");
+    list.replaceChildren(el("li", "meta", "กำลังค้นหา..."));
+    try {
+      const toks = likeTokens(q);
+      const params = new URLSearchParams({ select: "mt_co,name_t,saku_t,sh_nt,ch_nt,fa_nt", order: "name_t", limit: "20" });
+      params.set("and", nameFilter(toks));
+      const rows = await memGet("/rest/v1/tokan?" + params);
+      if (seq !== Y.linkSeq) return;
+      if (!rows.length) return list.replaceChildren(el("li", "meta", "ไม่พบสมาชิกที่ตรงกัน (หรืออยู่นอกขอบเขตสิทธิ์ของคุณ)"));
+      list.replaceChildren(...rows.map(m => {
+        const taken = Y.people.find(x => x.mtCo === m.mt_co && x.id !== Y.editId);
+        const li = el("li"), b = el("button");
+        b.type = "button";
+        b.append(el("span", null, yMember(m)), el("small", null, [m.sh_nt, m.ch_nt, m.fa_nt].filter(Boolean).join(" · ") + (taken ? " · ผูกกับ “" + taken.nickname + "” แล้ว" : "")));
+        b.onclick = () => { Y.link = { mtCo: Number(m.mt_co), name: yMember(m) }; list.replaceChildren(); $("yf-linkq").value = ""; yLinkCur(); };
+        li.append(b);
+        return li;
+      }));
+    } catch (e) {
+      if (seq === Y.linkSeq && e.status !== 401) list.replaceChildren(el("li", "meta", e.status === undefined ? "ค้นหาไม่ได้ ตรวจสอบอินเทอร์เน็ต" : "ค้นหาไม่สำเร็จ ลองเข้าสู่ระบบใหม่"));
+    }
+  }
+  function yOpen(p) {
+    const d = p || { nickname: "", googleMap: "", status: "", phone: "", note: "", extra: {} };
+    Y.editId = p ? p.id : null;
+    $("yform-title").textContent = p ? "แก้ไขรายชื่อ" : "เพิ่มรายชื่อ";
+    $("yf-nick").value = d.nickname;
+    $("yf-map").value = d.googleMap || "";
+    $("yf-phone").value = d.phone || "";
+    $("yf-note").value = d.note || "";
+    $("yf-status").replaceChildren(...["", ...Y_STATUSES].map(v => { const o = el("option", null, v || "-"); o.value = v; o.selected = (d.status || "") === v; return o; }));
+    $("yf-lochint").textContent = "ยืนอยู่หน้าบ้านน้อง แล้วกดปุ่มนี้เพื่อใส่ลิงก์ Google Maps ให้อัตโนมัติ";
+    $("yf-err").textContent = "";
+    $("yf-del").hidden = !p;
+    const box = $("yf-extra");
+    box.replaceChildren();
+    for (const c of Y.columns) {
+      const v = (d.extra || {})[c.key];
+      const lab = el("label", c.type === "checkbox" ? "fck" : null), inp = el("input");
+      inp.dataset.key = c.key;
+      if (c.type === "checkbox") { inp.type = "checkbox"; inp.checked = v === true; lab.append(inp, c.label); }
+      else {
+        inp.type = c.type === "number" ? "number" : "text";
+        if (c.type === "number") inp.step = "any"; else inp.maxLength = 200;
+        inp.value = v === undefined || v === null ? "" : v;
+        lab.append(c.label, inp);
+      }
+      box.append(lab);
+    }
+    Y.link = { mtCo: p ? p.mtCo : null, name: "" };
+    Y.linkOrig = p ? p.mtCo : null;
+    Y.linkSeq++;
+    $("yf-linkq").value = "";
+    $("yf-linklist").replaceChildren();
+    yLinkCur();
+    if (p && p.mtCo) {
+      const code = p.mtCo;
+      memGet("/rest/v1/tokan?select=name_t,saku_t&mt_co=eq." + encodeURIComponent(code)).then(([m]) => { if (m && Y.link.mtCo === code) { Y.link.name = yMember(m); yLinkCur(); } }).catch(() => {});
+    }
+    $("yform").showModal();
+  }
+  function yLocate() {
+    const hint = $("yf-lochint"), input = $("yf-map"), btn = $("yf-loc");
+    if (!navigator.geolocation) { hint.textContent = "เครื่องหรือเบราว์เซอร์นี้ไม่รองรับการระบุตำแหน่ง"; return; }
+    if (input.value.trim() && !confirm("แทนที่ลิงก์เดิมด้วยตำแหน่งปัจจุบัน?")) return;
+    btn.disabled = true;
+    hint.textContent = "กำลังหาตำแหน่ง... (กดอนุญาตถ้าเบราว์เซอร์ถาม)";
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude, longitude, accuracy } = pos.coords, m = Math.round(accuracy);
+      input.value = "https://www.google.com/maps?q=" + latitude.toFixed(6) + "," + longitude.toFixed(6);
+      hint.textContent = m > 100 ? `ได้ตำแหน่งแล้ว แต่แม่นยำต่ำ (ประมาณ ${m} ม.) ลองไปที่โล่งแล้วกดอีกครั้ง หรือกด “บันทึก” เพื่อเก็บ` : `ได้ตำแหน่งแล้ว (แม่นยำประมาณ ${m} ม.) กด “บันทึก” เพื่อเก็บ`;
+      btn.disabled = false;
+    }, err => {
+      hint.textContent = err.code === 1 ? "ไม่ได้รับอนุญาตให้ใช้ตำแหน่ง เปิดสิทธิ์ตำแหน่งให้แอปนี้ในการตั้งค่าเครื่อง" : err.code === 3 ? "หาตำแหน่งไม่ทันเวลา ลองอีกครั้งในที่โล่ง" : "หาตำแหน่งไม่ได้ ลองอีกครั้ง";
+      btn.disabled = false;
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  }
+  async function ySave() {
+    const v = id => $(id).value.trim();
+    const body = { nickname: v("yf-nick"), google_map: v("yf-map") || null, status: v("yf-status") || null, phone: v("yf-phone") || null, note: v("yf-note") || null };
+    const bad = msg => { $("yf-err").textContent = msg; };
+    if (!body.nickname) return bad("กรุณาใส่ชื่อเล่น");
+    if (body.google_map && !/^https?:\/\//i.test(body.google_map)) return bad("ลิงก์ต้องขึ้นต้นด้วย http:// หรือ https://");
+    if (body.phone && !Y_PHONE.test(body.phone)) return bad("เบอร์โทรใส่ได้เฉพาะตัวเลขและ + ( ) -");
+    const existing = Y.editId === null ? null : Y.people.find(x => x.id === Y.editId);
+    const extra = { ...((existing && existing.extra) || {}) };
+    for (const inp of $("yf-extra").querySelectorAll("input[data-key]")) {
+      const k = inp.dataset.key, c = Y.columns.find(x => x.key === k);
+      if (!c) continue;
+      if (c.type === "checkbox") { if (inp.checked) extra[k] = true; else delete extra[k]; continue; }
+      const t = inp.value.trim();
+      if (t === "") delete extra[k]; else extra[k] = c.type === "number" ? Number(t) : t;
+    }
+    body.extra = extra;
+    const linkChanged = (Y.link.mtCo ?? null) !== (Y.linkOrig ?? null);
+    if (linkChanged) body.mt_co = Y.link.mtCo ?? null;
+    $("yf-save").disabled = true;
+    try {
+      const rep = { Prefer: "return=representation" };
+      if (Y.editId === null) {
+        const [row] = await memReq("POST", "/rest/v1/bkk11_contacts?select=*,tokan(sh_nt)", body, rep);
+        if (!row) throw Object.assign(new Error("denied"), { status: 403 });
+        Y.people.push(yMap(row));
+      } else {
+        const [row] = await memReq("PATCH", "/rest/v1/bkk11_contacts?id=eq." + encodeURIComponent(Y.editId) + "&select=*,tokan(sh_nt)", body, rep);
+        if (!row) throw Object.assign(new Error("denied"), { status: 403 });
+        const i = Y.people.findIndex(x => x.id === Y.editId);
+        if (i >= 0) Y.people[i] = yMap(row);
+      }
+      ySort(); yCache(); yRender();
+      $("yform").close();
+    } catch (e) {
+      if (e.status !== 401) bad(linkChanged && (e.status === 403 || e.status === 401) ? "ผูกสมาชิกไม่สำเร็จ: ไม่มีสิทธิ์ผูกสมาชิก หรือสมาชิกอยู่นอกขอบเขตสิทธิ์ของคุณ" : yDescribe(e));
+    } finally {
+      $("yf-save").disabled = false;
+    }
+  }
+  async function yDelete() {
+    const p = Y.people.find(x => x.id === Y.editId);
+    if (!p || !confirm("ลบ “" + p.nickname + "” ออกจากฐานข้อมูล? ย้อนกลับไม่ได้")) return;
+    $("yf-del").disabled = true;
+    try {
+      const rows = await memReq("DELETE", "/rest/v1/bkk11_contacts?id=eq." + encodeURIComponent(Y.editId), undefined, { Prefer: "return=representation" });
+      if (!rows || !rows.length) throw Object.assign(new Error("denied"), { status: 403 });
+      Y.people = Y.people.filter(x => x.id !== Y.editId);
+      Y.favs.delete(yId(p)); lsSet(Y_FAV, [...Y.favs]);
+      yCache(); yRender();
+      $("yform").close();
+    } catch (e) {
+      if (e.status !== 401) $("yf-err").textContent = yDescribe(e);
+    } finally {
+      $("yf-del").disabled = false;
+    }
+  }
+
+  // ---- columns
+  function yColsRender() {
+    const row = (key, label, tag, del) => {
+      const li = el("li"), lab = el("label"), cb = el("input");
+      cb.type = "checkbox"; cb.checked = yVisible(key);
+      cb.onchange = () => { Y.vis[key] = cb.checked; lsSet(Y_VIS, Y.vis); yRender(); };
+      lab.append(cb, label);
+      li.append(lab, el("span", "stag", tag));
+      if (del) li.append(del);
+      return li;
+    };
+    const TYPES = { text: "ข้อความ", number: "ตัวเลข", checkbox: "ติ๊กถูก" };
+    $("ycols-list").replaceChildren(
+      ...Y_BUILTIN.map(c => row(c.key, c.label, "มีอยู่แล้ว")),
+      ...Y.columns.map(c => {
+        const d = el("button", "btn xs danger", "ลบ");
+        d.type = "button";
+        d.setAttribute("aria-label", "ลบคอลัมน์ " + c.label);
+        d.onclick = () => yColDelete(c);
+        return row(c.key, c.label, TYPES[c.type] || c.type, d);
+      })
+    );
+  }
+  async function yColAdd() {
+    const label = $("yc-label").value.trim(), bad = m => { $("yc-err").textContent = m; $("yc-err").hidden = !m; };
+    if (!label) return;
+    if (Y.columns.some(c => c.label === label) || Y_BUILTIN.some(c => c.label === label)) return bad("มีคอลัมน์ชื่อนี้แล้ว");
+    const key = "c_" + (Math.random().toString(36).slice(2) + "00000000").slice(0, 8);
+    try {
+      const [row] = await memReq("POST", "/rest/v1/bkk11_contact_columns", { key, label, type: $("yc-type").value, sort: Y.columns.length }, { Prefer: "return=representation" });
+      if (!row) throw Object.assign(new Error("denied"), { status: 403 });
+      Y.columns.push(row);
+      $("yc-label").value = "";
+      bad("");
+      yCache(); yColsRender(); yRender();
+    } catch (e) { if (e.status !== 401) bad(yDescribe(e)); }
+  }
+  async function yColDelete(c) {
+    if (!confirm("ลบคอลัมน์ “" + c.label + "”? ค่าที่กรอกไว้ในคอลัมน์นี้จะไม่แสดงอีก")) return;
+    try {
+      const rows = await memReq("DELETE", "/rest/v1/bkk11_contact_columns?id=eq." + encodeURIComponent(c.id), undefined, { Prefer: "return=representation" });
+      if (!rows || !rows.length) throw Object.assign(new Error("denied"), { status: 403 });
+      Y.columns = Y.columns.filter(x => x.id !== c.id);
+      delete Y.vis[c.key]; lsSet(Y_VIS, Y.vis);
+      yCache(); yColsRender(); yRender();
+    } catch (e) { if (e.status !== 401) { $("yc-err").textContent = yDescribe(e); $("yc-err").hidden = false; } }
+  }
+
+  // ---- saved places (kept on this device only)
+  function yNotesRender() {
+    $("yn-list").replaceChildren(...Y.notes.map(n => {
+      const li = el("li", "card ycard"), top = el("div", "ctop"), main = el("div", "cmain");
+      main.append(el("div", "ctitle", n.name));
+      if (n.note) main.append(el("div", "meta", n.note));
+      const act = el("div", "yact"), url = safeUrl(n.googleMap);
+      const pin = el(url ? "a" : "span", "yb pin" + (url ? "" : " off"));
+      pin.setAttribute("aria-label", "เปิด Google Maps ของ " + n.name);
+      if (url) { pin.href = url; pin.target = "_blank"; pin.rel = "noopener noreferrer"; }
+      pin.append(svgIcon(...IC_PIN));
+      act.append(pin);
+      top.append(main, act);
+      makeSwipe(li, top, [{ label: "ลบ", cls: "sw-del", fn: () => { Y.notes = Y.notes.filter(x => x.id !== n.id); lsSet(Y_NOTES, Y.notes); yNotesRender(); } }]);
+      return li;
+    }));
+    $("yn-empty").hidden = Y.notes.length > 0;
+  }
+  function ySub(id) {
+    for (const k of ["people", "notes"]) {
+      const on = k === id, t = $("ysub-" + k);
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      $("ysub-" + k + "-p").hidden = !on;
+    }
+    if (id === "notes") yNotesRender();
+  }
+  function yInit() {
+    ySeedPlaces();
+    const cached = lsGet(Y_CACHE, null);
+    if (memAuthed() && cached && Array.isArray(cached.people) && cached.people.length && cached.people[0].id !== undefined) { Y.people = cached.people; Y.columns = cached.columns || []; }
+    for (const k of ["people", "notes"]) $("ysub-" + k).onclick = () => ySub(k);
+    $("y-q").oninput = e => { Y.q = e.target.value; yRender(); };
+    for (const b of $("y-stat").querySelectorAll("button")) b.onclick = () => {
+      Y.status = b.dataset.status;
+      for (const x of $("y-stat").querySelectorAll("button")) x.setAttribute("aria-pressed", String(x === b));
+      yRender();
+    };
+    $("y-add").onclick = () => yOpen(null);
+    $("y-cols").onclick = () => { $("yc-err").hidden = true; yColsRender(); $("ycols").showModal(); };
+    $("yc-close").onclick = () => $("ycols").close();
+    $("yc-add").onclick = yColAdd;
+    $("yf-cancel").onclick = () => $("yform").close();
+    $("yf-save").onclick = ySave;
+    $("yf-del").onclick = yDelete;
+    $("yf-loc").onclick = yLocate;
+    $("yf-linkq").oninput = e => {
+      clearTimeout(Y.linkTimer);
+      const q = e.target.value.trim();
+      if (!q) { Y.linkSeq++; $("yf-linklist").replaceChildren(); return; }
+      Y.linkTimer = setTimeout(() => yLinkSearch(q), 300);
+    };
+    for (const id of ["yform", "ycols"]) $(id).addEventListener("click", e => { if (e.target === $(id)) $(id).close(); });
+    $("yn-add").onclick = () => {
+      const name = $("yn-name").value.trim(), map = $("yn-map").value.trim(), note = $("yn-text").value.trim();
+      const bad = m => { $("yn-err").textContent = m; $("yn-err").hidden = !m; };
+      if (!name || !map) return bad("กรุณาใส่ชื่อสถานที่และลิงก์ Google Maps");
+      if (!safeUrl(map)) return bad("ลิงก์ต้องขึ้นต้นด้วย http:// หรือ https://");
+      bad("");
+      Y.notes.unshift({ id: yUuid(), name, googleMap: map, note: note || null, createdAt: Date.now() });
+      lsSet(Y_NOTES, Y.notes);
+      $("yn-name").value = ""; $("yn-map").value = ""; $("yn-text").value = "";
+      yNotesRender();
+    };
+    yRender();
+  }
+  yInit();
+
   $("tab-settings").onclick = openSettings;
   $("today-close").onclick = () => $("today").close();
   $("today-open").onclick = () => { $("today").close(); showTab("schedule"); };
@@ -4246,14 +4812,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   loadAccessCache();
   applyAccess();   // tabs the cached verdict says are closed never show
   const initial = location.hash.slice(1);
-  if (initial === "visits" || initial === "schedule") showTab(initial);
+  if (initial === "visits" || initial === "schedule" || (initial === "ymd" && uiOpen("maps"))) showTab(initial);
   else if (!uiOpen("items")) showTab("visits");
   else { showTab("items"); showSub(SUBS.includes(initial) ? initial : "items"); }
   if (initial === "settings") openSettings();
   addEventListener("hashchange", () => {
     const id = location.hash.slice(1);
     if (SUBS.includes(id)) { if (uiOpen("items")) { showTab("items"); showSub(id); } else showTab("visits"); }
-    else if (id === "visits" || id === "schedule") showTab(id);
+    else if (id === "visits" || id === "schedule" || (id === "ymd" && uiOpen("maps"))) showTab(id);
     else if (id === "settings") openSettings();
   });
 
@@ -4320,10 +4886,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function applyAccess() {
     const items = uiOpen("items");
     $("tab-items").hidden = !items;
-    $("tab-maps").hidden = !uiOpen("maps");
+    $("tab-ymd").hidden = !uiOpen("maps");
+    if (!uiOpen("maps") && (Y.people.length || Y.columns.length)) {   // no permission (any more): no copy of the contact book stays on the screen or the device
+      Y.people = []; Y.columns = []; Y.loaded = 0;
+      try { localStorage.removeItem(Y_CACHE); } catch (e) {}
+      yRender();
+    }
     $("open-access").hidden = !can("access");
     const cur = tabs.find(t => t.getAttribute("aria-selected") === "true");
-    if (!items && (!cur || cur.dataset.tab === "items")) showTab("visits");
+    if ((!items && (!cur || cur.dataset.tab === "items")) || (!uiOpen("maps") && cur && cur.dataset.tab === "ymd")) showTab("visits");
     refreshBadges();
   }
   async function loadAccess() {
