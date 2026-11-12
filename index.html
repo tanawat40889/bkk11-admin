@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-3CF6SaY6Nkz4msQOdfhW04rCcn+XUTObfJ0PhlYZJ7A='; style-src 'self' https://fonts.googleapis.com 'sha256-k8OQuLXfNf4Puwseja7Pk+bH6L3YulK3NbkLNCGcVQI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-eLQz9JYH9IIc5nwZ6jDVV/1NK2QLFdZn1UA2w+nVjms='; style-src 'self' https://fonts.googleapis.com 'sha256-k8OQuLXfNf4Puwseja7Pk+bH6L3YulK3NbkLNCGcVQI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -4504,7 +4504,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const yId = p => "id:" + p.id;
   const yVisible = k => Y.vis[k] !== false;
   const yMap = r => ({ id: r.id, mtCo: r.mt_co, nickname: r.nickname || "", googleMap: r.google_map, status: r.status, khet: r.tokan ? r.tokan.sh_nt : null, phone: r.phone, note: r.note, extra: r.extra || {} });
-  const ySort = () => Y.people.sort((a, b) => a.nickname.localeCompare(b.nickname, "th"));
+  const yCol = new Intl.Collator("th", { numeric: true, sensitivity: "base" });   // Thai alphabetical, numbers in numeric order
+  const yByName = (a, b) => yCol.compare(a, b);
+  const ySort = () => Y.people.sort((a, b) => yByName(a.nickname, b.nickname));
   const yCache = () => lsSet(Y_CACHE, { people: Y.people, columns: Y.columns });
   const yErr = msg => { $("y-error").textContent = msg || ""; $("y-error").hidden = !msg; };
   const yDescribe = e => e.status === undefined ? "บันทึกไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่" : e.status === 401 || e.status === 403 ? "ไม่มีสิทธิ์ทำรายการนี้ ลองเข้าสู่ระบบใหม่" : "บันทึกไม่สำเร็จ: " + (e.status || "");
@@ -4584,7 +4586,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function yRender() {
     const q = Y.q.toLowerCase().trim();
     const hay = p => (p.nickname + " " + (p.note || "") + " " + (p.khet || "") + " " + Object.values(p.extra || {}).filter(v => typeof v === "string").join(" ")).toLowerCase();
-    const list = Y.people.filter(p => (Y.status === "all" || p.status === Y.status) && (!q || hay(p).includes(q)));
+    const list = [...Y.people].sort((a, b) => yByName(a.nickname, b.nickname)).filter(p => (Y.status === "all" || p.status === Y.status) && (!q || hay(p).includes(q)));
     const favs = list.filter(p => Y.favs.has(yId(p))), rest = list.filter(p => !Y.favs.has(yId(p)));
     $("y-fav-wrap").hidden = !favs.length;
     $("y-fav").replaceChildren(...favs.map(yCard));
@@ -4833,7 +4835,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   // ---- saved places (kept on this device only)
   function yNotesRender() {
-    const nq = Y.nq.toLowerCase().trim(), shown = Y.notes.filter(n => !nq || (n.name + " " + (n.note || "")).toLowerCase().includes(nq));
+    const nq = Y.nq.toLowerCase().trim(), shown = Y.notes.filter(n => !nq || (n.name + " " + (n.note || "")).toLowerCase().includes(nq)).sort((a, b) => yByName(a.name, b.name));
     $("yn-list").replaceChildren(...shown.map(n => {
       const li = el("li", "card ycard"), top = el("div", "ctop"), main = el("div", "cmain");
       main.append(el("div", "ctitle", n.name));
