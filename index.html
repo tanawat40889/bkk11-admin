@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-EOhvAMWB9++n7DU7/CMVyHTtc0r+5aUN2U7Jm3nGzRM='; style-src 'self' https://fonts.googleapis.com 'sha256-DLJfpAskkAH4AoYNTKixRz742qDcDfzs0wcOqTpV4Kk='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-yJeWYDmfdcGpI09CL+SwGedTA3vYAWguRmT2frExJOs='; style-src 'self' https://fonts.googleapis.com 'sha256-SOgPRd9VowF+WxBJgTak+6x1IQ5UsmXN+3szqUHhQi4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -309,7 +309,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .yextra { display: grid; gap: 12px; }
 .form label.fck { display: flex; align-items: center; gap: 10px; font-size: .9375rem; color: var(--ink); }
 .form label.fck input { flex: none; width: 22px; height: 22px; min-height: 0; }
-.ycols { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; max-height: 40dvh; overflow: auto; }
+.ycols { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .ycols li { display: flex; align-items: center; gap: 8px; min-height: 44px; }
 .form .ycols label { flex: 1; flex-direction: row; display: flex; align-items: center; gap: 10px; font-size: .9375rem; color: var(--ink); }
 .ycols label input { flex: none; width: 22px; height: 22px; min-height: 0; }
@@ -678,7 +678,9 @@ dialog {
   margin: auto;
   overflow: auto;
   width: min(92vw, 520px);
-  max-height: 90vh;
+  max-height: calc(var(--vvh, 100dvh) - var(--sat) - var(--sab) - 32px);   /* never taller than what is really visible (keyboard, bars); the dialog scrolls inside */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 0;
   color: var(--ink);
   background: var(--card);
@@ -686,7 +688,10 @@ dialog {
   border-radius: var(--r);
 }
 dialog::backdrop { background: rgb(0 0 0 / .5); }
-.form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 16px; }
+.form { --fp: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: var(--fp); }
+/* long forms scroll inside the popup; the title and the buttons stay in reach */
+dialog > .form > h3:first-child { position: sticky; top: 0; z-index: 2; margin: calc(-1 * var(--fp)) calc(-1 * var(--fp)) 0; padding: var(--fp) var(--fp) 8px; background: var(--card); }
+dialog > .form > .btns:last-child { position: sticky; bottom: 0; z-index: 2; margin: 0 calc(-1 * var(--fp)) calc(-1 * var(--fp)); padding: 10px var(--fp) var(--fp); background: var(--card); border-top: 1px solid var(--line); }
 .form h3 { font-size: 1.05rem; }
 .form label { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 4px; font-size: .8125rem; color: var(--mute); }
 .form .hint { font-size: .75rem; color: var(--mute); }
@@ -778,7 +783,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   .subtabs, .ybar { margin: 0; padding-left: 0; padding-right: 0; }
   .subtab { flex: none; padding: 0 20px; font-size: .9375rem; }
   dialog { width: min(90vw, 640px); }
-  .form { padding: 24px; gap: 14px; }
+  .form { --fp: 24px; gap: 14px; }
   .form textarea.plain { min-height: 220px; }
   #f-json { min-height: 140px; }
   .occ .promo { max-width: 72ch; }
@@ -5063,6 +5068,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     menu.style.bottom = "auto";
     menu.style.top = Math.round(h - menu.offsetHeight - 12) + "px";
   }
+  // the real visible height (iOS shrinks the visual viewport, not the layout one, when the keyboard opens): popups size themselves to it
+  const setVvh = () => document.documentElement.style.setProperty("--vvh", (window.visualViewport ? visualViewport.height : innerHeight) + "px");
+  setVvh();
+  addEventListener("resize", setVvh);
+  if (window.visualViewport) visualViewport.addEventListener("resize", setVvh);
   const queueMenu = () => { if (!menuRaf) menuRaf = requestAnimationFrame(placeMenu); };
   for (const ev of ["load", "pageshow", "resize", "orientationchange", "scroll", "focus"]) addEventListener(ev, queueMenu, { passive: true });
   if (window.visualViewport) for (const ev of ["resize", "scroll"]) visualViewport.addEventListener(ev, queueMenu);
