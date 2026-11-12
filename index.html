@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-6ysLk1Vyf2C+l//UzGDh/V5FusQuK1AYqmOz0tWx9ng='; style-src 'self' https://fonts.googleapis.com 'sha256-g3O8UkfTgDRLNGWaNSOFoeQtoKMvRebuntb5UEA6adU='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-EOhvAMWB9++n7DU7/CMVyHTtc0r+5aUN2U7Jm3nGzRM='; style-src 'self' https://fonts.googleapis.com 'sha256-DLJfpAskkAH4AoYNTKixRz742qDcDfzs0wcOqTpV4Kk='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -304,7 +304,6 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .yb svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .swact .sw-fav { background: #d97706; }
 .swact .sw-tok { background: #7c3aed; }
-.ynote-form { padding: 12px 0 0; }
 .ylink { display: grid; gap: 8px; }
 .ylinkcur { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .875rem; }
 .yextra { display: grid; gap: 12px; }
@@ -1109,14 +1108,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <p class="empty" id="y-empty" hidden></p>
     </div>
     <div class="subpanel" id="ysub-notes-p" role="tabpanel" aria-labelledby="ysub-notes" hidden>
-      <div class="form ynote-form">
-        <label>ชื่อสถานที่<input id="yn-name" type="text" autocomplete="off" maxlength="200"></label>
-        <label>ลิงก์ Google Maps<input id="yn-map" type="url" inputmode="url" autocomplete="off" placeholder="วางลิงก์ Google Maps ที่นี่"></label>
-        <label>โน้ต (ถ้ามี)<input id="yn-text" type="text" autocomplete="off" maxlength="300"></label>
-        <p class="warnline" id="yn-err" hidden></p>
-        <button type="button" class="btn" id="yn-add">+ เพิ่มสถานที่</button>
-        <p class="hint">บันทึกไว้ในเครื่องนี้เท่านั้น</p>
-      </div>
+      <button type="button" class="fab" id="yn-open" aria-label="เพิ่มสถานที่" title="เพิ่มสถานที่"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
       <ul class="list" id="yn-list"></ul>
       <p class="empty" id="yn-empty" hidden>ยังไม่มีสถานที่ที่บันทึกไว้ ลองเพิ่มด้านบนได้เลย</p>
     </div>
@@ -1386,6 +1378,21 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <button type="button" class="btn danger" id="yf-del">ลบ</button>
       <button type="button" class="btn ghost" id="yf-cancel">ยกเลิก</button>
       <button type="button" class="btn" id="yf-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ynform" aria-labelledby="ynform-title">
+  <div class="form">
+    <h3 id="ynform-title">เพิ่มสถานที่</h3>
+    <label>ชื่อสถานที่ *<input id="yn-name" type="text" autocomplete="off" maxlength="200"></label>
+    <label>ลิงก์ Google Maps *<input id="yn-map" type="url" inputmode="url" autocomplete="off" placeholder="วางลิงก์ Google Maps ที่นี่"></label>
+    <label>โน้ต (ถ้ามี)<input id="yn-text" type="text" autocomplete="off" maxlength="300"></label>
+    <p class="warnline" id="yn-err" hidden></p>
+    <p class="hint">บันทึกไว้ในเครื่องนี้เท่านั้น</p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="yn-cancel">ยกเลิก</button>
+      <button type="button" class="btn" id="yn-add">บันทึก</button>
     </div>
   </div>
 </dialog>
@@ -4870,7 +4877,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (!q) { Y.linkSeq++; $("yf-linklist").replaceChildren(); return; }
       Y.linkTimer = setTimeout(() => yLinkSearch(q), 300);
     };
-    for (const id of ["yform", "ycols"]) $(id).addEventListener("click", e => { if (e.target === $(id)) $(id).close(); });
+    for (const id of ["yform", "ycols", "ynform"]) $(id).addEventListener("click", e => { if (e.target === $(id)) $(id).close(); });
+    $("yn-open").onclick = () => { $("yn-name").value = ""; $("yn-map").value = ""; $("yn-text").value = ""; $("yn-err").hidden = true; $("ynform").showModal(); };
+    $("yn-cancel").onclick = () => $("ynform").close();
     $("yn-add").onclick = () => {
       const name = $("yn-name").value.trim(), map = $("yn-map").value.trim(), note = $("yn-text").value.trim();
       const bad = m => { $("yn-err").textContent = m; $("yn-err").hidden = !m; };
@@ -4879,7 +4888,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       bad("");
       Y.notes.unshift({ id: yUuid(), name, googleMap: map, note: note || null, createdAt: Date.now() });
       lsSet(Y_NOTES, Y.notes);
-      $("yn-name").value = ""; $("yn-map").value = ""; $("yn-text").value = "";
+      $("ynform").close();
       yNotesRender();
     };
     yRender();
