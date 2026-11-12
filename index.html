@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-+PbtLfx9LRigF6x92OlCCPFuwVl2LDxIZfi6nz3+sSk='; style-src 'self' https://fonts.googleapis.com 'sha256-mTxnr7z7yvf2uy/go9jn7E7cOEseUQuuHrlsedOpYXw='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-6ysLk1Vyf2C+l//UzGDh/V5FusQuK1AYqmOz0tWx9ng='; style-src 'self' https://fonts.googleapis.com 'sha256-g3O8UkfTgDRLNGWaNSOFoeQtoKMvRebuntb5UEA6adU='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -142,6 +142,7 @@ section { margin-top: 16px; }
   right: 0;
   margin: 0 auto;
   bottom: calc(var(--sab) + 12px);
+  translate: 0 calc(-1 * var(--sab));   /* with the JS top (which ignores the inset) this lands at bottom + inset */
   display: flex;
   gap: 4px;
   width: min(calc(100% - 24px - var(--sal) - var(--sar)), 420px);
@@ -271,8 +272,16 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .swbody { position: relative; background: var(--card); transition: transform .2s ease; touch-action: pan-y; }
 .swbody.drag { transition: none; }
 /* ฐานข้อมูล YMD (the former YMD DB app) */
-.ysearch { margin-top: 12px; }
-.ystat { margin-top: 10px; }
+.ybar { position: sticky; top: var(--hdr-h); z-index: 4; display: flex; align-items: center; gap: 8px; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 10px max(16px, var(--sar)) 10px max(16px, var(--sal)); background: var(--bg); }
+.ybar .field { flex: 1; min-width: 0; margin: 0; }
+.ytog { display: flex; flex: none; padding: 3px; gap: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+.ytab { display: grid; place-items: center; width: 44px; height: 44px; color: var(--mute); background: none; border: 0; border-radius: 11px; cursor: pointer; }
+.ytab svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ytab[aria-selected="true"] { color: var(--brand-ink); background: var(--brand); }
+.yset { margin: 14px 0 6px; font-size: .9375rem; color: var(--mute); }
+.fab.yfab-set { bottom: calc(168px + var(--sab)); width: 48px; height: 48px; right: calc(max(16px, var(--sar)) + 4px); color: var(--ink); background: var(--card); border: 1px solid var(--line); }
+.fab.yfab-set svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ystat { margin-top: 4px; }
 .chips button[aria-pressed="true"] { color: var(--brand-ink); background: var(--brand); }
 .ybtns { display: flex; gap: 8px; }
 .ysec { margin: 18px 0 0; font-size: .9375rem; color: var(--mute); }
@@ -303,7 +312,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .form label.fck input { flex: none; width: 22px; height: 22px; min-height: 0; }
 .ycols { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; max-height: 40dvh; overflow: auto; }
 .ycols li { display: flex; align-items: center; gap: 8px; min-height: 44px; }
-.ycols label { flex: 1; display: flex; align-items: center; gap: 10px; font-size: .9375rem; color: var(--ink); }
+.form .ycols label { flex: 1; flex-direction: row; display: flex; align-items: center; gap: 10px; font-size: .9375rem; color: var(--ink); }
 .ycols label input { flex: none; width: 22px; height: 22px; min-height: 0; }
 .ycols .stag { margin: 0; }
 .fab { position: fixed; z-index: 6; right: max(16px, var(--sar)); bottom: calc(96px + var(--sab)); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; color: var(--brand-ink); background: var(--brand); border: 0; border-radius: 50%; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); cursor: pointer; }
@@ -767,7 +776,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   #mjson-text { min-height: 240px; }
   #sub-monthly { max-width: 760px; }
-  .subtabs { margin: 0; padding-left: 0; padding-right: 0; }
+  .subtabs, .ybar { margin: 0; padding-left: 0; padding-right: 0; }
   .subtab { flex: none; padding: 0 20px; font-size: .9375rem; }
   dialog { width: min(90vw, 640px); }
   .form { padding: 24px; gap: 14px; }
@@ -1080,25 +1089,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
   </section>
   <section id="panel-ymd" role="tabpanel" aria-labelledby="tab-ymd" hidden>
-    <div class="subtabs" role="tablist" aria-label="หมวด">
-      <button type="button" class="subtab" role="tab" id="ysub-people" data-ysub="people" aria-controls="ysub-people-p" aria-selected="true">รายชื่อ YMD</button>
-      <button type="button" class="subtab" role="tab" id="ysub-notes" data-ysub="notes" aria-controls="ysub-notes-p" aria-selected="false" tabindex="-1">บันทึกสถานที่</button>
+    <div class="ybar">
+      <input type="search" class="field" id="y-q" placeholder="ค้นหาชื่อเล่น โน้ต เขต" autocomplete="off" aria-label="ค้นหา">
+      <div class="ytog" role="tablist" aria-label="หมวด">
+        <button type="button" class="ytab" role="tab" id="ysub-people" data-ysub="people" aria-controls="ysub-people-p" aria-selected="true" aria-label="รายชื่อ YMD" title="รายชื่อ YMD"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M16.5 14.2A5 5 0 0 1 21 19"/></svg></button>
+        <button type="button" class="ytab" role="tab" id="ysub-notes" data-ysub="notes" aria-controls="ysub-notes-p" aria-selected="false" tabindex="-1" aria-label="บันทึกสถานที่" title="บันทึกสถานที่"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg></button>
+      </div>
     </div>
     <div class="subpanel" id="ysub-people-p" role="tabpanel" aria-labelledby="ysub-people">
-      <input type="search" class="field ysearch" id="y-q" placeholder="ค้นหาชื่อเล่น โน้ต เขต" autocomplete="off" aria-label="ค้นหาชื่อเล่น โน้ต เขต">
-      <div class="chips ystat" id="y-stat" role="group" aria-label="สถานะ">
-        <button type="button" data-status="Active" aria-pressed="true">Active</button>
-        <button type="button" data-status="Visiting" aria-pressed="false">Visiting</button>
-        <button type="button" data-status="Passive" aria-pressed="false">Passive</button>
-        <button type="button" data-status="all" aria-pressed="false">ทั้งหมด</button>
-      </div>
-      <div class="vtop">
-        <h3 id="y-title"></h3>
-        <span class="ybtns">
-          <button type="button" class="btn sm ghost" id="y-cols">คอลัมน์</button>
-          <button type="button" class="btn sm" id="y-add">+ เพิ่มรายชื่อ</button>
-        </span>
-      </div>
+      <button type="button" class="fab yfab-set" id="y-cols" aria-label="ตั้งค่า" title="ตั้งค่า"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg></button>
+      <button type="button" class="fab" id="y-add" aria-label="เพิ่มรายชื่อ" title="เพิ่มรายชื่อ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
       <p class="warnline" id="y-error" hidden></p>
       <div id="y-fav-wrap" hidden>
         <h3 class="ysec">รายการโปรด</h3>
@@ -1392,7 +1392,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
 <dialog id="ycols" aria-labelledby="ycols-title">
   <div class="form">
-    <h3 id="ycols-title">คอลัมน์</h3>
+    <h3 id="ycols-title">ตั้งค่า</h3>
+    <h4 class="yset">สถานะของน้อง</h4>
+    <div class="chips ystat" id="y-stat" role="group" aria-label="สถานะ">
+      <button type="button" data-status="Active" aria-pressed="true">Active</button>
+      <button type="button" data-status="Visiting" aria-pressed="false">Visiting</button>
+      <button type="button" data-status="Passive" aria-pressed="false">Passive</button>
+      <button type="button" data-status="all" aria-pressed="false">ทั้งหมด</button>
+    </div>
+    <h4 class="yset">คอลัมน์</h4>
     <p class="hint">ติ๊กเลือกข้อมูลที่จะแสดงบนการ์ด (จำไว้ในเครื่องนี้) และเพิ่มคอลัมน์ใหม่ได้ ทุกคนที่ใช้ระบบนี้จะเห็นคอลัมน์ที่เพิ่ม</p>
     <ul class="ycols" id="ycols-list"></ul>
     <div class="frow">
@@ -4474,7 +4482,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 ];
   const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-  const Y = { people: [], columns: [], favs: new Set(lsGet(Y_FAV, [])), vis: lsGet(Y_VIS, {}), notes: lsGet(Y_NOTES, []), q: "", status: "Active", loaded: 0, loading: false, editId: null, link: { mtCo: null, name: "" }, linkOrig: null, linkSeq: 0, linkTimer: 0 };
+  const Y = { people: [], columns: [], favs: new Set(lsGet(Y_FAV, [])), vis: lsGet(Y_VIS, {}), notes: lsGet(Y_NOTES, []), q: "", nq: "", sub: "people", status: "Active", loaded: 0, loading: false, editId: null, link: { mtCo: null, name: "" }, linkOrig: null, linkSeq: 0, linkTimer: 0 };
   const yId = p => "id:" + p.id;
   const yVisible = k => Y.vis[k] !== false;
   const yMap = r => ({ id: r.id, mtCo: r.mt_co, nickname: r.nickname || "", googleMap: r.google_map, status: r.status, khet: r.tokan ? r.tokan.sh_nt : null, phone: r.phone, note: r.note, extra: r.extra || {} });
@@ -4563,7 +4571,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("y-fav-wrap").hidden = !favs.length;
     $("y-fav").replaceChildren(...favs.map(yCard));
     $("y-list").replaceChildren(...rest.map(yCard));
-    $("y-title").textContent = (q || Y.status !== "all" ? "ผลการค้นหา" : "รายชื่อทั้งหมด") + " (" + list.length + ")";
     $("y-empty").textContent = Y.people.length ? "ไม่พบชื่อที่ค้นหา" : "ยังไม่มีรายชื่อ";
     $("y-empty").hidden = list.length > 0;
   }
@@ -4808,7 +4815,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   // ---- saved places (kept on this device only)
   function yNotesRender() {
-    $("yn-list").replaceChildren(...Y.notes.map(n => {
+    const nq = Y.nq.toLowerCase().trim(), shown = Y.notes.filter(n => !nq || (n.name + " " + (n.note || "")).toLowerCase().includes(nq));
+    $("yn-list").replaceChildren(...shown.map(n => {
       const li = el("li", "card ycard"), top = el("div", "ctop"), main = el("div", "cmain");
       main.append(el("div", "ctitle", n.name));
       if (n.note) main.append(el("div", "meta", n.note));
@@ -4822,7 +4830,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       makeSwipe(li, top, [{ label: "ลบ", cls: "sw-del", fn: () => { Y.notes = Y.notes.filter(x => x.id !== n.id); lsSet(Y_NOTES, Y.notes); yNotesRender(); } }]);
       return li;
     }));
-    $("yn-empty").hidden = Y.notes.length > 0;
+    $("yn-empty").textContent = Y.notes.length ? "ไม่พบสถานที่ที่ค้นหา" : "ยังไม่มีสถานที่ที่บันทึกไว้ ลองเพิ่มด้านบนได้เลย";
+    $("yn-empty").hidden = shown.length > 0;
   }
   function ySub(id) {
     for (const k of ["people", "notes"]) {
@@ -4831,6 +4840,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       t.tabIndex = on ? 0 : -1;
       $("ysub-" + k + "-p").hidden = !on;
     }
+    Y.sub = id;
+    $("y-q").value = id === "notes" ? Y.nq : Y.q;
+    $("y-q").placeholder = id === "notes" ? "ค้นหาสถานที่" : "ค้นหาชื่อเล่น โน้ต เขต";
     if (id === "notes") yNotesRender();
   }
   function yInit() {
@@ -4838,7 +4850,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const cached = lsGet(Y_CACHE, null);
     if (memAuthed() && cached && Array.isArray(cached.people) && cached.people.length && cached.people[0].id !== undefined) { Y.people = cached.people; Y.columns = cached.columns || []; }
     for (const k of ["people", "notes"]) $("ysub-" + k).onclick = () => ySub(k);
-    $("y-q").oninput = e => { Y.q = e.target.value; yRender(); };
+    $("y-q").oninput = e => { if (Y.sub === "notes") { Y.nq = e.target.value; yNotesRender(); } else { Y.q = e.target.value; yRender(); } };
     for (const b of $("y-stat").querySelectorAll("button")) b.onclick = () => {
       Y.status = b.dataset.status;
       for (const x of $("y-stat").querySelectorAll("button")) x.setAttribute("aria-pressed", String(x === b));
@@ -5011,7 +5023,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     clearTimeout(repaintTimer);
     repaintTimer = setTimeout(() => {
       wasAway = false;
-      const bars = document.querySelectorAll("header, nav.tabs, .subtabs, .sstick, .vleft");
+      const bars = document.querySelectorAll("header, nav.tabs, .subtabs, .ybar, .sstick, .vleft");
       bars.forEach(b => { b.style.transform = "translate3d(0,0,0.01px)"; });
       if (!force) { const y = scrollY; scrollTo(0, y + 1); scrollTo(0, y); }
       requestAnimationFrame(() => requestAnimationFrame(() => bars.forEach(b => { b.style.transform = ""; })));
@@ -5027,9 +5039,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // iOS keeps a stale (too short) layout viewport for position:fixed until the first scroll, so the bottom menu floated too
   // high on a freshly opened short page. Place it from the real screen height instead of trusting `bottom`.
   const menu = document.querySelector("nav.tabs");
-  const probe = el("div");
-  probe.style.cssText = "position:fixed;visibility:hidden;pointer-events:none;padding-bottom:env(safe-area-inset-bottom,0px)";
-  document.body.append(probe);
   const hdr = document.querySelector("header");
   const setHdr = () => document.documentElement.style.setProperty("--hdr-h", hdr.offsetHeight + "px");
   setHdr(); addEventListener("resize", setHdr); addEventListener("load", setHdr); addEventListener("orientationchange", setHdr);
@@ -5041,9 +5050,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     let h = Math.max(innerHeight, vv ? vv.height : 0, document.documentElement.clientHeight);
     const sw = Math.min(screen.width, screen.height), sl = Math.max(screen.width, screen.height);
     if (navigator.standalone && innerWidth === (land ? sl : sw)) h = Math.max(h, land ? sw : sl);   // whole-screen app window only (not a windowed iPad)
-    const gap = 12 + (parseFloat(getComputedStyle(probe).paddingBottom) || 0);
+    // the home-indicator inset is applied in CSS (translate: env()), which iOS keeps current by itself; measuring it here read 0 while the page was still starting
     menu.style.bottom = "auto";
-    menu.style.top = Math.round(h - menu.offsetHeight - gap) + "px";
+    menu.style.top = Math.round(h - menu.offsetHeight - 12) + "px";
   }
   const queueMenu = () => { if (!menuRaf) menuRaf = requestAnimationFrame(placeMenu); };
   for (const ev of ["load", "pageshow", "resize", "orientationchange", "scroll", "focus"]) addEventListener(ev, queueMenu, { passive: true });
@@ -5051,6 +5060,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   placeMenu();
   setTimeout(placeMenu, 300);
   setTimeout(placeMenu, 1200);
+  setTimeout(placeMenu, 2500);
+  document.addEventListener("visibilitychange", queueMenu);
   window.renderBoard = render;
   try {
     board = JSON.parse($("board-data").textContent);
