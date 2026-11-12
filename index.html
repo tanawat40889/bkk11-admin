@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-yJeWYDmfdcGpI09CL+SwGedTA3vYAWguRmT2frExJOs='; style-src 'self' https://fonts.googleapis.com 'sha256-k8OQuLXfNf4Puwseja7Pk+bH6L3YulK3NbkLNCGcVQI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-3CF6SaY6Nkz4msQOdfhW04rCcn+XUTObfJ0PhlYZJ7A='; style-src 'self' https://fonts.googleapis.com 'sha256-k8OQuLXfNf4Puwseja7Pk+bH6L3YulK3NbkLNCGcVQI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -1394,6 +1394,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <h3 id="ynform-title">เพิ่มสถานที่</h3>
     <label>ชื่อสถานที่ *<input id="yn-name" type="text" autocomplete="off" maxlength="200"></label>
     <label>ลิงก์ Google Maps *<input id="yn-map" type="url" inputmode="url" autocomplete="off" placeholder="วางลิงก์ Google Maps ที่นี่"></label>
+    <div>
+      <button type="button" class="btn sm ghost" id="yn-loc">ใช้ตำแหน่งปัจจุบันของฉัน</button>
+      <p class="hint" id="yn-lochint">ยืนอยู่ที่สถานที่นั้น แล้วกดปุ่มนี้เพื่อใส่ลิงก์ Google Maps ให้อัตโนมัติ</p>
+    </div>
     <label>โน้ต (ถ้ามี)<input id="yn-text" type="text" autocomplete="off" maxlength="300"></label>
     <p class="warnline" id="yn-err" hidden></p>
     <p class="hint">บันทึกไว้ในเครื่องนี้เท่านั้น</p>
@@ -4705,8 +4709,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
     $("yform").showModal();
   }
-  function yLocate() {
-    const hint = $("yf-lochint"), input = $("yf-map"), btn = $("yf-loc");
+  function yLocate(pre = "yf") {
+    const hint = $(pre + "-lochint"), input = $(pre + "-map"), btn = $(pre + "-loc");
     if (!navigator.geolocation) { hint.textContent = "เครื่องหรือเบราว์เซอร์นี้ไม่รองรับการระบุตำแหน่ง"; return; }
     if (input.value.trim() && !confirm("แทนที่ลิงก์เดิมด้วยตำแหน่งปัจจุบัน?")) return;
     btn.disabled = true;
@@ -4877,7 +4881,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("yf-cancel").onclick = () => $("yform").close();
     $("yf-save").onclick = ySave;
     $("yf-del").onclick = yDelete;
-    $("yf-loc").onclick = yLocate;
+    $("yf-loc").onclick = () => yLocate("yf");
+    $("yn-loc").onclick = () => yLocate("yn");
     $("yf-linkq").oninput = e => {
       clearTimeout(Y.linkTimer);
       const q = e.target.value.trim();
@@ -4885,7 +4890,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       Y.linkTimer = setTimeout(() => yLinkSearch(q), 300);
     };
     for (const id of ["yform", "ycols", "ynform"]) $(id).addEventListener("click", e => { if (e.target === $(id)) $(id).close(); });
-    $("yn-open").onclick = () => { $("yn-name").value = ""; $("yn-map").value = ""; $("yn-text").value = ""; $("yn-err").hidden = true; $("ynform").showModal(); };
+    $("yn-open").onclick = () => { $("yn-name").value = ""; $("yn-map").value = ""; $("yn-text").value = ""; $("yn-err").hidden = true; $("yn-lochint").textContent = "ยืนอยู่ที่สถานที่นั้น แล้วกดปุ่มนี้เพื่อใส่ลิงก์ Google Maps ให้อัตโนมัติ"; $("ynform").showModal(); };
     $("yn-cancel").onclick = () => $("ynform").close();
     $("yn-add").onclick = () => {
       const name = $("yn-name").value.trim(), map = $("yn-map").value.trim(), note = $("yn-text").value.trim();
