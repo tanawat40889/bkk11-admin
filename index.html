@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-yJeWYDmfdcGpI09CL+SwGedTA3vYAWguRmT2frExJOs='; style-src 'self' https://fonts.googleapis.com 'sha256-SOgPRd9VowF+WxBJgTak+6x1IQ5UsmXN+3szqUHhQi4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-yJeWYDmfdcGpI09CL+SwGedTA3vYAWguRmT2frExJOs='; style-src 'self' https://fonts.googleapis.com 'sha256-k1VrjK4kjeaUnOwQmDQ0gOG0zHfWcKHyPq2PIzJ5SG4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -688,6 +688,8 @@ dialog {
   border-radius: var(--r);
 }
 dialog::backdrop { background: rgb(0 0 0 / .5); }
+/* settings popup on a phone: 75% of the visible screen height, the content scrolls inside */
+@media (max-width: 700px), (max-height: 500px) { #ycols { height: calc(var(--vvh, 100dvh) * .75); } }
 .form { --fp: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: var(--fp); }
 /* long forms scroll inside the popup; the title and the buttons stay in reach */
 dialog > .form > h3:first-child { position: sticky; top: 0; z-index: 2; margin: calc(-1 * var(--fp)) calc(-1 * var(--fp)) 0; padding: var(--fp) var(--fp) 8px; background: var(--card); }
