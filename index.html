@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-eLQz9JYH9IIc5nwZ6jDVV/1NK2QLFdZn1UA2w+nVjms='; style-src 'self' https://fonts.googleapis.com 'sha256-k8OQuLXfNf4Puwseja7Pk+bH6L3YulK3NbkLNCGcVQI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-eLQz9JYH9IIc5nwZ6jDVV/1NK2QLFdZn1UA2w+nVjms='; style-src 'self' https://fonts.googleapis.com 'sha256-9uefA7LAqLOP8UIJxs9Y8m3x3LGBg8ObIncaGRspdHE='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -288,11 +288,13 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .ycard.st-Active { --lc: var(--ok); }
 .ycard.st-Visiting { --lc: var(--warn); }
 .ycard.st-Passive { --lc: var(--mute); }
-.ycard .ctop { align-items: center; }
-.ycard .cmain { padding: 8px 0 8px 12px; }
-.ycard .ctitle { overflow-wrap: anywhere; }
+.ycard .ctop { align-items: center; height: 4rem; }   /* every card the same height: one line for the name, one for the details */
+.ycard .cmain { padding: 0 0 0 12px; overflow: hidden; }
+.ycard .ctitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ycard .stag { margin-left: 6px; }
-.ysub { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; }
+.ysub { display: flex; flex-wrap: nowrap; align-items: center; gap: 2px 6px; overflow: hidden; white-space: nowrap; }
+.ysub > * { flex: none; }
+.ysub > span:last-child:not(.ybadge):not(.ykhet) { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ybadge { padding: 0 8px; font-size: .75rem; font-weight: 700; line-height: 1.5; color: #fff; border-radius: 999px; }
 .ybadge.Active { background: var(--ok); }
 .ybadge.Visiting { background: var(--warn); }
