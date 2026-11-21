@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-eLQz9JYH9IIc5nwZ6jDVV/1NK2QLFdZn1UA2w+nVjms='; style-src 'self' https://fonts.googleapis.com 'sha256-9uefA7LAqLOP8UIJxs9Y8m3x3LGBg8ObIncaGRspdHE='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-62lwaZEbOjEHvRaYsmlL4K+HW25pwVoN5MKYOQUSkbU='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -711,6 +711,9 @@ dialog > .form > .btns:last-child { position: sticky; bottom: 0; z-index: 2; mar
   border-radius: var(--r);
   padding: 14px 16px;
 }
+.mrow.swipe { display: block; padding: 0; overflow: hidden; }
+.mrow .minner { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+.mrow.next .minner { padding: 13px 15px; }
 .mrow.past { opacity: .75; }
 .mrow.done { opacity: .6; }
 .mrow.next { border: 2px solid var(--brand); padding: 13px 15px; }
@@ -1060,6 +1063,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <div class="subpanel" id="sub-rooms" role="tabpanel" aria-labelledby="subtab-rooms" hidden>
       <div class="hsec" aria-labelledby="h-rooms">
         <h2 class="sech" id="h-rooms">ห้องที่ระลึก อ. ผู้มีพระคุณ</h2>
+        <div class="toprow"><button type="button" class="btn addbtn" id="r-add">+ เพิ่มรอบ</button></div>
         <ul class="months" id="rooms"></ul>
         <details id="rooms-done-wrap" hidden>
           <summary id="rooms-done-sum"></summary>
@@ -1074,6 +1078,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <div class="subpanel" id="sub-photos" role="tabpanel" aria-labelledby="subtab-photos" hidden>
       <div class="hsec" id="sec-photos" aria-labelledby="h-photos">
         <h2 class="sech" id="h-photos">แจ้งเรื่องรูปสนทนาธรรม 4 ฝ่าย</h2>
+        <div class="toprow"><button type="button" class="btn addbtn" id="ph-add">+ เพิ่มรายการเตือน</button></div>
         <ul class="months" id="photos"></ul>
         <details id="photos-done-wrap" hidden>
           <summary id="photos-done-sum"></summary>
@@ -1222,6 +1227,40 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <div class="btns">
       <button type="button" class="btn ghost" id="today-close">ปิด</button>
       <button type="button" class="btn" id="today-open">ดูรายการทั้งหมด</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="rnform" aria-labelledby="rn-title">
+  <div class="form">
+    <h3 id="rn-title">เพิ่มรอบห้องที่ระลึก</h3>
+    <label>วันที่จัด *<input id="rn-date" type="date"></label>
+    <div class="frow">
+      <label>เวลา<input id="rn-time" type="text" maxlength="60" autocomplete="off" placeholder="เช่น 10:00-12:00"></label>
+      <label>จำนวนคน<input id="rn-count" type="text" inputmode="numeric" maxlength="4" autocomplete="off"></label>
+    </div>
+    <label>เอกสารแจ้งข่าว<input id="rn-issue" type="text" maxlength="60" autocomplete="off" placeholder="เช่น ฉบับที่ 12"></label>
+    <p class="warnline" id="rn-error"></p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="rn-cancel">ยกเลิก</button>
+      <button type="button" class="btn danger" id="rn-reset" hidden>คืนค่าเดิม</button>
+      <button type="button" class="btn" id="rn-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="phform" aria-labelledby="ph-title">
+  <div class="form">
+    <h3 id="ph-title">เพิ่มรายการเตือน</h3>
+    <p class="hint" id="ph-info" hidden></p>
+    <label id="ph-name-wrap">เรื่องที่ต้องทำ *<input id="ph-name" type="text" maxlength="200" autocomplete="off"></label>
+    <label><span id="ph-date-lab">วันที่</span><input id="ph-date" type="date"></label>
+    <label>โน้ต (ถ้ามี)<input id="ph-note" type="text" maxlength="300" autocomplete="off"></label>
+    <p class="warnline" id="ph-error"></p>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="ph-cancel">ยกเลิก</button>
+      <button type="button" class="btn danger" id="ph-reset" hidden>คืนค่าปกติ</button>
+      <button type="button" class="btn" id="ph-save">บันทึก</button>
     </div>
   </div>
 </dialog>
@@ -1748,7 +1787,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const str = (v, max) => String(v == null ? "" : v).slice(0, max);
 
   const PREF_KEYS = ["roomsTemplate", "photosTemplate"];
-  const emptyState = () => ({ items: [], json: { text: "", t: 0 }, done: {}, prefs: {}, roomDates: {} });
+  const emptyState = () => ({ items: [], json: { text: "", t: 0 }, done: {}, prefs: {}, roomDates: {}, rounds: {}, photoOv: {}, reminders: {} });
 
   function cleanOverrides(o) {
     const out = {};
@@ -1808,6 +1847,34 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         out.roomDates[k] = { date: v.date === "" ? "" : String(v.date), t: v.t };
       }
     }
+    // Memorial-room rounds edited or typed here, keyed by id: "b-<board date>" replaces / hides the board's round of that
+    // date, any other id is a round typed in the app. Photo reminders: photoOv = the send day / note of a month's
+    // status card (key YYYY-MM), reminders = to-dos typed in the app. All last-write-wins per key; deleted = tombstone.
+    if (s.rounds && typeof s.rounds === "object") {
+      for (const [k, v] of Object.entries(s.rounds).slice(0, 600)) {
+        if (!ID_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
+        if (v.deleted) { out.rounds[k] = { deleted: true, t: v.t }; continue; }
+        if (v.reset) { out.rounds[k] = { reset: true, t: v.t }; continue; }   // "b-" ids only: back to the board's own round
+        if (!DAY_RE.test(String(v.date))) continue;
+        const count = Number(v.count);
+        out.rounds[k] = { date: String(v.date), time: str(v.time, 60), count: v.count != null && v.count !== "" && Number.isFinite(count) && count >= 0 && count <= 1000 ? Math.round(count) : null, issue: str(v.issue, 60), t: v.t };
+      }
+    }
+    if (s.photoOv && typeof s.photoOv === "object") {
+      for (const [k, v] of Object.entries(s.photoOv).slice(0, 200)) {
+        if (!YM_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
+        out.photoOv[k] = { date: DAY_RE.test(String(v.date)) ? String(v.date) : "", note: str(v.note, 300), t: v.t };
+      }
+    }
+    if (s.reminders && typeof s.reminders === "object") {
+      for (const [k, v] of Object.entries(s.reminders).slice(0, 600)) {
+        if (!ID_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
+        if (v.deleted) { out.reminders[k] = { deleted: true, t: v.t }; continue; }
+        const title = str(v.title, 200).trim();
+        if (!title) continue;
+        out.reminders[k] = { title, due: DAY_RE.test(String(v.due)) ? String(v.due) : "", note: str(v.note, 300), t: v.t };
+      }
+    }
     return out;
   }
 
@@ -1833,7 +1900,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     for (const [k, v] of Object.entries(B.prefs)) if (!prefs[k] || v.t >= prefs[k].t) prefs[k] = v;
     const roomDates = { ...A.roomDates };
     for (const [k, v] of Object.entries(B.roomDates)) if (!roomDates[k] || v.t >= roomDates[k].t) roomDates[k] = v;
-    return { items, json: B.json.t >= A.json.t ? B.json : A.json, done, prefs, roomDates };
+    const lww = (x, y) => { const o = { ...x }; for (const [k, v] of Object.entries(y)) if (!o[k] || v.t >= o[k].t) o[k] = v; return o; };
+    return { items, json: B.json.t >= A.json.t ? B.json : A.json, done, prefs, roomDates, rounds: lww(A.rounds, B.rounds), photoOv: lww(A.photoOv, B.photoOv), reminders: lww(A.reminders, B.reminders) };
   }
 
   // Drops everything older than RETAIN_YEARS: old tombstones, done marks, per-month overrides
@@ -1857,7 +1925,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     for (const [k, v] of Object.entries(st.done)) if (v.t >= cut) done[k] = v;
     const roomDates = {};
     for (const [k, v] of Object.entries(st.roomDates)) if (v.t >= cut) roomDates[k] = v;
-    return { items, json: st.json, done, prefs: st.prefs, roomDates };
+    const cd = cutoffDay(nowMs);
+    const rounds = {};
+    for (const [k, v] of Object.entries(st.rounds)) if (v.deleted || v.reset ? v.t >= cut : v.date >= cd) rounds[k] = v;
+    const photoOv = {};
+    for (const [k, v] of Object.entries(st.photoOv)) if (v.t >= cut) photoOv[k] = v;
+    const reminders = {};
+    for (const [k, v] of Object.entries(st.reminders)) if (v.deleted ? v.t >= cut : (v.due || "9999") >= cd || v.t >= cut) reminders[k] = v;
+    return { items, json: st.json, done, prefs: st.prefs, roomDates, rounds, photoOv, reminders };
   }
 
   // The board published by the scheduled task (rooms + things to submit)
@@ -1945,11 +2020,30 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // Memorial rooms: the LINE confirmation is due on a round's deadline day, announced ROOMS_NOTIFY_DAYS ahead
   const ROOMS_NOTIFY_DAYS = 7;
   const roomKey = day => boardKey("room", day);
+  // The board's rounds with the edits made here (state.rounds["b-<date>"] replaces or hides one) plus the rounds typed
+  // here. key = what the done mark uses (the board date, or the id of a typed round); dl = what roomDates is keyed by.
+  function effectiveRooms(boardRooms, rounds) {
+    const R = rounds || {}, out = [];
+    for (const r of boardRooms || []) {
+      const ov = R["b-" + r.date];
+      if (ov && ov.deleted) continue;
+      out.push(ov && !ov.reset ? { ...r, date: ov.date, time: ov.time, count: ov.count, issue: ov.issue, key: r.date, dl: r.date, id: "b-" + r.date, edited: true } : { ...r, key: r.date, dl: r.date, id: "b-" + r.date });
+    }
+    for (const [id, v] of Object.entries(R)) if (!id.startsWith("b-") && !v.deleted && !v.reset) out.push({ date: v.date, time: v.time, count: v.count, issue: v.issue, key: id, dl: v.date, id, typed: true });
+    return out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  }
   // A saved roomDates override, else the 1st of the round's own month
   const roomDeadline = (day, roomDates) => {
     const d = parseDay(day);
     if (!d) return null;
     const ov = roomDates && roomDates[day];
+    return (ov && ov.date && parseDay(ov.date)) || new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+  };
+  // Same for an effectiveRooms() entry: the override is looked up by x.dl, the default is the 1st of the shown date's month
+  const roomDeadlineOf = (x, roomDates) => {
+    const d = parseDay(x.date);
+    if (!d) return null;
+    const ov = roomDates && roomDates[x.dl];
     return (ov && ov.date && parseDay(ov.date)) || new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
   };
 
@@ -2687,69 +2781,138 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function renderPhotosList() {
     const ul = $("photos"), doneUl = $("photos-done"), t = today();
     badgeParts.photos = 0;
-    $("photos-done-wrap").hidden = true;
-    doneUl.replaceChildren();
+    const openLis = [], doneLis = [];
     if (!photos.status) {
-      if (!photos.error) { ul.replaceChildren(el("p", "empty", "กำลังโหลดสถานะรูป…")); refreshBadges(); return; }
-      const retry = el("button", "btn ghost sm", "ลองใหม่");
-      retry.type = "button";
-      retry.onclick = loadPhotos;
-      ul.replaceChildren(mrow("later", "รูป", "รูปสนทนาธรรม 4 ฝ่าย", "โหลดสถานะรูปไม่สำเร็จ", null, null, [retry]));
-      refreshBadges();
-      return;
+      if (!photos.error) openLis.push(el("p", "empty", "กำลังโหลดสถานะรูป…"));
+      else {
+        const retry = el("button", "btn ghost sm", "ลองใหม่");
+        retry.type = "button";
+        retry.onclick = loadPhotos;
+        openLis.push(mrow("later", "รูป", "รูปสนทนาธรรม 4 ฝ่าย", "โหลดสถานะรูปไม่สำเร็จ", null, null, [retry]));
+      }
     }
-    const st = photos.status, miss = photoMissing(st);
-    if (!miss) { ul.replaceChildren(); refreshBadges(); return; }
-    const total = st.areas.length;
-    const ym = st.month, y = +ym.slice(0, 4), m = +ym.slice(5, 7) - 1;
-    const send = lastDayOfMonth(new Date(Date.UTC(y, m, 1)));
-    const key = photoKey(ym), isDone = done.has(key);
-    const meta = [];
-    let kind, extra = [];
-    if (!miss.length) {
-      kind = "ok";
-      meta.push("ส่งครบทุกตำบลแล้ว (" + total + " ตำบล)");
-    } else {
-      kind = "warn";
-      meta.push(countdown(diff(send, t))[0] + " · ส่งข้อความวันที่ " + send.getUTCDate() + " " + MONTHS[m]);
-      meta.push("ยังไม่ครบ " + miss.length + " จาก " + total + " ตำบล");
-      const names = el("div", "meta", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "));
-      const cp = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
-      cp.type = "button";
-      cp.onclick = () => copyText(photosMessage(ym, miss), cp);
-      const open = el("a", "btn ghost sm", "หน้าส่งรูป");
-      open.href = UPLOAD_URL;
-      open.target = "_blank";
-      open.rel = "noopener";
-      const row = el("div", "btns");
-      row.append(cp, open);
-      extra = [names, row];
-      if (!isDone && diff(send, t) === 0) badgeParts.photos = 1;
+    const st = photos.status, miss = st && photoMissing(st);
+    if (miss) {
+      const total = st.areas.length;
+      const ym = st.month, y = +ym.slice(0, 4), m = +ym.slice(5, 7) - 1;
+      const pov = store.photoOv[ym] || {};
+      const send = (pov.date && parseDay(pov.date)) || lastDayOfMonth(new Date(Date.UTC(y, m, 1)));
+      const key = photoKey(ym), isDone = done.has(key);
+      const meta = [];
+      let kind, extra = [];
+      if (!miss.length) {
+        kind = "ok";
+        meta.push("ส่งครบทุกตำบลแล้ว (" + total + " ตำบล)");
+      } else {
+        kind = "warn";
+        meta.push(countdown(diff(send, t))[0] + " · ส่งข้อความวันที่ " + send.getUTCDate() + " " + MONTHS[send.getUTCMonth()] + (pov.date ? " (ปรับเอง)" : ""));
+        meta.push("ยังไม่ครบ " + miss.length + " จาก " + total + " ตำบล");
+        const names = el("div", "meta", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "));
+        const cp = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+        cp.type = "button";
+        cp.onclick = () => copyText(photosMessage(ym, miss), cp);
+        const open = el("a", "btn ghost sm", "หน้าส่งรูป");
+        open.href = UPLOAD_URL;
+        open.target = "_blank";
+        open.rel = "noopener";
+        const row = el("div", "btns");
+        row.append(cp, open);
+        extra = [names, row];
+        if (!isDone && diff(send, t) === 0) badgeParts.photos++;
+      }
+      if (pov.note) extra.push(el("div", "meta", "โน้ต: " + pov.note));
+      const finished = isDone || !miss.length;
+      const li = mrow("later" + (finished ? " done" : ""), MONTHS[m], "รูปสนทนาธรรม 4 ฝ่าย", meta.join(" · "),
+        kind === "ok" ? "ครบแล้ว" : "ยังไม่ครบ", isDone ? null : kind, extra);
+      if (miss.length) {
+        const tick = el("button", "otick" + (isDone ? " on" : ""));
+        tick.type = "button";
+        tick.setAttribute("aria-pressed", String(isDone));
+        tick.setAttribute("aria-label", isDone ? "ยกเลิกส่งข้อความแล้ว" : "ทำเครื่องหมายว่าส่งข้อความแล้ว");
+        tick.onclick = () => {
+          if (isDone) done.delete(key); else done.add(key);
+          saveDone();
+          renderPhotos();
+        };
+        li.prepend(tick);
+      }
+      swipeRow(li, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "status", ym, send }) }]);
+      (finished ? doneLis : openLis).push(li);
     }
-    const finished = isDone || !miss.length;
-    const li = mrow("later" + (finished ? " done" : ""), MONTHS[m], "รูปสนทนาธรรม 4 ฝ่าย", meta.join(" · "),
-      kind === "ok" ? "ครบแล้ว" : "ยังไม่ครบ", isDone ? null : kind, extra);
-    if (miss.length) {
+    // reminders typed in the app
+    const rems = Object.entries(store.reminders).filter(([, v]) => !v.deleted).map(([id, v]) => ({ id, ...v, d: parse(v.due) }))
+      .sort((a, b) => (a.d || 1e15) - (b.d || 1e15));
+    for (const r of rems) {
+      const key = boardKey("reminder", r.id), isDone = done.has(key);
+      const meta = [r.d ? countdown(diff(r.d, t))[0] + " · " + fmt(r.d) : "ไม่ระบุวัน", r.note].filter(Boolean).join(" · ");
+      const soon = !!r.d && diff(r.d, t) <= 3;
+      const li = mrow("later" + (isDone ? " done" : ""), r.d ? MONTHS[r.d.getUTCMonth()] : "•", r.title, meta, soon ? "ใกล้ถึงกำหนด" : "ยังไม่ถึงกำหนด", isDone ? null : soon ? "warn" : "ok");
       const tick = el("button", "otick" + (isDone ? " on" : ""));
       tick.type = "button";
       tick.setAttribute("aria-pressed", String(isDone));
-      tick.setAttribute("aria-label", isDone ? "ยกเลิกส่งข้อความแล้ว" : "ทำเครื่องหมายว่าส่งข้อความแล้ว");
+      tick.setAttribute("aria-label", isDone ? "ยกเลิกทำแล้ว" : "ทำเครื่องหมายว่าทำแล้ว");
       tick.onclick = () => {
         if (isDone) done.delete(key); else done.add(key);
         saveDone();
         renderPhotos();
       };
       li.prepend(tick);
+      swipeRow(li, [
+        { label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "rem", id: r.id, r }) },
+        { label: "ลบ", cls: "sw-del", fn: () => deleteReminder(r) }
+      ]);
+      if (!isDone && r.d && diff(r.d, t) <= BADGE_DAYS) badgeParts.photos++;
+      (isDone ? doneLis : openLis).push(li);
     }
-    if (finished) {
-      ul.replaceChildren(el("p", "empty", "ไม่มีรายการค้าง"));
-      $("photos-done-wrap").hidden = false;
-      $("photos-done-sum").textContent = "ทำแล้ว (1)";
-      doneUl.replaceChildren(li);
-    } else {
-      ul.replaceChildren(li);
-    }
+    ul.replaceChildren(...(openLis.length ? openLis : [el("p", "empty", doneLis.length ? "ไม่มีรายการค้าง" : "ยังไม่มีรายการ")]));
+    $("photos-done-wrap").hidden = !doneLis.length;
+    $("photos-done-sum").textContent = `ทำแล้ว (${doneLis.length})`;
+    doneUl.replaceChildren(...doneLis);
     refreshBadges();
+  }
+
+  // One dialog for two things: the send day / note of this month's status card, and reminders typed here
+  let phTarget = null;
+  function openPhoto(target) {
+    phTarget = target;
+    const status = target.kind === "status", r = target.r;
+    $("ph-title").textContent = status ? "แก้การแจ้งรูปเดือนนี้" : r ? "แก้ไขรายการเตือน" : "เพิ่มรายการเตือน";
+    $("ph-info").hidden = !status;
+    if (status) $("ph-info").textContent = "ปกติส่งข้อความวันสุดท้ายของเดือน";
+    $("ph-name-wrap").hidden = status;
+    $("ph-name").value = r ? r.title : "";
+    $("ph-date-lab").textContent = status ? "วันส่งข้อความ" : "วันที่ต้องทำ";
+    $("ph-date").value = status ? ((store.photoOv[target.ym] || {}).date || "") : r ? r.due : "";
+    $("ph-note").value = status ? ((store.photoOv[target.ym] || {}).note || "") : r ? r.note : "";
+    $("ph-error").textContent = "";
+    $("ph-reset").hidden = !(status && store.photoOv[target.ym] && (store.photoOv[target.ym].date || store.photoOv[target.ym].note));
+    $("phform").showModal();
+  }
+  function savePhoto() {
+    const date = $("ph-date").value, note = $("ph-note").value.trim(), now = Date.now();
+    if (date && !parse(date)) { $("ph-error").textContent = "วันที่ไม่ถูกต้อง"; return; }
+    if (phTarget.kind === "status") {
+      store.photoOv[phTarget.ym] = { date, note, t: now };
+    } else {
+      const title = $("ph-name").value.trim();
+      if (!title) { $("ph-error").textContent = "ใส่เรื่องที่ต้องทำก่อน"; return; }
+      store.reminders[phTarget.id || newId()] = { title, due: date, note, t: now };
+    }
+    persistLocal(); scheduleSync();
+    $("phform").close();
+    renderPhotos();
+  }
+  function resetPhoto() {
+    store.photoOv[phTarget.ym] = { date: "", note: "", t: Date.now() };
+    persistLocal(); scheduleSync();
+    $("phform").close();
+    renderPhotos();
+  }
+  function deleteReminder(r) {
+    if (!confirm("ลบ “" + r.title + "” ?")) return;
+    store.reminders[r.id] = { deleted: true, t: Date.now() };
+    persistLocal(); scheduleSync();
+    renderPhotos();
   }
 
   async function loadPhotos() {
@@ -2820,35 +2983,37 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
 
   function renderRooms(data, t) {
-    const rooms = (data.rooms || [])
+    const rooms = effectiveRooms(data.rooms, store.rounds)
       .map(r => ({ r, d: parse(r.date) }))
       .filter(x => x.d)
       .sort((a, b) => a.d - b.d);
     const info = ({ r, d }) => [
       r.time,
       r.count != null && r.count + " คน" + (d >= t ? " (ตามรายชื่อ)" : ""),
-      r.issue && "เอกสารแจ้งข่าว " + r.issue
+      r.issue && "เอกสารแจ้งข่าว " + r.issue,
+      r.typed && "เพิ่มเอง",
+      r.edited && "แก้แล้ว"
     ].filter(Boolean);
 
     // The reminder that matters is sending the LINE confirmation message by the round's deadline date,
     // not the round's event date itself, so the day-count counts down to that deadline (can show "เลยมา" if it already passed).
     const meta = x => {
       const m = info(x);
-      const ov = store.roomDates[x.r.date];
-      m.unshift(countdown(diff(roomDeadline(x.r.date, store.roomDates), t))[0] + (ov && ov.date ? " (ปรับเอง)" : ""));
+      const ov = store.roomDates[x.r.dl];
+      m.unshift(countdown(diff(roomDeadlineOf(x.r, store.roomDates), t))[0] + (ov && ov.date ? " (ปรับเอง)" : ""));
       return m.join(" · ");
     };
     const upAll = rooms.filter(x => x.d >= t);
-    const isDoneRoom = x => done.has(roomKey(x.r.date));
+    const isDoneRoom = x => done.has(roomKey(x.r.key));
     const up = upAll.filter(x => !isDoneRoom(x)).slice(0, UPCOMING_MAX);
     const doneRooms = upAll.filter(isDoneRoom);
     badgeParts.rooms = upAll.filter(x => {
-      const n = diff(roomDeadline(x.r.date, store.roomDates), t);
+      const n = diff(roomDeadlineOf(x.r, store.roomDates), t);
       return n <= ROOMS_NOTIFY_DAYS && !isDoneRoom(x);   // a passed deadline (round still ahead) keeps counting until ticked
     }).length;
     refreshBadges();
     const roomCard = (x, i, finished) => {
-      const key = roomKey(x.r.date), isDone = done.has(key);
+      const key = roomKey(x.r.key), isDone = done.has(key);
       const li = mrow(finished ? "later done" : i === 0 ? "next" : "later", MONTHS[x.d.getUTCMonth()], fmt(x.d), meta(x),
         finished ? null : i === 0 ? "กำลังจะมาถึง" : "ถัดไป", finished ? null : i === 0 ? "warn" : "ok", roomActions(x));
       const tick = el("button", "otick" + (isDone ? " on" : ""));
@@ -2861,7 +3026,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         render(lastData);
       };
       li.prepend(tick);
-      return li;
+      return swipeRow(li, roundActs(x));
     };
     $("rooms").replaceChildren(...up.map((x, i) => roomCard(x, i, false)));
     $("rooms-done-wrap").hidden = !doneRooms.length;
@@ -2874,18 +3039,67 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("rooms-past-wrap").hidden = !past.length;
     $("rooms-past-sum").textContent = `ดูย้อนหลัง 1 ปี (${past.length} รอบ)`;
     $("rooms-past").replaceChildren(...past.map(x =>
-      mrow("past", MONTHS[x.d.getUTCMonth()], fmt(x.d), meta(x), null, null, roomActions(x))));
+      swipeRow(mrow("past", MONTHS[x.d.getUTCMonth()], fmt(x.d), meta(x), null, null, roomActions(x)), roundActs(x))));
 
     if (!up.length && !past.length && !doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ยังไม่มีข้อมูลรอบ"));
     else if (!up.length && doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ทำครบทุกรอบแล้ว"));
+  }
+
+  // Rows can be swiped left to show their buttons (the same as the cards in the other tabs)
+  function swipeRow(li, actions) {
+    const inner = el("div", "minner");
+    inner.append(...li.childNodes);
+    makeSwipe(li, inner, actions);
+    return li;
+  }
+  const roundActs = x => [
+    { label: "แก้ไข", cls: "sw-edit", fn: () => openRound(x.r) },
+    { label: "ลบ", cls: "sw-del", fn: () => deleteRound(x.r) }
+  ];
+
+  // Add / edit / hide a round. state.rounds["b-<board date>"] edits (or hides) a round of the board, any other id is typed here
+  let rnTarget = null;
+  function openRound(r) {
+    rnTarget = r || null;
+    $("rn-title").textContent = r ? "แก้ไขรอบห้องที่ระลึก" : "เพิ่มรอบห้องที่ระลึก";
+    $("rn-date").value = r ? r.date : "";
+    $("rn-time").value = r ? r.time || "" : "";
+    $("rn-count").value = r && r.count != null ? String(r.count) : "";
+    $("rn-issue").value = r ? r.issue || "" : "";
+    $("rn-error").textContent = "";
+    $("rn-reset").hidden = !(r && r.edited);
+    $("rnform").showModal();
+  }
+  function saveRound() {
+    const date = $("rn-date").value, cnt = $("rn-count").value.trim();
+    if (!parse(date)) { $("rn-error").textContent = "เลือกวันที่ก่อน"; return; }
+    if (cnt && !(/^\d{1,4}$/.test(cnt) && +cnt <= 1000)) { $("rn-error").textContent = "จำนวนคนใส่เป็นตัวเลข 0–1000"; return; }
+    const id = rnTarget ? rnTarget.id : "m-" + newId();
+    store.rounds[id] = { date, time: $("rn-time").value.trim(), count: cnt === "" ? null : +cnt, issue: $("rn-issue").value.trim(), t: Date.now() };
+    persistLocal(); scheduleSync();
+    $("rnform").close();
+    refreshAll();
+  }
+  function resetRound() {
+    store.rounds[rnTarget.id] = { reset: true, t: Date.now() };
+    persistLocal(); scheduleSync();
+    $("rnform").close();
+    refreshAll();
+  }
+  function deleteRound(r) {
+    const d = parse(r.date);
+    if (!confirm(r.typed ? "ลบรอบ " + fmt(d) + " ?" : "ซ่อนรอบ " + fmt(d) + " ? (เป็นรอบจากระบบดึงข้อมูล ซ่อนได้เฉพาะในแอปนี้)")) return;
+    store.rounds[r.id] = { deleted: true, t: Date.now() };
+    persistLocal(); scheduleSync();
+    refreshAll();
   }
 
   // Edit the date a round's countdown targets, synced via store.roomDates (keyed by the round's own date)
   let rdTarget = null;
   function openRoomDate(r, d) {
     const def = roomMonthStart(d);
-    rdTarget = { key: r.date, def };
-    const ov = store.roomDates[r.date];
+    rdTarget = { key: r.dl, def };
+    const ov = store.roomDates[r.dl];
     $("rdform-info").textContent = `รอบ ${fmt(d)} · ปกติ ${fmt(def)}`;
     $("rd-date").value = (ov && ov.date) || isoDay(def);
     $("rd-error").textContent = "";
@@ -3101,14 +3315,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const edit = el("button", "btn ghost", "แก้ไขรายการ");
     edit.type = "button";
     edit.onclick = () => openForm(i);
-    const del = el("button", "btn danger", "ลบ");
-    del.type = "button";
-    del.onclick = () => {
+    const delItem = () => {
       if (!confirm("ลบ “" + (it.title || "รายการนี้") + "” ?")) return;
       monthly.items.splice(i, 1);
       saveMonthly();
       renderMonthly();
     };
+    const del = el("button", "btn danger", "ลบ");
+    del.type = "button";
+    del.onclick = delItem;
     actions.append(edit, del);
     body.append(actions);
 
@@ -3189,7 +3404,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       cb.onclick = () => copyText(next, cb);
       top.append(cb);
     }
-    c.append(top, body);
+    makeSwipe(c, top, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openForm(i) }, { label: "ลบ", cls: "sw-del", fn: delItem }]);
+    c.append(body);
     return c;
   }
 
@@ -3331,6 +3547,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("o-cancel").onclick = () => $("oform").close();
     $("o-save").onclick = saveOverride;
     $("o-reset").onclick = resetOverride;
+    $("r-add").onclick = () => openRound(null);
+    $("rn-cancel").onclick = () => $("rnform").close();
+    $("rn-save").onclick = saveRound;
+    $("rn-reset").onclick = resetRound;
+    $("ph-add").onclick = () => openPhoto({ kind: "rem", id: null, r: null });
+    $("ph-cancel").onclick = () => $("phform").close();
+    $("ph-save").onclick = savePhoto;
+    $("ph-reset").onclick = resetPhoto;
     $("rd-cancel").onclick = () => $("rdform").close();
     $("rd-save").onclick = saveRoomDate;
     $("rd-reset").onclick = resetRoomDate;
@@ -3403,8 +3627,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (ta.value !== want) ta.value = want;
       check();
     };
-    const dialogSave = { mform: saveForm, oform: saveOverride, rdform: saveRoomDate };
-    for (const id of ["mform", "oform", "rdform"]) {
+    const dialogSave = { mform: saveForm, oform: saveOverride, rdform: saveRoomDate, rnform: saveRound, phform: savePhoto };
+    for (const id of ["mform", "oform", "rdform", "rnform", "phform"]) {
       $(id).addEventListener("keydown", e => {
         if ((e.ctrlKey || e.metaKey) && e.key === "Enter") dialogSave[id]();
       });
