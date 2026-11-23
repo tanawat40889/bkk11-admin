@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-62lwaZEbOjEHvRaYsmlL4K+HW25pwVoN5MKYOQUSkbU='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-uzPsCzQp7bFGM4qmBZtgRQC+zUVU2jCNbpuHjpLmJC0='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -1576,6 +1576,28 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         placeholder='[ jan: { link: "aaa.html", month: "มกราคม" }, feb: { ... } ]'></textarea>
       <p class="meta" id="mjson-status"></p>
     </details>
+    <details class="mjson" id="upload-tpl">
+      <summary>ข้อความแจ้งอัพโหลดรูป 4 ฝ่าย (แก้ไขได้)</summary>
+      <div class="frow">
+        <label>ส่งทุกเดือนวัน
+          <select id="up-weekday">
+            <option value="1">จันทร์</option><option value="2">อังคาร</option><option value="3">พุธ</option>
+            <option value="4">พฤหัสบดี</option><option value="5">ศุกร์</option><option value="6">เสาร์</option><option value="0">อาทิตย์</option>
+          </select>
+        </label>
+        <label>สัปดาห์ที่
+          <select id="up-nth">
+            <option value="1">ที่ 1</option><option value="2">ที่ 2</option><option value="3">ที่ 3</option>
+            <option value="4">ที่ 4</option><option value="0">สุดท้าย</option>
+          </select>
+        </label>
+      </div>
+      <p class="hint">เช่น อาทิตย์ ที่ 3 = ส่งก่อนสนทนาธรรมสุดสัปดาห์ที่ 4 ใช้ {เดือนนี้} ในข้อความ กดปุ่ม "คัดลอกข้อความ" ที่การ์ดในแท็บรูป 4 ฝ่าย ข้อความและวันนี้ซิงก์ข้ามเครื่อง</p>
+      <textarea id="upload-tpl-text" class="plain" rows="14" spellcheck="false"></textarea>
+      <div class="btns">
+        <button type="button" class="btn ghost" id="upload-tpl-reset">คืนค่าเริ่มต้น</button>
+      </div>
+    </details>
     <details class="mjson" id="photos-tpl">
       <summary>ข้อความติดตามรูปสนทนาธรรม 4 ฝ่าย (แก้ไขได้)</summary>
       <p class="hint">ใช้ {เดือนนี้} {เดือนหน้า} {รายชื่อตำบลที่ยังส่งไม่ครบ} กดปุ่ม "คัดลอกข้อความ" ที่การ์ดรูปในหน้าแรกเพื่อเอาไปใช้ ข้อความนี้ซิงก์ข้ามเครื่อง</p>
@@ -1786,7 +1808,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const cutoffDay = nowMs => new Date(cutoffMs(nowMs)).toISOString().slice(0, 10);
   const str = (v, max) => String(v == null ? "" : v).slice(0, max);
 
-  const PREF_KEYS = ["roomsTemplate", "photosTemplate"];
+  const PREF_KEYS = ["roomsTemplate", "photosTemplate", "uploadTemplate", "uploadRule"];
   const emptyState = () => ({ items: [], json: { text: "", t: 0 }, done: {}, prefs: {}, roomDates: {}, rounds: {}, photoOv: {}, reminders: {} });
 
   function cleanOverrides(o) {
@@ -1862,7 +1884,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
     if (s.photoOv && typeof s.photoOv === "object") {
       for (const [k, v] of Object.entries(s.photoOv).slice(0, 200)) {
-        if (!YM_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
+        if (!/^u?\d{4}-\d{2}$/.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;   // "YYYY-MM" = the follow-up card, "uYYYY-MM" = the upload-notice card
         out.photoOv[k] = { date: DAY_RE.test(String(v.date)) ? String(v.date) : "", note: str(v.note, 300), t: v.t };
       }
     }
@@ -2091,6 +2113,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
     return out.sort((a, b) => a.date - b.date).slice(0, count);
   }
+
+  // The monthly "please upload your photos" message is sent on a weekday of the nth week (prefs.uploadRule.text = "weekday:nth",
+  // 0 = Sunday, nth 0 = last; default the 3rd Sunday, i.e. before the 4th-weekend meeting); photoOv["uYYYY-MM"].date moves one month
+  const UPLOAD_RULE = "0:3";
+  const UPLOAD_RULE_RE = /^([0-6]):([0-4])$/;
+  function uploadSendDay(ym, prefs, photoOv) {
+    const ov = (photoOv || {})["u" + ym];
+    if (ov && DAY_RE.test(String(ov.date))) return ov.date;
+    const r = UPLOAD_RULE_RE.exec(String((((prefs || {}).uploadRule) || {}).text || "")) || UPLOAD_RULE_RE.exec(UPLOAD_RULE);
+    const y = YM_RE.exec(ym);
+    return isoDay(nthWeekday(+y[1], +y[2] - 1, +r[1], +r[2]));
+  }
   // </state-lib>
 
   // ---------- data shared across devices: localStorage first, optional sync through /api/sync ----------
@@ -2123,7 +2157,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let ACCESS = { known: false, owner: false, features: [] };
   const can = f => ACCESS.known && (ACCESS.owner || ACCESS.features.includes(f));
   const uiOpen = f => !ACCESS.known || can(f);
-  const settings = { roomsTemplate: "", photosTemplate: "" };   // "" = use the built-in message
+  const settings = { roomsTemplate: "", photosTemplate: "", uploadTemplate: "", uploadRule: "" };   // "" = use the built-in message
   let sigs = new Map();
   let lastData = null;
   let refreshJsonBox = () => {};
@@ -2154,6 +2188,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     monthly.json = store.json.text;
     settings.roomsTemplate = (store.prefs.roomsTemplate || {}).text || "";
     settings.photosTemplate = (store.prefs.photosTemplate || {}).text || "";
+    settings.uploadTemplate = (store.prefs.uploadTemplate || {}).text || "";
+    settings.uploadRule = (store.prefs.uploadRule || {}).text || "";
     done = new Set(Object.entries(store.done).filter(([, v]) => v.on).map(([k]) => k));
     sigs = new Map(monthly.items.map(x => [x.id, itemSig(x)]));
   }
@@ -2182,6 +2218,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (settings.photosTemplate !== ((store.prefs.photosTemplate || {}).text || "")) {
       store.prefs.photosTemplate = { text: settings.photosTemplate, t: now };
       changed = true;
+    }
+    for (const k of ["uploadTemplate", "uploadRule"]) {
+      if (settings[k] !== ((store.prefs[k] || {}).text || "")) {
+        store.prefs[k] = { text: settings[k], t: now };
+        changed = true;
+      }
     }
     for (const k of done) if (!(store.done[k] && store.done[k].on)) { store.done[k] = { on: true, t: now }; changed = true; }
     for (const [k, v] of Object.entries(store.done)) if (v.on && !done.has(k)) { store.done[k] = { on: false, t: now }; changed = true; }
@@ -2763,6 +2805,49 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     "ขอบคุณมากครับ 🙏"
   ].join("\n");
   const photosTemplate = () => settings.photosTemplate || DEFAULT_PHOTOS_TEMPLATE;
+  // The monthly "please upload your photos" message (sent before the 4th-weekend meeting); {เดือนนี้} = the month
+  const DEFAULT_UPLOAD_TEMPLATE = [
+    "สวัสดีครับ",
+    "",
+    "รบกวนผู้นำตำบลแต่ละพื้นที่ อัพโหลดรูปภาพรายการสนทนาธรรม 4 ฝ่าย ประจำเดือน{เดือนนี้} ผ่านเว็บไซต์ด้านล่างนี้ครับ",
+    "",
+    "🌐 เว็บไซต์ส่งรูป",
+    UPLOAD_URL,
+    "",
+    "📸 รูปที่ต้องส่ง ตำบลละ 2 รูป",
+    "1. ภาพบรรยากาศ",
+    "2. ภาพถ่ายหมู่",
+    "",
+    "📝 วิธีใช้งาน",
+    "1️⃣ กดลิงก์ด้านบนเพื่อเปิดเว็บ",
+    "2️⃣ กดที่ \"ชื่อตำบล\" ของท่าน",
+    "3️⃣ กดช่อง \"1. ภาพบรรยากาศ\" แล้วเลือกรูปจากเครื่อง",
+    "4️⃣ รอจนขึ้น ✅ \"ส่งรูปสำเร็จ\" แล้วกด \"ตกลง\"",
+    "5️⃣ กดช่อง \"2. ภาพถ่ายหมู่\" แล้วทำเหมือนเดิม",
+    "6️⃣ ตรวจดูว่ารูปที่แสดงในแต่ละช่องถูกต้อง เป็นอันเสร็จครับ",
+    "",
+    "⚠️ ข้อควรระวัง",
+    "• ระหว่างที่ขึ้น ⏳ \"กำลังส่ง\" กรุณารอสักครู่ อย่าเพิ่งปิดหน้าเว็บ",
+    "• ถ้าขึ้น ❌ \"ส่งรูปไม่สำเร็จ\" ให้ลองส่งใหม่อีกครั้ง",
+    "• กรุณาตรวจชื่อตำบลให้ถูกต้องก่อนส่งทุกครั้ง",
+    "",
+    "💡 เพิ่มเติม",
+    "• ส่งผิดรูป? กดที่ช่องเดิมแล้วเลือกรูปใหม่ได้เลย รูปใหม่จะแทนที่รูปเก่า",
+    "• หลังส่งรูปครั้งแรก ตำบลของท่านจะมี ⭐ และขึ้นมาอยู่บนสุด ครั้งต่อไปไม่ต้องเลื่อนหา",
+    "• สีของแต่ละตำบลบอกสถานะ: ขาว = ยังไม่ส่ง / เหลือง = ส่งแล้ว 1 รูป / เขียว = ส่งครบแล้ว",
+    "",
+    "🗓 กำหนดส่ง",
+    "• จัดสนทนาธรรม 4 ฝ่าย: เสาร์–อาทิตย์ที่ 4 ของเดือน",
+    "• ส่งรูปได้ตั้งแต่วันจัด จนถึงสิ้นเดือน",
+    "• ข้อมูลผู้เข้าร่วม 6 ฝ่าย ยังส่งผ่านระบบการในพื้นที่ตามเดิมครับ",
+    "",
+    "ขอบคุณครับ 🙏"
+  ].join("\n");
+  const uploadTemplate = () => settings.uploadTemplate || DEFAULT_UPLOAD_TEMPLATE;
+  const uploadRule = () => (/^[0-6]:[0-4]$/.test(settings.uploadRule) ? settings.uploadRule : UPLOAD_RULE);
+  const WEEKDAY_TH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+  const uploadRuleText = () => { const [w, n] = uploadRule().split(":"); return "ทุกเดือนวัน" + WEEKDAY_TH[+w] + (+n === 0 ? "สุดท้าย" : "ที่ " + n) + "ของเดือน"; };
+  const uploadMessage = ym => uploadTemplate().replace(/\{\s*([^{}\n]+?)\s*\}/g, (x, k) => (k === "เดือนนี้" ? MONTH_FULL[+ym.slice(5, 7) - 1] : x));
   const photos = { status: null, error: false, loading: false };
 
   function photosMessage(month, miss) {
@@ -2782,6 +2867,37 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const ul = $("photos"), doneUl = $("photos-done"), t = today();
     badgeParts.photos = 0;
     const openLis = [], doneLis = [];
+    {   // the monthly upload notice, sent on the weekday of the nth week set in the settings (or the day typed for this month)
+      const ymU = isoDay(t).slice(0, 7), pk = "u" + ymU, keyU = boardKey("upload", ymU), isDoneU = done.has(keyU);
+      const povU = store.photoOv[pk] || {};
+      const sendU = parseDay(uploadSendDay(ymU, store.prefs, store.photoOv));
+      const metaU = countdown(diff(sendU, t))[0] + " · ส่งข้อความวันที่ " + sendU.getUTCDate() + " " + MONTHS[sendU.getUTCMonth()] + (povU.date ? " (ปรับเอง)" : " (" + uploadRuleText() + ")");
+      const extraU = [];
+      if (povU.note) extraU.push(el("div", "meta", "โน้ต: " + povU.note));
+      const cpU = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+      cpU.type = "button";
+      cpU.onclick = () => copyText(uploadMessage(ymU), cpU);
+      const openU = el("a", "btn ghost sm", "หน้าส่งรูป");
+      openU.href = UPLOAD_URL; openU.target = "_blank"; openU.rel = "noopener";
+      const rowU = el("div", "btns");
+      rowU.append(cpU, openU);
+      extraU.push(rowU);
+      const soonU = diff(sendU, t) <= 2;
+      const liU = mrow("later" + (isDoneU ? " done" : ""), MONTHS[+ymU.slice(5, 7) - 1], "แจ้งอัพโหลดรูปภาพ 4 ฝ่าย", metaU, soonU ? "ใกล้ถึงวันส่ง" : "ยังไม่ถึงวันส่ง", isDoneU ? null : soonU ? "warn" : "ok", extraU);
+      const tickU = el("button", "otick" + (isDoneU ? " on" : ""));
+      tickU.type = "button";
+      tickU.setAttribute("aria-pressed", String(isDoneU));
+      tickU.setAttribute("aria-label", isDoneU ? "ยกเลิกส่งข้อความแล้ว" : "ทำเครื่องหมายว่าส่งข้อความแล้ว");
+      tickU.onclick = () => {
+        if (isDoneU) done.delete(keyU); else done.add(keyU);
+        saveDone();
+        renderPhotos();
+      };
+      liU.prepend(tickU);
+      swipeRow(liU, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "upload", pk, ym: ymU, send: sendU }) }]);
+      if (!isDoneU && soonU) badgeParts.photos++;
+      (isDoneU ? doneLis : openLis).push(liU);
+    }
     if (!photos.status) {
       if (!photos.error) openLis.push(el("p", "empty", "กำลังโหลดสถานะรูป…"));
       else {
@@ -2875,24 +2991,25 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let phTarget = null;
   function openPhoto(target) {
     phTarget = target;
-    const status = target.kind === "status", r = target.r;
-    $("ph-title").textContent = status ? "แก้การแจ้งรูปเดือนนี้" : r ? "แก้ไขรายการเตือน" : "เพิ่มรายการเตือน";
+    const status = target.kind !== "rem", r = target.r, pk = target.kind === "upload" ? target.pk : target.ym;
+    target.pk = pk;
+    $("ph-title").textContent = target.kind === "upload" ? "แก้การแจ้งอัพโหลดรูปเดือนนี้" : status ? "แก้การแจ้งรูปเดือนนี้" : r ? "แก้ไขรายการเตือน" : "เพิ่มรายการเตือน";
     $("ph-info").hidden = !status;
-    if (status) $("ph-info").textContent = "ปกติส่งข้อความวันสุดท้ายของเดือน";
+    if (status) $("ph-info").textContent = target.kind === "upload" ? "ปกติส่งข้อความ " + uploadRuleText() + " (ตั้งได้ที่ ตั้งค่า)" : "ปกติส่งข้อความวันสุดท้ายของเดือน";
     $("ph-name-wrap").hidden = status;
     $("ph-name").value = r ? r.title : "";
     $("ph-date-lab").textContent = status ? "วันส่งข้อความ" : "วันที่ต้องทำ";
-    $("ph-date").value = status ? ((store.photoOv[target.ym] || {}).date || "") : r ? r.due : "";
-    $("ph-note").value = status ? ((store.photoOv[target.ym] || {}).note || "") : r ? r.note : "";
+    $("ph-date").value = status ? ((store.photoOv[pk] || {}).date || "") : r ? r.due : "";
+    $("ph-note").value = status ? ((store.photoOv[pk] || {}).note || "") : r ? r.note : "";
     $("ph-error").textContent = "";
-    $("ph-reset").hidden = !(status && store.photoOv[target.ym] && (store.photoOv[target.ym].date || store.photoOv[target.ym].note));
+    $("ph-reset").hidden = !(status && store.photoOv[pk] && (store.photoOv[pk].date || store.photoOv[pk].note));
     $("phform").showModal();
   }
   function savePhoto() {
     const date = $("ph-date").value, note = $("ph-note").value.trim(), now = Date.now();
     if (date && !parse(date)) { $("ph-error").textContent = "วันที่ไม่ถูกต้อง"; return; }
-    if (phTarget.kind === "status") {
-      store.photoOv[phTarget.ym] = { date, note, t: now };
+    if (phTarget.kind !== "rem") {
+      store.photoOv[phTarget.pk] = { date, note, t: now };
     } else {
       const title = $("ph-name").value.trim();
       if (!title) { $("ph-error").textContent = "ใส่เรื่องที่ต้องทำก่อน"; return; }
@@ -2903,7 +3020,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     renderPhotos();
   }
   function resetPhoto() {
-    store.photoOv[phTarget.ym] = { date: "", note: "", t: Date.now() };
+    store.photoOv[phTarget.pk] = { date: "", note: "", t: Date.now() };
     persistLocal(); scheduleSync();
     $("phform").close();
     renderPhotos();
@@ -3617,7 +3734,34 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       ptpl.value = DEFAULT_PHOTOS_TEMPLATE;
       saveMonthly();
     };
+    const utpl = $("upload-tpl-text"), upW = $("up-weekday"), upN = $("up-nth");
+    const showRule = () => { const [w, n] = uploadRule().split(":"); upW.value = w; upN.value = n; };
+    utpl.value = uploadTemplate();
+    showRule();
+    let utplTimer = 0;
+    utpl.oninput = () => {
+      clearTimeout(utplTimer);
+      utplTimer = setTimeout(() => {
+        settings.uploadTemplate = utpl.value === DEFAULT_UPLOAD_TEMPLATE ? "" : utpl.value;
+        saveMonthly();
+        renderPhotos();
+      }, 400);
+    };
+    $("upload-tpl-reset").onclick = () => {
+      settings.uploadTemplate = "";
+      utpl.value = DEFAULT_UPLOAD_TEMPLATE;
+      saveMonthly();
+      renderPhotos();
+    };
+    upW.onchange = upN.onchange = () => {
+      const v = upW.value + ":" + upN.value;
+      settings.uploadRule = v === UPLOAD_RULE ? "" : v;
+      saveMonthly();
+      renderPhotos();
+    };
     refreshTemplateBox = () => {
+      if (utpl.value !== uploadTemplate()) utpl.value = uploadTemplate();
+      showRule();
       if (tpl.value !== roomsTemplate()) tpl.value = roomsTemplate();
       if (ptpl.value !== photosTemplate()) ptpl.value = photosTemplate();
       renderPhotos();
