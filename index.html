@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-uzPsCzQp7bFGM4qmBZtgRQC+zUVU2jCNbpuHjpLmJC0='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-FR8+faycVussydW7+wZdRPzF1A2oTduJspkl3uWVV74='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -1265,6 +1265,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   </div>
 </dialog>
 
+<dialog id="msgform" aria-labelledby="msg-title">
+  <div class="form">
+    <h3 id="msg-title">ข้อความสำหรับคัดลอก</h3>
+    <p class="hint" id="msg-info"></p>
+    <textarea id="msg-text" class="plain" spellcheck="false" placeholder="พิมพ์ข้อความที่จะคัดลอกไปส่ง"></textarea>
+    <div class="btns">
+      <button type="button" class="btn ghost" id="msg-cancel">ยกเลิก</button>
+      <button type="button" class="btn danger" id="msg-reset" hidden>ล้างข้อความ</button>
+      <button type="button" class="btn" id="msg-save">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
 <dialog id="rdform">
   <div class="form">
     <h3>แก้วันนับถอยหลัง</h3>
@@ -1809,7 +1822,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const str = (v, max) => String(v == null ? "" : v).slice(0, max);
 
   const PREF_KEYS = ["roomsTemplate", "photosTemplate", "uploadTemplate", "uploadRule"];
-  const emptyState = () => ({ items: [], json: { text: "", t: 0 }, done: {}, prefs: {}, roomDates: {}, rounds: {}, photoOv: {}, reminders: {} });
+  const emptyState = () => ({ items: [], json: { text: "", t: 0 }, done: {}, prefs: {}, roomDates: {}, rounds: {}, photoOv: {}, reminders: {}, msgs: {} });
 
   function cleanOverrides(o) {
     const out = {};
@@ -1897,6 +1910,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         out.reminders[k] = { title, due: DAY_RE.test(String(v.due)) ? String(v.due) : "", note: str(v.note, 300), t: v.t };
       }
     }
+    // The message to copy for a card of the to-send tab, keyed by the card's done-mark key; "" = cleared (use the built-in text)
+    if (s.msgs && typeof s.msgs === "object") {
+      for (const [k, v] of Object.entries(s.msgs).slice(0, 1500)) {
+        if (!ID_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
+        out.msgs[k] = { text: str(v.text, 2000), t: v.t };
+      }
+    }
     return out;
   }
 
@@ -1923,7 +1943,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const roomDates = { ...A.roomDates };
     for (const [k, v] of Object.entries(B.roomDates)) if (!roomDates[k] || v.t >= roomDates[k].t) roomDates[k] = v;
     const lww = (x, y) => { const o = { ...x }; for (const [k, v] of Object.entries(y)) if (!o[k] || v.t >= o[k].t) o[k] = v; return o; };
-    return { items, json: B.json.t >= A.json.t ? B.json : A.json, done, prefs, roomDates, rounds: lww(A.rounds, B.rounds), photoOv: lww(A.photoOv, B.photoOv), reminders: lww(A.reminders, B.reminders) };
+    return { items, json: B.json.t >= A.json.t ? B.json : A.json, done, prefs, roomDates, rounds: lww(A.rounds, B.rounds), photoOv: lww(A.photoOv, B.photoOv), reminders: lww(A.reminders, B.reminders), msgs: lww(A.msgs, B.msgs) };
   }
 
   // Drops everything older than RETAIN_YEARS: old tombstones, done marks, per-month overrides
@@ -1954,7 +1974,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     for (const [k, v] of Object.entries(st.photoOv)) if (v.t >= cut) photoOv[k] = v;
     const reminders = {};
     for (const [k, v] of Object.entries(st.reminders)) if (v.deleted ? v.t >= cut : (v.due || "9999") >= cd || v.t >= cut) reminders[k] = v;
-    return { items, json: st.json, done, prefs: st.prefs, roomDates, rounds, photoOv, reminders };
+    const msgs = {};
+    for (const [k, v] of Object.entries(st.msgs)) if (v.t >= cut) msgs[k] = v;
+    return { items, json: st.json, done, prefs: st.prefs, roomDates, rounds, photoOv, reminders, msgs };
   }
 
   // The board published by the scheduled task (rooms + things to submit)
@@ -2676,6 +2698,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       body.append(p);
     }
     if (it.verify) body.append(el("span", "verify", "ตรวจสอบกับต้นฉบับ"));
+    {
+      if (msgOf(key)) body.append(el("div", "promo", msgOf(key)));
+      const mr = el("div", "btns");
+      mr.append(...msgBtns(key, it.title || "", "", true));
+      body.append(mr);
+    }
     if (d && n >= 0 && !isDone) {
       const b = el("button", "cal", "เพิ่มในปฏิทิน · เตือนก่อน 7 วัน");
       b.type = "button";
@@ -2850,6 +2878,46 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const uploadMessage = ym => uploadTemplate().replace(/\{\s*([^{}\n]+?)\s*\}/g, (x, k) => (k === "เดือนนี้" ? MONTH_FULL[+ym.slice(5, 7) - 1] : x));
   const photos = { status: null, error: false, loading: false };
 
+  // A message to copy and send for any card of the to-send tab, keyed by the card's done-mark key (synced in state.msgs).
+  // base = the built-in text (a template, or "" when there is none); the typed message wins while it is set.
+  const msgOf = key => ((store.msgs[key] || {}).text || "");
+  const msgText = (key, base) => msgOf(key) || base || "";
+  let msgTarget = null;
+  function openMsg(key, title, base) {
+    msgTarget = { key, base: base || "" };
+    $("msg-title").textContent = "ข้อความสำหรับคัดลอก";
+    $("msg-info").textContent = title + (base ? " · แก้จากข้อความมาตรฐานได้เลย ถ้าไม่แก้จะใช้ข้อความมาตรฐานต่อไป" : " · พิมพ์ข้อความที่จะคัดลอกไปส่ง");
+    $("msg-text").value = msgText(key, base);
+    $("msg-reset").hidden = !msgOf(key);
+    $("msg-reset").textContent = base ? "ใช้ข้อความมาตรฐาน" : "ล้างข้อความ";
+    $("msgform").showModal();
+  }
+  function saveMsg(clear) {
+    const text = clear ? "" : $("msg-text").value.trim();
+    const same = text === msgTarget.base.trim();   // unchanged from the built-in text = keep following it
+    store.msgs[msgTarget.key] = { text: same ? "" : text.slice(0, 2000), t: Date.now() };
+    persistLocal(); scheduleSync();
+    $("msgform").close();
+    refreshAll();
+    renderPhotos();
+  }
+  // [copy, edit] buttons (copy only when there is something to copy); `copy` = true when the card has its own copy button
+  function msgBtns(key, title, base, withCopy) {
+    const out = [];
+    const text = msgText(key, base);
+    if (withCopy && text) {
+      const c = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+      c.type = "button";
+      c.onclick = () => copyText(msgText(key, base), c);
+      out.push(c);
+    }
+    const e = el("button", "btn ghost sm", msgOf(key) || base ? "แก้ข้อความ" : "เพิ่มข้อความ");
+    e.type = "button";
+    e.onclick = () => openMsg(key, title, base);
+    out.push(e);
+    return out;
+  }
+
   function photosMessage(month, miss) {
     const m = +month.slice(5, 7) - 1;
     const vars = {
@@ -2876,12 +2944,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (povU.note) extraU.push(el("div", "meta", "โน้ต: " + povU.note));
       const cpU = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
       cpU.type = "button";
-      cpU.onclick = () => copyText(uploadMessage(ymU), cpU);
+      cpU.onclick = () => copyText(msgText(keyU, uploadMessage(ymU)), cpU);
       const openU = el("a", "btn ghost sm", "หน้าส่งรูป");
       openU.href = UPLOAD_URL; openU.target = "_blank"; openU.rel = "noopener";
       const rowU = el("div", "btns");
       rowU.append(cpU, openU);
-      extraU.push(rowU);
+      const rowU2 = el("div", "btns");
+      rowU2.append(...msgBtns(keyU, "แจ้งอัพโหลดรูปภาพ 4 ฝ่าย", uploadMessage(ymU), false));
+      extraU.push(rowU, rowU2);
       const soonU = diff(sendU, t) <= 2;
       const liU = mrow("later" + (isDoneU ? " done" : ""), MONTHS[+ymU.slice(5, 7) - 1], "แจ้งอัพโหลดรูปภาพ 4 ฝ่าย", metaU, soonU ? "ใกล้ถึงวันส่ง" : "ยังไม่ถึงวันส่ง", isDoneU ? null : soonU ? "warn" : "ok", extraU);
       const tickU = el("button", "otick" + (isDoneU ? " on" : ""));
@@ -2926,14 +2996,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         const names = el("div", "meta", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "));
         const cp = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
         cp.type = "button";
-        cp.onclick = () => copyText(photosMessage(ym, miss), cp);
+        cp.onclick = () => copyText(msgText(key, photosMessage(ym, miss)), cp);
         const open = el("a", "btn ghost sm", "หน้าส่งรูป");
         open.href = UPLOAD_URL;
         open.target = "_blank";
         open.rel = "noopener";
         const row = el("div", "btns");
         row.append(cp, open);
-        extra = [names, row];
+        const row2 = el("div", "btns");
+        row2.append(...msgBtns(key, "รูปสนทนาธรรม 4 ฝ่าย", photosMessage(ym, miss), false));
+        extra = [names, row, row2];
         if (!isDone && diff(send, t) === 0) badgeParts.photos++;
       }
       if (pov.note) extra.push(el("div", "meta", "โน้ต: " + pov.note));
@@ -2962,7 +3034,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const key = boardKey("reminder", r.id), isDone = done.has(key);
       const meta = [r.d ? countdown(diff(r.d, t))[0] + " · " + fmt(r.d) : "ไม่ระบุวัน", r.note].filter(Boolean).join(" · ");
       const soon = !!r.d && diff(r.d, t) <= 3;
-      const li = mrow("later" + (isDone ? " done" : ""), r.d ? MONTHS[r.d.getUTCMonth()] : "•", r.title, meta, soon ? "ใกล้ถึงกำหนด" : "ยังไม่ถึงกำหนด", isDone ? null : soon ? "warn" : "ok");
+      const rx = [];
+      if (msgOf(key)) rx.push(el("div", "promo", msgOf(key)));
+      const rr = el("div", "btns");
+      rr.append(...msgBtns(key, r.title, "", true));
+      rx.push(rr);
+      const li = mrow("later" + (isDone ? " done" : ""), r.d ? MONTHS[r.d.getUTCMonth()] : "•", r.title, meta, soon ? "ใกล้ถึงกำหนด" : "ยังไม่ถึงกำหนด", isDone ? null : soon ? "warn" : "ok", rx);
       const tick = el("button", "otick" + (isDone ? " on" : ""));
       tick.type = "button";
       tick.setAttribute("aria-pressed", String(isDone));
@@ -3087,16 +3164,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   // "copy message" + "edit countdown date" buttons (and a note when the round has no head count per region yet)
   function roomActions({ r, d }) {
+    const mk = roomKey(r.key), base = roomsMessage(r, d).text;
     const btn = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
     btn.type = "button";
-    btn.onclick = () => copyText(roomsMessage(r, d).text, btn);
+    btn.onclick = () => copyText(msgText(mk, base), btn);
     const eb = el("button", "btn ghost sm", "แก้วันนับถอยหลัง");
     eb.type = "button";
     eb.onclick = () => openRoomDate(r, d);
     const row = el("div", "btns");
     row.append(btn, eb);
+    const row2 = el("div", "btns");
+    row2.append(...msgBtns(mk, "ห้องที่ระลึก " + fmt(d), base, false));
     const { missing } = roomsMessage(r, d);
-    return missing.length ? [row, el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : [row];
+    return missing.length && !msgOf(mk) ? [row, row2, el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : [row, row2];
   }
 
   function renderRooms(data, t) {
@@ -3672,6 +3752,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("ph-cancel").onclick = () => $("phform").close();
     $("ph-save").onclick = savePhoto;
     $("ph-reset").onclick = resetPhoto;
+    $("msg-cancel").onclick = () => $("msgform").close();
+    $("msg-save").onclick = () => saveMsg(false);
+    $("msg-reset").onclick = () => saveMsg(true);
     $("rd-cancel").onclick = () => $("rdform").close();
     $("rd-save").onclick = saveRoomDate;
     $("rd-reset").onclick = resetRoomDate;
