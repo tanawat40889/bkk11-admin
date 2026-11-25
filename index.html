@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-3/I5zQvjftM6T3mhzCCkG/edodsR2/EjyzxXc/xjlHM='; style-src 'self' https://fonts.googleapis.com 'sha256-dfxMlxZMNao6EADzJ5AJO8oSgZP/5pRs1OlxxEfnCQI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-Qx08+y/C091kiOjg4DYF+b4pxSVck8cMVblTzrPvn6c='; style-src 'self' https://fonts.googleapis.com 'sha256-aaKr6zsND0dNXduagCHkpnrJCMwp+ZYAsgKJNjJc7xI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -134,7 +134,7 @@ header img { flex: none; width: 96px; height: auto; }
 main { padding: 0 max(16px, var(--sar)) calc(120px + var(--sab)) max(16px, var(--sal)); max-width: 640px; margin: 0 auto; }
 section { margin-top: 16px; }
 
-/* Floating glass menu at the bottom: icons only, the red badge is the only text */
+/* Floating glass menu at the bottom: icon with its short name underneath (iOS tab bar style) */
 .tabs {
   position: fixed;
   z-index: 20;
@@ -157,10 +157,12 @@ section { margin-top: 16px; }
 .tab {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 52px;
-  padding: 0;
+  gap: 3px;
+  min-height: 58px;
+  padding: 4px 0 5px;
   font: inherit;
   color: color-mix(in srgb, var(--ink) 72%, transparent);
   background: transparent;
@@ -169,7 +171,7 @@ section { margin-top: 16px; }
   cursor: pointer;
   transition: background .2s ease, color .2s ease;
 }
-.tab > span:not(.bdg) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.tab > span:not(.bdg) { font-size: .6875rem; font-weight: 600; line-height: 1.2; white-space: nowrap; }
 .tab { position: relative; }
 .hbtns { display: flex; flex: none; align-self: flex-start; gap: 2px; margin: -6px 0 0 auto; }
 .ibtn {
@@ -191,6 +193,7 @@ section { margin-top: 16px; }
 .sdlg-head h3 { font-size: 1.05rem; }
 .sclose { display: grid; place-items: center; width: 44px; height: 44px; color: var(--mute); background: transparent; border: 0; border-radius: 12px; cursor: pointer; }
 .sclose svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+dialog.full .sdlg-head { padding-top: calc(var(--sat) + 6px); }
 dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; padding: 0; }
 .mc-bar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: calc(var(--sat) + 6px) 8px 8px; background: var(--card); border-bottom: 1px solid var(--line); }
 .mc-bar h3 { flex: 1; min-width: 0; font-size: 1.05rem; }
@@ -322,7 +325,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .vside { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-right: 12px; }
 .vside .pill { margin-right: 0; }
 .vshare { min-height: 36px; padding: 0 12px; font: inherit; font-size: .75rem; color: var(--brand); background: none; border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; white-space: nowrap; }
-.sharecard { display: grid; gap: 6px; padding: 14px 16px; background: var(--bg); border: 1px solid var(--line); border-left: 5px solid var(--lc, var(--brand)); border-radius: var(--r); line-height: 1.5; overflow-wrap: anywhere; }
+.sharecard { display: grid; gap: 6px; padding: 14px 16px; background: var(--bg); border: 1px solid color-mix(in srgb, var(--lc, var(--brand)) 45%, var(--line)); border-radius: var(--r); line-height: 1.5; overflow-wrap: anywhere; }
 .sharecard .sc-title { font-weight: 700; font-size: 1rem; }
 .sharecard a { color: var(--brand); }
 .vdot.ymd { background: var(--brand); }
@@ -333,13 +336,13 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .sstick .vlegend { flex-wrap: nowrap; align-items: center; gap: 6px 14px; margin: 6px 0 0; white-space: nowrap; }
 .sstick.mini .vcell:not(.cur), .sstick.mini .vlegend { display: none; }
 .sstick.mini .vhead { margin-bottom: 4px; }
-.stog { display: none; align-items: center; justify-content: center; gap: 6px; min-height: 34px; margin: 6px auto 0; padding: 0 16px; font: inherit; font-size: .8125rem; font-weight: 700; color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--card)); border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; }
+.stog { display: none; align-items: center; justify-content: center; gap: 6px; min-height: 40px; margin: 6px auto 0; padding: 0 16px; font: inherit; font-size: .8125rem; font-weight: 700; color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--card)); border: 1px solid var(--brand); border-radius: 999px; cursor: pointer; }
 .sstick.mini .stog, .sstick.pin .stog { display: flex; }
 .stog svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
 .stog .t-fold, .sstick.pin .stog .t-open { display: none; }
 .sstick.pin .stog .t-fold { display: inline; }
 .sstick.pin .stog svg { transform: rotate(180deg); }
-.sstick.mini .vnav { width: 34px; height: 34px; }
+.sstick.mini .vnav { width: 40px; height: 40px; }
 #panel-schedule { overflow-anchor: none; }   /* the calendar shrinking must not make the browser re-scroll the list */
 .scal { gap: 3px; }
 .scal .vdow { padding: 0; font-size: .6875rem; }
@@ -368,7 +371,11 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .morelist { display: grid; grid-auto-rows: 1fr; gap: 12px; padding: 16px; }
 a.morebtn { text-decoration: none; }
 .morebtn { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 76px; padding: 14px 16px; text-align: left; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); cursor: pointer; }
-.moreico { flex: none; width: 2rem; text-align: center; font-size: 1.75rem; line-height: 1; }
+.ico { flex: none; width: 1.05em; height: 1.05em; vertical-align: -.16em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.vnav svg, .mc-top svg, .mc-fsx svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.mc-top svg { width: 18px; height: 18px; margin-right: 4px; vertical-align: -4px; }
+.moreico { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent); }
+.moreico svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .moretxt { display: grid; gap: 2px; min-width: 0; }
 .moretxt small { font-size: .8125rem; color: var(--mute); }
 #panel-settings { display: grid; gap: 14px; padding: 16px; }
@@ -399,15 +406,15 @@ a.morebtn { text-decoration: none; }
   border-radius: 9px;
 }
 .tab svg {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.tab svg { width: 28px; height: 28px; stroke-width: 1.9; }
+.tab svg { width: 24px; height: 24px; stroke-width: 1.9; }
 .tab[aria-selected="true"] { color: var(--brand); background: color-mix(in srgb, var(--brand) 16%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand) 28%, transparent); }
 .tab .bdg { box-shadow: 0 0 0 2px color-mix(in srgb, var(--card) 85%, transparent); }
 
@@ -568,8 +575,8 @@ a.morebtn { text-decoration: none; }
 .otick {
   flex: none;
   position: relative;
-  width: 34px;
-  min-height: 46px;
+  width: 44px;
+  min-height: 44px;
   background: none;
   border: 0;
   cursor: pointer;
@@ -636,7 +643,7 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .btns { display: flex; gap: 10px; margin-top: 10px; }
 .occ .btns { margin-top: 6px; }
 .btns .btn { flex: 1; }
-.toprow { display: flex; align-items: center; gap: 10px; margin: 4px 0 16px; }
+.toprow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 4px 0 16px; }
 .addbtn { flex: none; min-height: 40px; padding: 0 16px; }
 .mjson {
   margin-top: 16px;
@@ -671,7 +678,14 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .ibtn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .ctopcp { align-self: center; margin-right: 6px; }
 #mdata { background: var(--bg); }
-.mdbody { display: grid; gap: 16px; padding: 16px 16px calc(32px + var(--sab)); }
+#mdata[open] { display: flex; flex-direction: column; overflow: hidden; }
+#mdata .mdbody { flex: 1; min-height: 0; align-content: start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.mdbody { display: grid; gap: 16px; padding: 16px 16px 24px; }
+.mdfoot { flex: none; padding: 10px 16px calc(12px + var(--sab)); background: var(--card); border-top: 1px solid var(--line); }
+.mdfoot .btn { width: 100%; }
+.mdsec { margin: 0; font-size: .875rem; font-weight: 700; color: var(--ink); }
+.mdrow .mn { font-size: 1rem; font-weight: 700; color: var(--brand); }
+.mdrow .mn small { margin-left: 6px; font-size: .8125rem; font-weight: 400; color: var(--mute); }
 .mdbody .chips button { min-height: 40px; padding: 0 16px; }
 .mdbody .chips .newk { border-style: dashed; }
 .mdkey { display: flex; gap: 8px; align-items: center; }
@@ -679,7 +693,7 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .mdnew { display: flex; gap: 8px; }
 .mdnew input { flex: 1; min-width: 0; }
 .mdrows { display: grid; gap: 10px; }
-.mdrow { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: center; }
+.mdrow { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px; align-items: center; }
 .mdrow label { font-size: .875rem; color: var(--mute); }
 .mdbody input { min-height: 46px; padding: 0 12px; font: inherit; font-size: 16px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
 .mdhint { margin: 0; font-size: .8125rem; line-height: 1.5; color: var(--mute); }
@@ -1051,13 +1065,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <span class="bdg" hidden></span>
   </button>
   <button class="tab" role="tab" id="tab-schedule" data-tab="schedule" aria-controls="panel-schedule" aria-selected="false" tabindex="-1" aria-label="รายการ">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg>
     <span>รายการ</span>
     <span class="bdg" hidden></span>
   </button>
   <button class="tab" role="tab" id="tab-ymd" data-tab="ymd" aria-controls="panel-ymd" aria-selected="false" tabindex="-1" aria-label="ฐานข้อมูล YMD">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.2-6-10a6 6 0 0 1 12 0c0 4.8-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
-    <span>YMD DB</span>
+    <span>YMD</span>
   </button>
 </div>
 </nav>
@@ -1158,9 +1172,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   <section id="panel-visits" role="tabpanel" aria-labelledby="tab-visits" hidden>
     <div class="vleft">
     <div class="vhead">
-      <button type="button" class="vnav" id="v-prev" aria-label="เดือนก่อน">‹</button>
+      <button type="button" class="vnav" id="v-prev" aria-label="เดือนก่อน"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
       <h2 class="vmonth" id="v-month" aria-live="polite"></h2>
-      <button type="button" class="vnav" id="v-next" aria-label="เดือนถัดไป">›</button>
+      <button type="button" class="vnav" id="v-next" aria-label="เดือนถัดไป"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="btn ghost sm" id="v-today">วันนี้</button>
     </div>
     <div class="vcover" id="v-cover" role="alert" hidden>
@@ -1182,9 +1196,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   <section id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" hidden>
     <div class="sstick" id="s-stick">
       <div class="vhead">
-        <button type="button" class="vnav" id="s-prev" aria-label="เดือนก่อน">‹</button>
+        <button type="button" class="vnav" id="s-prev" aria-label="เดือนก่อน"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
         <h2 class="vmonth" id="s-month" aria-live="polite"></h2>
-        <button type="button" class="vnav" id="s-next" aria-label="เดือนถัดไป">›</button>
+        <button type="button" class="vnav" id="s-next" aria-label="เดือนถัดไป"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
         <button type="button" class="btn ghost sm" id="s-today">วันนี้</button>
       </div>
       <div class="vcal scal" id="s-cal" aria-label="ปฏิทินรายการ"></div>
@@ -1301,11 +1315,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 <dialog id="mdata" class="full" aria-labelledby="mdata-title">
   <div class="sdlg-head">
     <h3 id="mdata-title">ข้อมูลรายเดือน</h3>
-    <button type="button" class="sclose" id="mdata-close" aria-label="เสร็จ (บันทึกให้อัตโนมัติ)">
+    <button type="button" class="sclose" id="mdata-close" aria-label="ปิด">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </div>
   <div class="mdbody" id="mdata-body"></div>
+  <div class="mdfoot"><button type="button" class="btn" id="mdata-done">เสร็จ</button></div>
 </dialog>
 
 <dialog id="msgform" aria-labelledby="msg-title">
@@ -1330,19 +1345,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   </div>
   <div class="morelist">
     <a class="morebtn" href="https://tanawat40889.github.io/bkk11-tokan/" target="_blank" rel="noopener">
-      <span class="moreico" aria-hidden="true">👥</span>
+      <span class="moreico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.4 3.2-5.5 6.5-5.5s5.9 2.1 6.5 5.5"/><path d="M15.5 4.8a3.5 3.5 0 0 1 0 6.4M17.8 14.8c1.9.8 3 2.7 3.2 5.2"/></svg></span>
       <span class="moretxt"><b>โทกัง</b><small>รายชื่อสมาชิกรวมภาคกรุงเทพ 11 เปิดในแท็บใหม่</small></span>
     </a>
     <button type="button" class="morebtn" id="open-mc">
-      <span class="moreico" aria-hidden="true">🎙️</span>
+      <span class="moreico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg></span>
       <span class="moretxt"><b>บทพิธีกรงานวัด</b><small>บทพิธีสวดมนต์อุทิศส่วนกุศล พิมพ์ชื่อหรือดึงจากฐานข้อมูลสมาชิก อ่านบนมือถือ/iPad</small></span>
     </button>
     <a class="morebtn" id="open-access" href="access.html" hidden>
-      <span class="moreico" aria-hidden="true">🔐</span>
+      <span class="moreico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span>
       <span class="moretxt"><b>จัดการสิทธิ์</b><small>เปิดหน้าแยก · ติ๊กว่าใครใช้ ต้องส่ง / แผนที่ ได้ (เฉพาะเจ้าของและคนที่ได้รับสิทธิ์)</small></span>
     </a>
     <a class="morebtn" href="https://tanawat40889.github.io/bkk11-boardgames/" target="_blank" rel="noopener">
-      <span class="moreico" aria-hidden="true">🎲</span>
+      <span class="moreico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="8.5" cy="8.5" r=".9"/><circle cx="12" cy="12" r=".9"/><circle cx="15.5" cy="15.5" r=".9"/></svg></span>
       <span class="moretxt"><b>บอร์ดเกม</b><small>เปิดเว็บบอร์ดเกม BKK11 ในแท็บใหม่</small></span>
     </a>
   </div>
@@ -1354,7 +1369,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <h3 id="mc-title">บทพิธีกรงานวัด</h3>
-    <button type="button" class="mc-top" id="mc-full" aria-label="เต็มจอ" hidden>⛶ เต็มจอ</button>
+    <button type="button" class="mc-top" id="mc-full" aria-label="เต็มจอ" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg> เต็มจอ</button>
     <div class="mc-opts" id="mc-opts">
     <div class="mc-modes" id="mc-modes" role="radiogroup" aria-label="โหมด">
       <button type="button" role="radio" aria-checked="true" data-mode="info">ข้อมูล</button>
@@ -1370,7 +1385,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
     </div>
   </div>
-  <button type="button" class="mc-fsx" id="mc-fsx" aria-label="ออกจากเต็มจอ" hidden>✕</button>
+  <button type="button" class="mc-fsx" id="mc-fsx" aria-label="ออกจากเต็มจอ" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <div class="mc-pane form" id="mc-info">
     <div class="mc-fields" id="mc-fields"></div>
     <p class="hint">พิมพ์ชื่อลงในช่องได้เลย หรือกด “ค้นหาสมาชิก” เพื่อดึงชื่อจากฐานข้อมูลสมาชิก (ต้องเข้าสู่ระบบด้วยชื่อและรหัสสมาชิกเดียวกับโทกัง) ชื่อที่ใส่เก็บไว้ในเครื่องนี้เท่านั้น ไม่ซิงก์ข้ามเครื่อง ช่องชื่อมาจากตัวแปร {ชื่อช่อง} ในบท เพิ่มช่องใหม่ได้ที่แท็บ “แก้ไขบท”</p>
@@ -1752,6 +1767,20 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (text != null) n.textContent = text;
     return n;
   };
+  // Drawn icons for buttons and lines built in script (constant markup only; user text is always added as text)
+  const ICON = {
+    cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
+    share: '<path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>'
+  };
+  const icoHtml = name => '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">' + ICON[name] + '</svg>';
+  // element = [drawn icon] + text
+  const withIco = (name, text, tag = "span", cls = "") => {
+    const n = el(tag, cls);
+    n.innerHTML = icoHtml(name);
+    n.append(" " + text);
+    return n;
+  };
 
   const parse = s => {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
@@ -1824,7 +1853,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     ].map(fold).join("\r\n") + "\r\n";
   }
 
-  function addToCalendar(it, d) {
+  function itemToCalendar(it, d) {
     const blob = new Blob([calendarFile(it, d)], { type: "text/calendar;charset=utf-8" });
     const href = URL.createObjectURL(blob);
     const a = el("a");
@@ -1949,7 +1978,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return out;
   }
 
-  // Last write wins per record; same-title duplicates (e.g. imported on two devices) collapse to the newest
+  // Last write wins per record; the same item saved twice (e.g. imported on two devices: same title and same schedule) collapses to the newest.
+  // Items that only share a title but have another schedule are different items and both stay.
+  const sameItemKey = x => [x.title, x.weekday, x.nth, x.time].join("|");
   function mergeStates(a, b) {
     const A = normalizeState(a), B = normalizeState(b);
     const byId = new Map();
@@ -1961,10 +1992,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const best = new Map();
     for (const x of items) {
       if (x.deleted) continue;
-      const cur = best.get(x.title);
-      if (!cur || x.updatedAt > cur.updatedAt || (x.updatedAt === cur.updatedAt && x.id > cur.id)) best.set(x.title, x);
+      const k = sameItemKey(x), cur = best.get(k);
+      if (!cur || x.updatedAt > cur.updatedAt || (x.updatedAt === cur.updatedAt && x.id > cur.id)) best.set(k, x);
     }
-    items = items.filter(x => x.deleted || best.get(x.title) === x).sort((p, q) => (p.id < q.id ? -1 : 1));
+    items = items.filter(x => x.deleted || best.get(sameItemKey(x)) === x).sort((p, q) => (p.id < q.id ? -1 : 1));
     const done = { ...A.done };
     for (const [k, v] of Object.entries(B.done)) if (!done[k] || v.t >= done[k].t) done[k] = v;
     const prefs = { ...A.prefs };
@@ -2292,6 +2323,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     renderMonthly();
     refreshJsonBox();
     refreshTemplateBox();
+    // the open monthly-data editor shows what was synced in, unless a value is being typed
+    if ($("mdata").open && !$("mdata-body").contains(document.activeElement)) renderMdata();
   }
 
   // ---------- shared sign-in: the same member session (storage key) as โทกัง and ที่อยู่น้อง, so one login covers all three sites ----------
@@ -2739,7 +2772,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (d && n >= 0 && !isDone) {
       const b = el("button", "cal", "เพิ่มในปฏิทิน · เตือนก่อน 7 วัน");
       b.type = "button";
-      b.onclick = () => addToCalendar(it, d);
+      b.onclick = () => itemToCalendar(it, d);
       body.append(b);
     }
 
@@ -3299,7 +3332,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const oldDl = rnTarget ? rnTarget.dl : null, newDl = rnTarget && !rnTarget.typed ? rnTarget.dl : date;
     if (oldDl && oldDl !== newDl && store.roomDates[oldDl] && store.roomDates[oldDl].date) store.roomDates[oldDl] = { date: "", t: now };
     if (dlv || (store.roomDates[newDl] && store.roomDates[newDl].date)) store.roomDates[newDl] = { date: dlv, t: now };
-    setMsg(roomKey(id), $("rn-msg").value, rnBase);
+    setMsg(roomKey(rnTarget ? rnTarget.key : id), $("rn-msg").value, rnBase);
     persistLocal(); scheduleSync();
     $("rnform").close();
     refreshAll();
@@ -3629,8 +3662,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   // Edit one month only (e.g. a postponed date) without touching the recurring rule
   let ovTarget = null;
+  const monthlyIndex = id => monthly.items.findIndex(x => x.id === id);
   function openOverride(i, o) {
-    ovTarget = { i, key: o.key, rule: o.rule };
+    ovTarget = { id: monthly.items[i].id, key: o.key, rule: o.rule };
     const it = monthly.items[i];
     $("oform-info").textContent = `${it.title} · ปกติ ${fmt(o.rule)}`;
     $("o-date").value = isoDay(o.date);
@@ -3644,7 +3678,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function saveOverride() {
     const date = $("o-date").value;
     if (!parse(date)) { $("o-error").textContent = "เลือกวันที่ก่อน"; return; }
-    const it = monthly.items[ovTarget.i];
+    const it = monthly.items[monthlyIndex(ovTarget.id)];
+    if (!it) { $("o-error").textContent = "รายการนี้ถูกลบหรือเปลี่ยนไปแล้ว ปิดแล้วลองใหม่"; return; }
     const ov = { date, time: $("o-time").value.trim(), promote: $("o-promote").value };
     const unchanged = date === isoDay(ovTarget.rule) && !ov.time && !ov.promote.trim();
     it.overrides = it.overrides || {};
@@ -3654,8 +3689,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     renderMonthly();
   }
   function resetOverride() {
-    const it = monthly.items[ovTarget.i];
-    if (it.overrides) delete it.overrides[ovTarget.key];
+    const it = monthly.items[monthlyIndex(ovTarget.id)];
+    if (it && it.overrides) delete it.overrides[ovTarget.key];
     saveMonthly();
     $("oform").close();
     renderMonthly();
@@ -3668,9 +3703,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return { ok: true, text: `มีข้อมูล ${r.filled} จาก 12 เดือน` + (r.bad.length ? " · ข้ามคีย์ที่อ่านไม่ได้: " + r.bad.join(", ") : "") };
   }
 
-  let editing = -1;
+  let editing = "";   // id of the item being edited ("" = adding one)
   function openForm(i) {
-    editing = i;
+    editing = i >= 0 ? monthly.items[i].id : "";
     const it = i >= 0 ? monthly.items[i] : { title: "", weekday: 1, nth: 2, time: "", promote: "", json: "" };
     $("mform-title").textContent = i >= 0 ? "แก้ไขรายการประจำเดือน" : "เพิ่มรายการประจำเดือน";
     $("f-title").value = it.title || "";
@@ -3695,10 +3730,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       promote: $("f-promote").value,
       json: $("f-json").value
     };
-    if (editing >= 0) {
-      item.id = monthly.items[editing].id;
-      item.overrides = monthly.items[editing].overrides;
-      monthly.items[editing] = item;
+    const i = editing ? monthlyIndex(editing) : -1;
+    if (editing && i < 0) { $("f-error").textContent = "รายการนี้ถูกลบหรือเปลี่ยนไปแล้ว ปิดแล้วลองใหม่"; return; }
+    // the same title on the same weekday/nth/time is the same item (sync keeps only one of those), so it is refused here
+    if (monthly.items.some((x, k) => k !== i && x.title === title && x.weekday === item.weekday && x.nth === item.nth && x.time === item.time)) {
+      $("f-error").textContent = "มีรายการชื่อเดียวกันและวันเวลาเดียวกันอยู่แล้ว";
+      return;
+    }
+    if (i >= 0) {
+      item.id = monthly.items[i].id;
+      item.overrides = monthly.items[i].overrides;
+      item.updatedAt = monthly.items[i].updatedAt;   // an unchanged save keeps its timestamp (commitLocal bumps it only on a real change)
+      monthly.items[i] = item;
     } else {
       monthly.items.push(item);
     }
@@ -3738,6 +3781,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // Friendly editor for the monthly replacement data: pick a field ({link}, {month}...), fill one value per month.
   // Each edit is written back as strict JSON into monthly.json (the same text the advanced box in settings shows).
   const mdata = { keys: [], sel: "", adding: false };
+  // Edits always start from the current saved JSON (another device may have changed it since the editor was drawn)
+  const mdFresh = () => { const r = parseMonthJson(monthly.json); return r.error ? null : r.data; };
+  const mdSetCell = (i, key, val) => {
+    const rows = mdFresh();
+    if (!rows) return;
+    if (val === "") delete rows[i][key]; else rows[i][key] = val;
+    mdSave(rows);
+  };
   function mdSave(rows) {
     const obj = {};
     rows.forEach((m, i) => { const o = {}; for (const k of mdata.keys) if (m[k] !== undefined && m[k] !== "") o[k] = m[k]; if (Object.keys(o).length) obj[EN_MON[i]] = o; });
@@ -3746,7 +3797,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     renderMonthly();
     refreshJsonBox();
   }
-  function renderMdata(keepFocus) {
+  const cleanKey = v => String(v).trim().toLowerCase().replace(/[{}\s]/g, "");
+  function renderMdata() {
     const box = $("mdata-body");
     const r = parseMonthJson(monthly.json);
     if (r.error) {
@@ -3756,16 +3808,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const rows = r.data;
     for (const m of rows) for (const k of Object.keys(m)) if (!mdata.keys.includes(k)) mdata.keys.push(k);
     if (!mdata.keys.includes(mdata.sel)) mdata.sel = mdata.keys[0] || "";
-    const parts = [];
+    if (!mdata.keys.length) mdata.adding = true;
+    const parts = [el("p", "mdhint", "ตั้งชื่อช่องที่จะใช้แทนในข้อความ (เช่น link) แล้วใส่ค่าของแต่ละเดือน 1–12 ในข้อความเขียนว่า {link}")];
+    parts.push(el("h4", "mdsec", "ช่อง"));
     const chips = el("div", "chips");
     for (const k of mdata.keys) {
       const b = el("button", "", "{" + k + "}");
       b.type = "button";
-      b.setAttribute("aria-pressed", String(k === mdata.sel));
+      b.setAttribute("aria-pressed", String(k === mdata.sel && !mdata.adding));
       b.onclick = () => { mdata.sel = k; mdata.adding = false; renderMdata(); };
       chips.append(b);
     }
-    const nb = el("button", "newk", "+ ช่อง");
+    const nb = el("button", "newk", "+ เพิ่มช่อง");
     nb.type = "button";
     nb.onclick = () => { mdata.adding = true; renderMdata(); };
     chips.append(nb);
@@ -3773,12 +3827,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (mdata.adding) {
       const row = el("div", "mdnew");
       const inp = el("input");
-      inp.placeholder = "ชื่อช่อง เช่น link";
+      inp.placeholder = "ชื่อช่อง เช่น link หรือ month";
       inp.autocapitalize = "off"; inp.autocomplete = "off"; inp.spellcheck = false; inp.setAttribute("aria-label", "ชื่อช่อง");
-      const ok = el("button", "btn", "เพิ่ม");
+      const ok = el("button", "btn", "ตกลง");
       ok.type = "button";
       const add = () => {
-        const k = inp.value.trim().toLowerCase().replace(/[{}\s]/g, "");
+        const k = cleanKey(inp.value);
         if (!k) return;
         if (!mdata.keys.includes(k)) mdata.keys.push(k);
         mdata.sel = k; mdata.adding = false;
@@ -3789,55 +3843,46 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       row.append(inp, ok);
       parts.push(row);
       setTimeout(() => inp.focus(), 0);
-    }
-    if (mdata.sel) {
-      const kr = el("div", "mdkey");
-      const name = el("input");
-      name.value = mdata.sel; name.autocapitalize = "off"; name.autocomplete = "off"; name.spellcheck = false; name.setAttribute("aria-label", "ชื่อช่อง");
-      name.onchange = () => {
-        const nk = name.value.trim().toLowerCase().replace(/[{}\s]/g, "");
-        if (!nk || nk === mdata.sel || mdata.keys.includes(nk)) { name.value = mdata.sel; return; }
-        rows.forEach(m => { if (m[mdata.sel] !== undefined) { m[nk] = m[mdata.sel]; delete m[mdata.sel]; } });
-        mdata.keys = mdata.keys.map(k => (k === mdata.sel ? nk : k));
-        mdata.sel = nk;
-        mdSave(rows); renderMdata();
-      };
-      const del = el("button", "btn danger", "ลบช่อง");
-      del.type = "button";
-      del.onclick = () => {
-        if (!confirm("ลบช่อง {" + mdata.sel + "} ทุกเดือน ?")) return;
-        rows.forEach(m => { delete m[mdata.sel]; });
-        mdata.keys = mdata.keys.filter(k => k !== mdata.sel);
-        mdSave(rows); renderMdata();
-      };
-      kr.append(name, del);
-      parts.push(kr);
+    } else if (mdata.sel) {
+      parts.push(el("h4", "mdsec", "ค่าของ {" + mdata.sel + "} แต่ละเดือน"));
       const list = el("div", "mdrows");
       let timer = 0;
+      const key = mdata.sel;
       rows.forEach((m, i) => {
         const row = el("div", "mdrow");
-        const lab = el("label", "", MONTH_FULL[i]);
+        const lab = el("label", "mn", String(i + 1));
+        lab.append(el("small", "", MONTHS[i]));
         const inp = el("input");
         inp.id = "mdv" + i;
         lab.htmlFor = inp.id;
-        inp.value = m[mdata.sel] || "";
+        const before = m[key] || "";
+        inp.value = before;
         inp.autocapitalize = "off"; inp.autocomplete = "off"; inp.spellcheck = false;
-        inp.oninput = () => { m[mdata.sel] = inp.value; clearTimeout(timer); timer = setTimeout(() => mdSave(rows), 300); };
-        inp.onblur = () => { clearTimeout(timer); if (m[mdata.sel] !== undefined) mdSave(rows); };
+        inp.oninput = () => { clearTimeout(timer); timer = setTimeout(() => mdSetCell(i, key, inp.value), 300); };
+        inp.onblur = () => { clearTimeout(timer); if (inp.value !== before) mdSetCell(i, key, inp.value); };
         row.append(lab, inp);
         list.append(row);
       });
       parts.push(list);
-    } else if (!mdata.adding) {
-      parts.push(el("p", "mdhint", "ยังไม่มีข้อมูล กด “+ ช่อง” แล้วตั้งชื่อ เช่น link หรือ month จากนั้นใส่ค่าของแต่ละเดือน"));
+      const del = el("button", "btn danger", "ลบช่อง {" + mdata.sel + "}");
+      del.type = "button";
+      del.onclick = () => {
+        if (!confirm("ลบช่อง {" + mdata.sel + "} ทุกเดือน ?")) return;
+        const cur = mdFresh();
+        if (cur) cur.forEach(m => { delete m[mdata.sel]; });
+        mdata.keys = mdata.keys.filter(k => k !== mdata.sel);
+        if (cur) mdSave(cur);
+        renderMdata();
+      };
+      parts.push(del);
     }
-    parts.push(el("p", "mdhint", "ใช้ในข้อความโปรโมทด้วยชื่อช่องในวงเล็บปีกกา เช่น {link} ระบบจะแทนด้วยค่าของเดือนที่จัด บันทึกให้อัตโนมัติ"));
     box.replaceChildren(...parts);
   }
 
   function initMonthly() {
     $("mdata-open").onclick = () => { mdata.keys = []; mdata.sel = ""; mdata.adding = false; renderMdata(); $("mdata").showModal(); };
     $("mdata-close").onclick = () => $("mdata").close();
+    $("mdata-done").onclick = () => $("mdata").close();
     const d = n => "ก่อน " + n + " วัน";
     const chip = (id, text, full) => { $(id).textContent = text; $(id).parentNode.title = full; $(id).parentNode.setAttribute("aria-label", "แจ้งเตือน" + full); };
     chip("info-items", d(NOTIFY_DAYS), "ก่อนครบกำหนด " + NOTIFY_DAYS + " วัน และเตือนต่อหลังเลยกำหนดจนกว่าจะติ๊ก (สูงสุด " + PAST_NOTIFY_DAYS + " วัน)");
@@ -3865,6 +3910,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("msg-reset").onclick = () => saveMsg(true);
     const ta = $("mjson-text"), st = $("mjson-status"), det = $("mjson");
     ta.value = monthly.json;
+    let jsonDirty = false, tplDirty = false, ptplDirty = false;   // typed here and not saved yet: a sync must not overwrite it
     const check = () => {
       const r = jsonStatusText(ta.value);
       st.textContent = r.text;
@@ -3873,13 +3919,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       return r.ok;
     };
     const persist = () => {
-      if (!check() || ta.value === monthly.json) return;
+      if (!check()) return;   // half-typed JSON stays in the box (dirty) until it is valid
+      jsonDirty = false;
+      if (ta.value === monthly.json) return;
       monthly.json = ta.value;
       saveMonthly();
       renderMonthly();
     };
     let timer = 0;
     ta.oninput = () => {
+      jsonDirty = true;
       check();
       clearTimeout(timer);
       timer = setTimeout(persist, 300);
@@ -3896,8 +3945,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     tpl.value = roomsTemplate();
     let tplTimer = 0;
     tpl.oninput = () => {
+      tplDirty = true;
       clearTimeout(tplTimer);
       tplTimer = setTimeout(() => {
+        tplDirty = false;
         settings.roomsTemplate = tpl.value === defaultRoomsTemplate() ? "" : tpl.value;
         saveMonthly();
       }, 400);
@@ -3911,8 +3962,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     ptpl.value = photosTemplate();
     let ptplTimer = 0;
     ptpl.oninput = () => {
+      ptplDirty = true;
       clearTimeout(ptplTimer);
       ptplTimer = setTimeout(() => {
+        ptplDirty = false;
         settings.photosTemplate = ptpl.value === DEFAULT_PHOTOS_TEMPLATE ? "" : ptpl.value;
         saveMonthly();
       }, 400);
@@ -3950,13 +4003,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     refreshTemplateBox = () => {
       if (utpl.value !== uploadTemplate()) utpl.value = uploadTemplate();
       showRule();
-      if (tpl.value !== roomsTemplate()) tpl.value = roomsTemplate();
-      if (ptpl.value !== photosTemplate()) ptpl.value = photosTemplate();
+      if (!tplDirty && document.activeElement !== tpl && tpl.value !== roomsTemplate()) tpl.value = roomsTemplate();
+      if (!ptplDirty && document.activeElement !== ptpl && ptpl.value !== photosTemplate()) ptpl.value = photosTemplate();
       renderPhotos();
     };
     refreshJsonBox = () => {
-      const want = monthly.json || (det.open ? JSON_SKELETON : "");
-      if (ta.value !== want) ta.value = want;
+      if (!jsonDirty && document.activeElement !== ta) {
+        const want = monthly.json || (det.open ? JSON_SKELETON : "");
+        if (ta.value !== want) ta.value = want;
+      }
       check();
     };
     const dialogSave = { mform: saveForm, oform: saveOverride, rnform: saveRound, phform: savePhoto };
@@ -4363,7 +4418,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const li = el("li", "card scard" + (evIsYmd(e) ? " ymd" : ""));
       const main = el("div", "cmain");
       main.append(el("div", "ctitle", e.title));
-      if (e.place) main.append(el("div", "meta", "📍 " + e.place));
+      if (e.place) main.append(withIco("pin", e.place, "div", "meta"));
       if (e.who) main.append(el("span", "pill " + (evIsYmd(e) ? "ok" : "mute"), e.who));
       const head = el("div", "chead");
       head.append(el("div", "stime" + (e.time ? "" : " none"), e.time || "ทั้งวัน"), main);
@@ -4422,7 +4477,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const inMonth = evs.filter(e => e.date <= last && evEnd(e) >= first);
     const am = $("s-addmonth");
     am.hidden = !inMonth.length;
-    am.textContent = `📅 ทั้งเดือน (${inMonth.length})`;
+    am.innerHTML = icoHtml("cal") + " ทั้งเดือน (" + inMonth.length + ")";
     am.setAttribute("aria-label", `เพิ่มรายการทั้งเดือน ${inMonth.length} รายการลงปฏิทิน`);
     am.onclick = () => addToCalendar(inMonth, "events-" + ym + ".ics");
   }
@@ -4495,8 +4550,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const ttl = el("div", "ctitle", e.title);
       if (e.mid) ttl.append(el("span", "stag", "เพิ่มเอง"));
       main.append(ttl);
-      if (e.place) main.append(el("div", "meta", "📍 " + e.place));
-      const add = el("button", "addcal", "📅 เพิ่มลงปฏิทิน");
+      if (e.place) main.append(withIco("pin", e.place, "div", "meta"));
+      const add = el("button", "addcal");
+      add.innerHTML = icoHtml("cal") + " เพิ่มลงปฏิทิน";
       add.type = "button";
       add.onclick = () => addToCalendar([e], "event-" + e.date + ".ics");
       main.append(add);
@@ -4726,7 +4782,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       loadCoverage();   // the tab's notification number follows the tick
     };
     const side = el("div", "vside");
-    const share = el("button", "vshare", "📤 แชร์");
+    const share = el("button", "vshare");
+    share.innerHTML = icoHtml("share") + " แชร์";
     share.type = "button";
     share.onclick = () => openShare(r);
     side.append(pill, share);
@@ -4776,9 +4833,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const { sharer, who, when, text } = shareText(vShare.r, vShare.map);
     const card = $("vs-card");
     card.style.setProperty("--lc", "var(--v-" + phakCls(vShare.r.phak) + ")");
-    const nodes = [el("div", "sc-title", `${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`), el("div", null, "📅 " + when)];
+    const nodes = [el("div", "sc-title", `${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`), withIco("cal", when, "div")];
     if (vShare.map) {
-      const line = el("div", null, "📍 ");
+      const line = withIco("pin", "", "div");
       const a = el("a", null, vShare.map);
       a.href = vShare.map;
       a.target = "_blank";
