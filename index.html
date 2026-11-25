@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-FR8+faycVussydW7+wZdRPzF1A2oTduJspkl3uWVV74='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-O0qpK5P5nt2Iu4lSb5BOz35KnbCb2nNZN4XKYjMsfD0='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -2049,6 +2049,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // Recurring events ("the 2nd Monday of each month") with per-month overrides; also drives the daily push
   const NOTIFY_DAYS = 10;          // to-submit items
   const MONTHLY_NOTIFY_DAYS = 5;   // recurring monthly events
+  const PHOTO_NOTIFY_DAYS = 3;     // the 4-division photo chase starts this many days before its send day
   const DAY_MS = 864e5;
   const isoDay = d => d.toISOString().slice(0, 10);
   const ymKey = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
@@ -3006,7 +3007,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         const row2 = el("div", "btns");
         row2.append(...msgBtns(key, "รูปสนทนาธรรม 4 ฝ่าย", photosMessage(ym, miss), false));
         extra = [names, row, row2];
-        if (!isDone && diff(send, t) === 0) badgeParts.photos++;
+        if (!isDone && diff(send, t) <= PHOTO_NOTIFY_DAYS) badgeParts.photos++;   // counts from 3 days before the send day until ticked
       }
       if (pov.note) extra.push(el("div", "meta", "โน้ต: " + pov.note));
       const finished = isDone || !miss.length;
