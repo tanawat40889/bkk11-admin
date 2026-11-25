@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-XNg+NNzseAbwaybiITM2rhq49OwjinSE1fNRCzVqd2o='; style-src 'self' https://fonts.googleapis.com 'sha256-WXndc6dMgPFnZrhjatxisicOenbBgCOnT+iY8IDs5NE='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-unpm+VIEj3+TEcy7ROMEouiK3HXWuwbMf6mHgS/UatQ='; style-src 'self' https://fonts.googleapis.com 'sha256-qbapJwrgVoIY3jvh8TpuxqHMUWMq24p/V3LBIBkmEFA='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -415,7 +415,6 @@ a.morebtn { text-decoration: none; }
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-left: 5px solid var(--lc, var(--brand));
   border-radius: var(--r);
   overflow: hidden;
 }
@@ -637,8 +636,8 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .btns { display: flex; gap: 10px; margin-top: 10px; }
 .occ .btns { margin-top: 6px; }
 .btns .btn { flex: 1; }
-.toprow { display: flex; gap: 10px; margin-bottom: 12px; }
-.addbtn { flex: 1; }
+.toprow { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.addbtn { flex: none; min-height: 40px; padding: 0 16px; }
 .mjson {
   margin-top: 16px;
   padding: 0 16px;
@@ -661,7 +660,16 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .cpbtn { margin-top: 8px; }
 .btns .cpbtn { margin-top: 0; }
 .mbody .btns .btn { flex: 0 0 auto; padding: 4px 12px; font-size: .8125rem; line-height: 1.25; white-space: nowrap; }
-.pinfo { margin: 0 0 10px; font-size: .75rem; line-height: 1.45; color: var(--mute); }
+.pinfo { display: inline-flex; align-items: center; gap: 5px; margin: 0; padding: 3px 10px; font-size: .75rem; line-height: 1.4; color: var(--mute); background: color-mix(in srgb, var(--mute) 10%, transparent); border-radius: 999px; white-space: nowrap; }
+.pinfo .bell { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.toprow .pinfo { margin-left: auto; }
+.mside { flex: none; display: flex; align-items: center; gap: 6px; }
+.ibtn { display: grid; place-items: center; flex: none; width: 40px; height: 40px; padding: 0; color: var(--brand); background: transparent; border: 0; border-radius: 50%; cursor: pointer; }
+.ibtn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ibtn:active, .ibtn.ok { background: color-mix(in srgb, var(--brand) 14%, transparent); }
+.lnk { display: inline-flex; align-items: center; min-height: 36px; font-size: .8125rem; color: var(--brand); text-decoration: none; }
+.mbody .meta.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .mlabel { display: block; margin: 4px 0; font-size: .8125rem; color: var(--mute); }
 .mjson .hint { margin: 8px 0; font-size: .8125rem; color: var(--mute); }
 #push-devices { padding-left: 18px; margin-top: 8px; }
@@ -713,15 +721,13 @@ dialog > .form > .btns:last-child { position: sticky; bottom: 0; z-index: 2; mar
   padding: 10px 14px;
 }
 .mrow.swipe { display: block; padding: 0; overflow: hidden; }
-.mrow .minner { display: flex; align-items: center; gap: 12px; padding: 10px 14px; }
-.mrow.next .minner { padding: 9px 13px; }
+.mrow .minner { display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 14px; }
 .mrow.past { opacity: .75; }
 .mrow.done { opacity: .6; }
-.mrow.next { border: 2px solid var(--brand); padding: 9px 13px; }
+.mrow.next { border-color: var(--brand); }
 .mbody .meta + .meta { margin-top: 3px; }
 .mbody .btns { margin-top: 8px; gap: 8px; }
 .mrow.none .mtitle { color: var(--mute); }
-.mon { flex: none; width: 40px; font-weight: 700; color: var(--brand); }
 .mbody { flex: 1; min-width: 0; }
 .mtitle { font-weight: 500; }
 .empty { color: var(--mute); text-align: center; padding: 18px 0; }
@@ -1051,7 +1057,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         <span id="badge-msg"></span>
         <button type="button" id="badge-btn">เปิดใช้</button>
       </div>
-      <p class="pinfo" id="info-items"></p>
+      <div class="toprow"><p class="pinfo"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg><span id="info-items"></span></p></div>
       <ul class="list" id="items"></ul>
       <details id="overdue-wrap" hidden>
         <summary>ผ่านกำหนดแล้ว</summary>
@@ -1064,9 +1070,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
     <div class="subpanel" id="sub-rooms" role="tabpanel" aria-labelledby="subtab-rooms" hidden>
       <div class="hsec" aria-labelledby="h-rooms">
-        <h2 class="sech" id="h-rooms">ห้องที่ระลึก อ. ผู้มีพระคุณ</h2>
-        <p class="pinfo" id="info-rooms"></p>
-        <div class="toprow"><button type="button" class="btn addbtn" id="r-add">+ เพิ่มรอบ</button></div>
+        <h2 class="sech vh" id="h-rooms">ห้องที่ระลึก อ. ผู้มีพระคุณ</h2>
+        <div class="toprow"><button type="button" class="btn addbtn" id="r-add">+ เพิ่มรอบ</button><p class="pinfo"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg><span id="info-rooms"></span></p></div>
         <ul class="months" id="rooms"></ul>
         <details id="rooms-done-wrap" hidden>
           <summary id="rooms-done-sum"></summary>
@@ -1080,9 +1085,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
     <div class="subpanel" id="sub-photos" role="tabpanel" aria-labelledby="subtab-photos" hidden>
       <div class="hsec" id="sec-photos" aria-labelledby="h-photos">
-        <h2 class="sech" id="h-photos">แจ้งเรื่องรูปสนทนาธรรม 4 ฝ่าย</h2>
-        <p class="pinfo" id="info-photos"></p>
-        <div class="toprow"><button type="button" class="btn addbtn" id="ph-add">+ เพิ่มรายการเตือน</button></div>
+        <h2 class="sech vh" id="h-photos">แจ้งเรื่องรูปสนทนาธรรม 4 ฝ่าย</h2>
+        <div class="toprow"><button type="button" class="btn addbtn" id="ph-add">+ เพิ่มเตือน</button><p class="pinfo"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg><span id="info-photos"></span></p></div>
         <ul class="months" id="photos"></ul>
         <details id="photos-done-wrap" hidden>
           <summary id="photos-done-sum"></summary>
@@ -1092,11 +1096,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     </div>
     <div class="subpanel" id="sub-monthly" role="tabpanel" aria-labelledby="subtab-monthly" hidden>
       <div class="hsec" aria-labelledby="h-monthly">
-        <h2 class="sech" id="h-monthly">รายการประจำเดือน</h2>
-        <p class="pinfo" id="info-monthly"></p>
+        <h2 class="sech vh" id="h-monthly">รายการประจำเดือน</h2>
         <div class="toprow">
-          <button type="button" class="btn addbtn" id="m-add">+ เพิ่มรายการประจำเดือน</button>
-          <button type="button" class="btn ghost" id="mjson-copy">คัดลอก JSON</button>
+          <button type="button" class="btn addbtn" id="m-add">+ เพิ่มรายการ</button>
+          <p class="pinfo"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg><span id="info-monthly"></span></p>
+
+          <button type="button" class="ibtn" id="mjson-copy" aria-label="คัดลอก JSON" title="คัดลอก JSON"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg></button>
         </div>
         <ul class="list" id="monthly"></ul>
         <details id="monthly-done-wrap" hidden>
@@ -1151,7 +1156,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <h3 id="v-list-title"></h3>
       <button type="button" class="btn sm" id="v-add">+ เพิ่มนัดเยี่ยม</button>
     </div>
-    <p class="pinfo" id="info-visits"></p>
+    <div class="toprow"><p class="pinfo"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg><span id="info-visits"></span></p></div>
     <p class="warnline" id="v-error" hidden></p>
     <ul class="list" id="v-list"></ul>
     </div>
@@ -1168,7 +1173,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span><button type="button" class="addcal addmonth" id="s-addmonth"></button></div>
       <button type="button" class="stog" id="s-tog" aria-label="ขยายปฏิทิน" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="t-open">ดูปฏิทินทั้งเดือน</span><span class="t-fold">ย่อปฏิทิน</span></button>
     </div>
-    <p class="pinfo" id="info-schedule"></p>
+    <div class="toprow"><p class="pinfo"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg><span id="info-schedule"></span></p></div>
     <ul class="list" id="s-list"></ul>
     <button type="button" class="fab" id="s-add" aria-label="เพิ่มรายการ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
   </section>
@@ -2046,6 +2051,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const NOTIFY_DAYS = 10;          // to-submit items
   const MONTHLY_NOTIFY_DAYS = 5;   // recurring monthly events
   const PHOTO_NOTIFY_DAYS = 3;     // the 4-division photo chase starts this many days before its send day
+  const UPLOAD_NOTIFY_DAYS = 3;    // the monthly "upload your photos" message, this many days before its send day
+  const PAST_NOTIFY_DAYS = 10;     // an item that passed its date keeps being notified until it is ticked, but only this many days
   const DAY_MS = 864e5;
   const isoDay = d => d.toISOString().slice(0, 10);
   const ymKey = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
@@ -2729,7 +2736,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // App icon badge (iOS 16.4+ installed web app; needs notification permission there)
   // Counts items due within BADGE_DAYS days (today included).
   const BADGE_DAYS = NOTIFY_DAYS;
-  const UPLOAD_NOTIFY_DAYS = 2;   // แจ้งอัพโหลดรูป: notified this many days before its send day (same literal as notify.mjs)
   const UPCOMING_DAYS = 7;   // นัดเยี่ยมที่ยังไม่ประสาน: notified this many days ahead (same number as notify.mjs, so the push shows the same count)
   const badgeOk = () => typeof navigator.setAppBadge === "function";
   const hasNotif = () => typeof Notification !== "undefined";
@@ -2768,16 +2774,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (!phone) {
         // nothing to ask on a computer
       } else if (ios && !standalone) {
-        text = "ต้องติดตั้งแอปก่อนถึงจะมีเลขบนไอคอน: กดปุ่มแชร์ > เพิ่มไปยังหน้าจอโฮม แล้วเปิดจากไอคอน";
+        text = "ติดตั้งแอปก่อน: แชร์ > เพิ่มไปยังหน้าจอโฮม";
       } else if (badgeOk() && hasNotif()) {
         if (Notification.permission === "default") {
-          text = "แสดงเลขบนไอคอนแอป เมื่อมีรายการเหลือไม่เกิน " + BADGE_DAYS + " วัน";
+          text = "แสดงเลขบนไอคอนแอป";
           button = true;
         } else if (Notification.permission === "denied") {
-          text = "ปิดการแจ้งเตือนไว้ เปิดที่ ตั้งค่า > แจ้งเตือน > รภ.11 เพื่อให้มีเลขบนไอคอน";
+          text = "เปิดแจ้งเตือนที่ ตั้งค่า > แจ้งเตือน > รภ.11";
         }
       } else if (ios) {
-        text = "แอปนี้ยังไม่ได้รับสิทธิ์เว็บแอปจาก iOS (ต้อง iOS 16.4 ขึ้นไป) ลองลบไอคอนแล้วเพิ่มใหม่ผ่านแชร์ > เพิ่มไปยังหน้าจอโฮม";
+        text = "ลบไอคอนแล้วเพิ่มใหม่ (ต้อง iOS 16.4 ขึ้นไป)";
       }
       msg.textContent = text;
       btn.hidden = !button;
@@ -2934,19 +2940,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const ymU = isoDay(t).slice(0, 7), pk = "u" + ymU, keyU = boardKey("upload", ymU), isDoneU = done.has(keyU);
       const povU = store.photoOv[pk] || {};
       const sendU = parseDay(uploadSendDay(ymU, store.prefs, store.photoOv));
-      const metaU = countdown(diff(sendU, t))[0] + " · ส่งข้อความวันที่ " + sendU.getUTCDate() + " " + MONTHS[sendU.getUTCMonth()] + (povU.date ? " (ปรับเอง)" : " (" + uploadRuleShort() + ")");
+      const nU = diff(sendU, t);
+      const metaU = "ส่ง " + sendU.getUTCDate() + " " + MONTHS[sendU.getUTCMonth()] + " · " + (povU.date ? "ปรับเอง" : uploadRuleShort());
       const extraU = [];
-      if (povU.note) extraU.push(el("div", "meta", "โน้ต: " + povU.note));
-      const cpU = el("button", "btn ghost sm cpbtn", "คัดลอก");
-      cpU.type = "button";
-      cpU.onclick = () => copyText(msgText(keyU, uploadMessage(ymU)), cpU);
-      const openU = el("a", "btn ghost sm", "หน้าส่งรูป");
+      if (povU.note) extraU.push(el("div", "meta", povU.note));
+      const openU = el("a", "lnk", "หน้าส่งรูป ›");
       openU.href = UPLOAD_URL; openU.target = "_blank"; openU.rel = "noopener";
-      const rowU = el("div", "btns");
-      rowU.append(cpU, openU);
-      extraU.push(rowU);
-      const soonU = diff(sendU, t) <= UPLOAD_NOTIFY_DAYS;
-      const liU = mrow("later" + (isDoneU ? " done" : ""), MONTHS[+ymU.slice(5, 7) - 1], "แจ้งอัพโหลดรูปภาพ 4 ฝ่าย", metaU, soonU ? "ใกล้ถึงวันส่ง" : "ยังไม่ถึงวันส่ง", isDoneU ? null : soonU ? "warn" : "ok", extraU);
+      extraU.push(openU);
+      const soonU = nU <= UPLOAD_NOTIFY_DAYS;
+      const [pxU, pkU] = pillOf(nU, isDoneU);
+      const liU = mrow("later" + (isDoneU ? " done" : ""), "", "แจ้งอัพโหลดรูป", metaU, pxU, pkU, extraU, [copyIcon(() => msgText(keyU, uploadMessage(ymU)))]);
       const tickU = el("button", "otick" + (isDoneU ? " on" : ""));
       tickU.type = "button";
       tickU.setAttribute("aria-pressed", String(isDoneU));
@@ -2958,7 +2961,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       };
       liU.prepend(tickU);
       swipeRow(liU, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "upload", pk, ym: ymU, send: sendU, mkey: keyU, base: uploadMessage(ymU) }) }]);
-      if (!isDoneU && soonU) badgeParts.photos++;
+      if (!isDoneU && soonU && nU >= -PAST_NOTIFY_DAYS) badgeParts.photos++;
       (isDoneU ? doneLis : openLis).push(liU);
     }
     if (!photos.status) {
@@ -2967,7 +2970,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         const retry = el("button", "btn ghost sm", "ลองใหม่");
         retry.type = "button";
         retry.onclick = loadPhotos;
-        openLis.push(mrow("later", "รูป", "รูปสนทนาธรรม 4 ฝ่าย", "โหลดสถานะรูปไม่สำเร็จ", null, null, [retry]));
+        openLis.push(mrow("later", "", "ติดตามรูป", "โหลดสถานะรูปไม่สำเร็จ", null, null, [retry]));
       }
     }
     const st = photos.status, miss = st && photoMissing(st);
@@ -2977,32 +2980,21 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const pov = store.photoOv[ym] || {};
       const send = (pov.date && parseDay(pov.date)) || lastDayOfMonth(new Date(Date.UTC(y, m, 1)));
       const key = photoKey(ym), isDone = done.has(key);
-      const meta = [];
-      let kind, extra = [];
-      if (!miss.length) {
-        kind = "ok";
-        meta.push("ส่งครบทุกตำบลแล้ว (" + total + " ตำบล)");
-      } else {
-        kind = "warn";
-        meta.push(countdown(diff(send, t))[0] + " · ส่งข้อความวันที่ " + send.getUTCDate() + " " + MONTHS[send.getUTCMonth()] + (pov.date ? " (ปรับเอง)" : ""));
-        meta.push("ยังไม่ครบ " + miss.length + " จาก " + total + " ตำบล");
-        const names = el("div", "meta", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "));
-        const cp = el("button", "btn ghost sm cpbtn", "คัดลอก");
-        cp.type = "button";
-        cp.onclick = () => copyText(msgText(key, photosMessage(ym, miss)), cp);
-        const open = el("a", "btn ghost sm", "หน้าส่งรูป");
-        open.href = UPLOAD_URL;
-        open.target = "_blank";
-        open.rel = "noopener";
-        const row = el("div", "btns");
-        row.append(cp, open);
-        extra = [names, row];
-        if (!isDone && diff(send, t) <= PHOTO_NOTIFY_DAYS) badgeParts.photos++;   // counts from 3 days before the send day until ticked
+      const nS = diff(send, t);
+      let extra = [], side = [];
+      const meta = miss.length ? "ส่ง " + send.getUTCDate() + " " + MONTHS[send.getUTCMonth()] + (pov.date ? " · ปรับเอง" : "") + " · ขาด " + miss.length + "/" + total : "ครบทุกตำบล (" + total + ")";
+      if (miss.length) {
+        extra = [el("div", "meta clamp", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "))];
+        const open = el("a", "lnk", "หน้าส่งรูป ›");
+        open.href = UPLOAD_URL; open.target = "_blank"; open.rel = "noopener";
+        extra.push(open);
+        side = [copyIcon(() => msgText(key, photosMessage(ym, miss)))];
+        if (!isDone && nS <= PHOTO_NOTIFY_DAYS && nS >= -PAST_NOTIFY_DAYS) badgeParts.photos++;   // counts from PHOTO_NOTIFY_DAYS before the send day until ticked
       }
-      if (pov.note) extra.push(el("div", "meta", "โน้ต: " + pov.note));
+      if (pov.note) extra.unshift(el("div", "meta", pov.note));
       const finished = isDone || !miss.length;
-      const li = mrow("later" + (finished ? " done" : ""), MONTHS[m], "รูปสนทนาธรรม 4 ฝ่าย", meta.join(" · "),
-        kind === "ok" ? "ครบแล้ว" : "ยังไม่ครบ", isDone ? null : kind, extra);
+      const [pxS, pkS] = miss.length ? pillOf(nS, isDone) : ["ครบแล้ว", isDone ? null : "ok"];
+      const li = mrow("later" + (finished ? " done" : ""), "", "ติดตามรูป", meta, pxS, pkS, extra, side);
       if (miss.length) {
         const tick = el("button", "otick" + (isDone ? " on" : ""));
         tick.type = "button";
@@ -3023,12 +3015,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       .sort((a, b) => (a.d || 1e15) - (b.d || 1e15));
     for (const r of rems) {
       const key = boardKey("reminder", r.id), isDone = done.has(key);
-      const meta = [r.d ? countdown(diff(r.d, t))[0] + " · " + fmt(r.d) : "ไม่ระบุวัน", r.note].filter(Boolean).join(" · ");
-      const soon = !!r.d && diff(r.d, t) <= 3;
+      const meta = [r.d ? fmt(r.d) : "ไม่ระบุวัน", r.note].filter(Boolean).join(" · ");
       const rx = [];
-      if (msgOf(key)) rx.push(el("div", "promo", msgOf(key)));
-      if (msgOf(key)) { const rr = el("div", "btns"); rr.append(...msgCopy(key)); rx.push(rr); }
-      const li = mrow("later" + (isDone ? " done" : ""), r.d ? MONTHS[r.d.getUTCMonth()] : "•", r.title, meta, soon ? "ใกล้ถึงกำหนด" : "ยังไม่ถึงกำหนด", isDone ? null : soon ? "warn" : "ok", rx);
+      if (msgOf(key)) rx.push(el("div", "meta clamp", msgOf(key)));
+      const [pxR, pkR] = r.d ? pillOf(diff(r.d, t), isDone) : [null, null];
+      const li = mrow("later" + (isDone ? " done" : ""), "", r.title, meta, pxR, pkR, rx, msgOf(key) ? [copyIcon(() => msgOf(key))] : null);
       const tick = el("button", "otick" + (isDone ? " on" : ""));
       tick.type = "button";
       tick.setAttribute("aria-pressed", String(isDone));
@@ -3043,7 +3034,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         { label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "rem", id: r.id, r, mkey: key, base: "" }) },
         { label: "ลบ", cls: "sw-del", fn: () => deleteReminder(r) }
       ]);
-      if (!isDone && r.d && diff(r.d, t) <= BADGE_DAYS) badgeParts.photos++;
+      if (!isDone && r.d && diff(r.d, t) <= BADGE_DAYS && diff(r.d, t) >= -PAST_NOTIFY_DAYS) badgeParts.photos++;
       (isDone ? doneLis : openLis).push(li);
     }
     ul.replaceChildren(...(openLis.length ? openLis : [el("p", "empty", doneLis.length ? "ไม่มีรายการค้าง" : "ยังไม่มีรายการ")]));
@@ -3140,30 +3131,39 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return { text, missing: [...missing] };
   }
 
-  function mrow(cls, mon, title, meta, pill, kind, extra) {
+  // One row of the to-send tab: tick | title + one line | countdown pill + copy icon. `mon` is unused (the date is in the title).
+  function mrow(cls, mon, title, meta, pillText, kind, extra, side) {
     const li = el("li", "mrow " + cls);
     const body = el("div", "mbody");
     body.append(el("div", "mtitle", title), el("div", "meta", meta));
     if (extra) body.append(...extra);
-    li.append(el("div", "mon", mon), body);
-    if (kind) {
-      const p = el("span", "pill dot " + kind);
-      p.setAttribute("aria-label", pill);
-      li.append(p);
-    }
+    li.append(body);
+    const sd = el("div", "mside");
+    if (kind && pillText) sd.append(el("span", "pill " + kind, pillText));
+    if (side) sd.append(...side);
+    if (sd.childNodes.length) li.append(sd);
     return li;
   }
+  // countdown pill for a day count; a not-yet-ticked item that is already late stays red (the "keep nagging" rule)
+  const pillOf = (n, isDone) => { if (isDone) return [null, null]; const [txt, k] = countdown(n); return [txt, n < 0 ? "bad" : k]; };
+  const ICON_COPY = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>';
+  function copyIcon(getText, label) {
+    const b = el("button", "ibtn");
+    b.type = "button";
+    b.setAttribute("aria-label", label || "คัดลอกข้อความ");
+    b.innerHTML = ICON_COPY;
+    b.onclick = () => copyText(getText(), b);
+    return b;
+  }
 
-  // "copy message" button (and a note when the round has no head count per region yet)
+  // copy icon (and a note when the round has no head count per region yet)
   function roomActions({ r, d }) {
     const mk = roomKey(r.key), base = roomsMessage(r, d).text;
-    const btn = el("button", "btn ghost sm cpbtn", "คัดลอก");
-    btn.type = "button";
-    btn.onclick = () => copyText(msgText(mk, base), btn);
-    const row = el("div", "btns");
-    row.append(btn);
     const { missing } = roomsMessage(r, d);
-    return missing.length && !msgOf(mk) ? [row, el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : [row];
+    return {
+      side: [copyIcon(() => msgText(mk, base))],
+      extra: missing.length && !msgOf(mk) ? [el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : []
+    };
   }
 
   function renderRooms(data, t) {
@@ -3173,8 +3173,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       .sort((a, b) => a.d - b.d);
     const info = ({ r, d }) => [
       r.time,
-      r.count != null && r.count + " คน" + (d >= t ? " (ตามรายชื่อ)" : ""),
-      r.issue && "เอกสารแจ้งข่าว " + r.issue,
+      r.count != null && r.count + " คน",
+      r.issue && "ข่าว " + r.issue,
       r.typed && "เพิ่มเอง",
       r.edited && "แก้แล้ว"
     ].filter(Boolean);
@@ -3184,7 +3184,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const meta = x => {
       const m = info(x);
       const ov = store.roomDates[x.r.dl];
-      m.unshift(countdown(diff(roomDeadlineOf(x.r, store.roomDates), t))[0] + (ov && ov.date ? " (ปรับเอง)" : ""));
+      if (ov && ov.date) m.push("ปรับเอง");
       return m.join(" · ");
     };
     const upAll = rooms.filter(x => x.d >= t);
@@ -3193,13 +3193,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const doneRooms = upAll.filter(isDoneRoom);
     badgeParts.rooms = upAll.filter(x => {
       const n = diff(roomDeadlineOf(x.r, store.roomDates), t);
-      return n <= ROOMS_NOTIFY_DAYS && !isDoneRoom(x);   // a passed deadline (round still ahead) keeps counting until ticked
+      return n <= ROOMS_NOTIFY_DAYS && n >= -PAST_NOTIFY_DAYS && !isDoneRoom(x);   // a passed deadline (round still ahead) keeps counting until ticked, for PAST_NOTIFY_DAYS days
     }).length;
     refreshBadges();
     const roomCard = (x, i, finished) => {
       const key = roomKey(x.r.key), isDone = done.has(key);
-      const li = mrow(finished ? "later done" : i === 0 ? "next" : "later", MONTHS[x.d.getUTCMonth()], fmt(x.d), meta(x),
-        finished ? null : i === 0 ? "กำลังจะมาถึง" : "ถัดไป", finished ? null : i === 0 ? "warn" : "ok", roomActions(x));
+      const ra = roomActions(x);
+      const [px, pk] = pillOf(diff(roomDeadlineOf(x.r, store.roomDates), t), finished);
+      const li = mrow(finished ? "later done" : i === 0 ? "next" : "later", "", fmt(x.d), meta(x), px, pk, ra.extra, ra.side);
       const tick = el("button", "otick" + (isDone ? " on" : ""));
       tick.type = "button";
       tick.setAttribute("aria-pressed", String(isDone));
@@ -3223,7 +3224,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("rooms-past-wrap").hidden = !past.length;
     $("rooms-past-sum").textContent = `ดูย้อนหลัง 1 ปี (${past.length} รอบ)`;
     $("rooms-past").replaceChildren(...past.map(x =>
-      swipeRow(mrow("past", MONTHS[x.d.getUTCMonth()], fmt(x.d), meta(x), null, null, roomActions(x)), roundActs(x))));
+      swipeRow((() => { const ra = roomActions(x); return mrow("past", "", fmt(x.d), meta(x), null, null, ra.extra, ra.side); })(), roundActs(x))));
 
     if (!up.length && !past.length && !doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ยังไม่มีข้อมูลรอบ"));
     else if (!up.length && doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ทำครบทุกรอบแล้ว"));
@@ -3302,7 +3303,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const doneItems = items.filter(isDone);
     const upcoming = open.filter(x => !x.d || x.d >= t);
     const overdue = open.filter(x => x.d && x.d < t).reverse();
-    badgeParts.items = upcoming.filter(x => x.d && diff(x.d, t) <= BADGE_DAYS).length + overdue.length;   // overdue ones keep counting until ticked
+    badgeParts.items = upcoming.filter(x => x.d && diff(x.d, t) <= BADGE_DAYS).length + overdue.filter(x => diff(x.d, t) >= -PAST_NOTIFY_DAYS).length;   // overdue ones keep counting until ticked, for PAST_NOTIFY_DAYS days
     refreshBadges();
 
     const emptyText = doneItems.length ? "ทำครบทุกรายการแล้ว" : "ไม่มีรายการ";
@@ -3402,9 +3403,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   // Copies text and always says what happened (button label + a short message with a preview)
   async function copyText(text, btn) {
+    const icon = btn.classList.contains("ibtn");
     const label = btn.dataset.label || btn.textContent;
     btn.dataset.label = label;
     const say = (buttonText, message) => {
+      if (icon) { btn.classList.add("ok"); setTimeout(() => btn.classList.remove("ok"), 1200); toast(message); return; }
       btn.textContent = buttonText;
       toast(message);
       setTimeout(() => { btn.textContent = label; }, 1500);
@@ -3581,7 +3584,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const g = parseMonthJson(monthly.json);
     const list = monthly.items
       .map((it, i) => {
-        const occ = occurrences(it, t, MONTHLY_LOOKAHEAD);
+        const occ = occurrences(it, new Date(t.getTime() - PAST_NOTIFY_DAYS * 864e5), MONTHLY_LOOKAHEAD);   // a passed, unticked one stays for PAST_NOTIFY_DAYS days
         const nextUndone = occ.find(o => !done.has(boardKey(it.id, isoDay(o.date))));
         return { it, i, occ: occ.slice(0, MONTHLY_SHOWN), sortDate: (nextUndone || occ[0] || {}).date };
       })
@@ -3591,7 +3594,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const nearDone = x => !!x.occ[0] && done.has(boardKey(x.it.id, isoDay(x.occ[0].date)));
     const openCards = list.filter(x => !nearDone(x)).map(x => monthlyCard(x.it, x.i, t, g, x.occ));
     const doneCards = list.filter(nearDone).map(x => monthlyCard(x.it, x.i, t, g, x.occ));
-    const emptyText = doneCards.length ? "ทำครบทุกรายการแล้ว" : "ยังไม่มีรายการ กด “เพิ่มรายการประจำเดือน” เพื่อเริ่มต้น";
+    const emptyText = doneCards.length ? "ทำครบทุกรายการแล้ว" : "ยังไม่มีรายการ";
     $("monthly").replaceChildren(...(openCards.length ? openCards : [el("p", "empty", emptyText)]));
     $("monthly-done-wrap").hidden = !doneCards.length;
     $("monthly-done-sum").textContent = `ทำแล้ว (${doneCards.length})`;
@@ -3707,13 +3710,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
 
   function initMonthly() {
-    const d = n => n + " วัน";
-    $("info-items").textContent = "เตือนก่อนครบกำหนด " + d(NOTIFY_DAYS) + " และเตือนต่อทุกเช้าจนกว่าจะติ๊กว่าทำแล้ว";
-    $("info-rooms").textContent = "เตือนก่อนวันนับถอยหลัง " + d(ROOMS_NOTIFY_DAYS) + " และเตือนต่อจนกว่าจะติ๊กว่ายืนยันแล้ว";
-    $("info-photos").textContent = "แจ้งอัพโหลดรูป: เตือนก่อนวันส่ง " + d(UPLOAD_NOTIFY_DAYS) + " · ติดตามรูปที่ยังไม่ครบ: ก่อนวันส่ง " + d(PHOTO_NOTIFY_DAYS) + " · รายการเตือน: ก่อนครบกำหนด " + d(NOTIFY_DAYS) + " · เตือนต่อจนกว่าจะติ๊ก";
-    $("info-monthly").textContent = "เตือนก่อนถึงวัน " + d(MONTHLY_NOTIFY_DAYS) + " (ติ๊กแล้วไม่เตือน)";
-    $("info-visits").textContent = "นัดที่ยังไม่ประสาน: เตือนก่อนวันนัด " + d(UPCOMING_DAYS) + " · เดือนไหนภาคใดยังไม่มีนัด เตือนทุกเช้าจนกว่าจะมี";
-    $("info-schedule").textContent = "เตือนในเช้าวันที่มีรายการนั้น (เด้งหน้าต่างรายการวันนี้ครั้งแรกของวัน)";
+    const d = n => "ก่อน " + n + " วัน";
+    const chip = (id, text, full) => { $(id).textContent = text; $(id).parentNode.title = full; $(id).parentNode.setAttribute("aria-label", "แจ้งเตือน" + full); };
+    chip("info-items", d(NOTIFY_DAYS), "ก่อนครบกำหนด " + NOTIFY_DAYS + " วัน และเตือนต่อหลังเลยกำหนดจนกว่าจะติ๊ก (สูงสุด " + PAST_NOTIFY_DAYS + " วัน)");
+    chip("info-rooms", d(ROOMS_NOTIFY_DAYS), "ก่อนวันนับถอยหลัง " + ROOMS_NOTIFY_DAYS + " วัน และเตือนต่อหลังเลยจนกว่าจะติ๊ก (สูงสุด " + PAST_NOTIFY_DAYS + " วัน)");
+    chip("info-photos", d(PHOTO_NOTIFY_DAYS), "แจ้งอัพโหลด/ติดตามรูป ก่อนวันส่ง " + PHOTO_NOTIFY_DAYS + " วัน · รายการเตือน ก่อนครบกำหนด " + NOTIFY_DAYS + " วัน · เลยแล้วเตือนต่อจนกว่าจะติ๊ก (สูงสุด " + PAST_NOTIFY_DAYS + " วัน)");
+    chip("info-monthly", d(MONTHLY_NOTIFY_DAYS), "ก่อนถึงวัน " + MONTHLY_NOTIFY_DAYS + " วัน และเตือนต่อหลังเลยจนกว่าจะติ๊ก (สูงสุด " + PAST_NOTIFY_DAYS + " วัน)");
+    chip("info-visits", d(UPCOMING_DAYS), "นัดที่ยังไม่ประสานก่อนวันนัด " + UPCOMING_DAYS + " วัน · เดือนไหนภาคใดยังไม่มีนัด เตือนทุกเช้า");
+    chip("info-schedule", "เช้าวันนั้น", "เตือนในเช้าวันที่มีรายการนั้น");
     $("m-add").onclick = () => openForm(-1);
     $("f-cancel").onclick = () => $("mform").close();
     $("f-save").onclick = saveForm;
