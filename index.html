@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-O0qpK5P5nt2Iu4lSb5BOz35KnbCb2nNZN4XKYjMsfD0='; style-src 'self' https://fonts.googleapis.com 'sha256-twObkyRfcx3Y1MWbtVbzFSjQJfq7ZzlH93lX5yeFLM4='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-XNg+NNzseAbwaybiITM2rhq49OwjinSE1fNRCzVqd2o='; style-src 'self' https://fonts.googleapis.com 'sha256-WXndc6dMgPFnZrhjatxisicOenbBgCOnT+iY8IDs5NE='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -660,7 +660,8 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .mjson textarea.plain { font-family: inherit; font-size: 16px; }
 .cpbtn { margin-top: 8px; }
 .btns .cpbtn { margin-top: 0; }
-.mbody .btns .btn { padding: 6px 8px; font-size: .875rem; line-height: 1.25; }
+.mbody .btns .btn { flex: 0 0 auto; padding: 4px 12px; font-size: .8125rem; line-height: 1.25; white-space: nowrap; }
+.pinfo { margin: 0 0 10px; font-size: .75rem; line-height: 1.45; color: var(--mute); }
 .mlabel { display: block; margin: 4px 0; font-size: .8125rem; color: var(--mute); }
 .mjson .hint { margin: 8px 0; font-size: .8125rem; color: var(--mute); }
 #push-devices { padding-left: 18px; margin-top: 8px; }
@@ -709,16 +710,16 @@ dialog > .form > .btns:last-child { position: sticky; bottom: 0; z-index: 2; mar
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--r);
-  padding: 14px 16px;
+  padding: 10px 14px;
 }
 .mrow.swipe { display: block; padding: 0; overflow: hidden; }
-.mrow .minner { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
-.mrow.next .minner { padding: 13px 15px; }
+.mrow .minner { display: flex; align-items: center; gap: 12px; padding: 10px 14px; }
+.mrow.next .minner { padding: 9px 13px; }
 .mrow.past { opacity: .75; }
 .mrow.done { opacity: .6; }
-.mrow.next { border: 2px solid var(--brand); padding: 13px 15px; }
-.mbody .meta + .meta { margin-top: 6px; }
-.mbody .btns { margin-top: 12px; }
+.mrow.next { border: 2px solid var(--brand); padding: 9px 13px; }
+.mbody .meta + .meta { margin-top: 3px; }
+.mbody .btns { margin-top: 8px; gap: 8px; }
 .mrow.none .mtitle { color: var(--mute); }
 .mon { flex: none; width: 40px; font-weight: 700; color: var(--brand); }
 .mbody { flex: 1; min-width: 0; }
@@ -1050,6 +1051,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         <span id="badge-msg"></span>
         <button type="button" id="badge-btn">เปิดใช้</button>
       </div>
+      <p class="pinfo" id="info-items"></p>
       <ul class="list" id="items"></ul>
       <details id="overdue-wrap" hidden>
         <summary>ผ่านกำหนดแล้ว</summary>
@@ -1063,6 +1065,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <div class="subpanel" id="sub-rooms" role="tabpanel" aria-labelledby="subtab-rooms" hidden>
       <div class="hsec" aria-labelledby="h-rooms">
         <h2 class="sech" id="h-rooms">ห้องที่ระลึก อ. ผู้มีพระคุณ</h2>
+        <p class="pinfo" id="info-rooms"></p>
         <div class="toprow"><button type="button" class="btn addbtn" id="r-add">+ เพิ่มรอบ</button></div>
         <ul class="months" id="rooms"></ul>
         <details id="rooms-done-wrap" hidden>
@@ -1078,6 +1081,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <div class="subpanel" id="sub-photos" role="tabpanel" aria-labelledby="subtab-photos" hidden>
       <div class="hsec" id="sec-photos" aria-labelledby="h-photos">
         <h2 class="sech" id="h-photos">แจ้งเรื่องรูปสนทนาธรรม 4 ฝ่าย</h2>
+        <p class="pinfo" id="info-photos"></p>
         <div class="toprow"><button type="button" class="btn addbtn" id="ph-add">+ เพิ่มรายการเตือน</button></div>
         <ul class="months" id="photos"></ul>
         <details id="photos-done-wrap" hidden>
@@ -1089,6 +1093,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <div class="subpanel" id="sub-monthly" role="tabpanel" aria-labelledby="subtab-monthly" hidden>
       <div class="hsec" aria-labelledby="h-monthly">
         <h2 class="sech" id="h-monthly">รายการประจำเดือน</h2>
+        <p class="pinfo" id="info-monthly"></p>
         <div class="toprow">
           <button type="button" class="btn addbtn" id="m-add">+ เพิ่มรายการประจำเดือน</button>
           <button type="button" class="btn ghost" id="mjson-copy">คัดลอก JSON</button>
@@ -1146,6 +1151,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <h3 id="v-list-title"></h3>
       <button type="button" class="btn sm" id="v-add">+ เพิ่มนัดเยี่ยม</button>
     </div>
+    <p class="pinfo" id="info-visits"></p>
     <p class="warnline" id="v-error" hidden></p>
     <ul class="list" id="v-list"></ul>
     </div>
@@ -1162,6 +1168,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <div class="vlegend"><span><i class="vdot ymd"></i>ยุวชนชาย</span><span><i class="vdot all"></i>ทุกฝ่าย / 4 ฝ่าย</span><button type="button" class="addcal addmonth" id="s-addmonth"></button></div>
       <button type="button" class="stog" id="s-tog" aria-label="ขยายปฏิทิน" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg><span class="t-open">ดูปฏิทินทั้งเดือน</span><span class="t-fold">ย่อปฏิทิน</span></button>
     </div>
+    <p class="pinfo" id="info-schedule"></p>
     <ul class="list" id="s-list"></ul>
     <button type="button" class="fab" id="s-add" aria-label="เพิ่มรายการ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
   </section>
@@ -1240,6 +1247,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <label>จำนวนคน<input id="rn-count" type="text" inputmode="numeric" maxlength="4" autocomplete="off"></label>
     </div>
     <label>เอกสารแจ้งข่าว<input id="rn-issue" type="text" maxlength="60" autocomplete="off" placeholder="เช่น ฉบับที่ 12"></label>
+    <label>เตือนนับถอยหลังถึงวันที่<input id="rn-dl" type="date"><span class="hint">เว้นว่าง = นับถึงวันที่ 1 ของเดือนที่จัด</span></label>
+    <label>ข้อความที่จะคัดลอก<textarea id="rn-msg" class="plain" spellcheck="false"></textarea><span class="hint">เว้นว่าง = ใช้ข้อความมาตรฐาน (ตั้งค่า &gt; ข้อความห้องที่ระลึก)</span></label>
     <p class="warnline" id="rn-error"></p>
     <div class="btns">
       <button type="button" class="btn ghost" id="rn-cancel">ยกเลิก</button>
@@ -1256,6 +1265,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     <label id="ph-name-wrap">เรื่องที่ต้องทำ *<input id="ph-name" type="text" maxlength="200" autocomplete="off"></label>
     <label><span id="ph-date-lab">วันที่</span><input id="ph-date" type="date"></label>
     <label>โน้ต (ถ้ามี)<input id="ph-note" type="text" maxlength="300" autocomplete="off"></label>
+    <label>ข้อความที่จะคัดลอก<textarea id="ph-msg" class="plain" spellcheck="false"></textarea><span class="hint" id="ph-msg-hint"></span></label>
     <p class="warnline" id="ph-error"></p>
     <div class="btns">
       <button type="button" class="btn ghost" id="ph-cancel">ยกเลิก</button>
@@ -1267,27 +1277,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
 <dialog id="msgform" aria-labelledby="msg-title">
   <div class="form">
-    <h3 id="msg-title">ข้อความสำหรับคัดลอก</h3>
+    <h3 id="msg-title">แก้ไขข้อความที่จะคัดลอก</h3>
     <p class="hint" id="msg-info"></p>
     <textarea id="msg-text" class="plain" spellcheck="false" placeholder="พิมพ์ข้อความที่จะคัดลอกไปส่ง"></textarea>
     <div class="btns">
       <button type="button" class="btn ghost" id="msg-cancel">ยกเลิก</button>
       <button type="button" class="btn danger" id="msg-reset" hidden>ล้างข้อความ</button>
       <button type="button" class="btn" id="msg-save">บันทึก</button>
-    </div>
-  </div>
-</dialog>
-
-<dialog id="rdform">
-  <div class="form">
-    <h3>แก้วันนับถอยหลัง</h3>
-    <p class="hint" id="rdform-info"></p>
-    <label>วันครบกำหนดแจ้งเตือน<input id="rd-date" type="date"></label>
-    <p class="warnline" id="rd-error"></p>
-    <div class="btns">
-      <button type="button" class="btn ghost" id="rd-cancel">ยกเลิก</button>
-      <button type="button" class="btn danger" id="rd-reset">คืนค่าปกติ</button>
-      <button type="button" class="btn" id="rd-save">บันทึก</button>
     </div>
   </div>
 </dialog>
@@ -2699,10 +2695,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       body.append(p);
     }
     if (it.verify) body.append(el("span", "verify", "ตรวจสอบกับต้นฉบับ"));
-    {
-      if (msgOf(key)) body.append(el("div", "promo", msgOf(key)));
+    if (msgOf(key)) {
+      body.append(el("div", "promo", msgOf(key)));
       const mr = el("div", "btns");
-      mr.append(...msgBtns(key, it.title || "", "", true));
+      mr.append(...msgCopy(key));
       body.append(mr);
     }
     if (d && n >= 0 && !isDone) {
@@ -2725,13 +2721,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
     const top = el("div", "ctop");
     top.append(tick, head);
-    c.append(top, body);
+    makeSwipe(c, top, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openMsg(key, it.title || "") }]);
+    c.append(body);
     return c;
   }
 
   // App icon badge (iOS 16.4+ installed web app; needs notification permission there)
   // Counts items due within BADGE_DAYS days (today included).
   const BADGE_DAYS = NOTIFY_DAYS;
+  const UPLOAD_NOTIFY_DAYS = 2;   // แจ้งอัพโหลดรูป: notified this many days before its send day (same literal as notify.mjs)
   const UPCOMING_DAYS = 7;   // นัดเยี่ยมที่ยังไม่ประสาน: notified this many days ahead (same number as notify.mjs, so the push shows the same count)
   const badgeOk = () => typeof navigator.setAppBadge === "function";
   const hasNotif = () => typeof Notification !== "undefined";
@@ -2876,6 +2874,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const uploadRule = () => (/^[0-6]:[0-4]$/.test(settings.uploadRule) ? settings.uploadRule : UPLOAD_RULE);
   const WEEKDAY_TH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
   const uploadRuleText = () => { const [w, n] = uploadRule().split(":"); return "ทุกเดือนวัน" + WEEKDAY_TH[+w] + (+n === 0 ? "สุดท้าย" : "ที่ " + n) + "ของเดือน"; };
+  const uploadRuleShort = () => { const [w, n] = uploadRule().split(":"); return WEEKDAY_TH[+w] + (+n === 0 ? "สุดท้าย" : "ที่ " + n); };
   const uploadMessage = ym => uploadTemplate().replace(/\{\s*([^{}\n]+?)\s*\}/g, (x, k) => (k === "เดือนนี้" ? MONTH_FULL[+ym.slice(5, 7) - 1] : x));
   const photos = { status: null, error: false, loading: false };
 
@@ -2883,40 +2882,35 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   // base = the built-in text (a template, or "" when there is none); the typed message wins while it is set.
   const msgOf = key => ((store.msgs[key] || {}).text || "");
   const msgText = (key, base) => msgOf(key) || base || "";
+  // Saves (or clears) the message of a card; text equal to the built-in one, or empty, means "follow the built-in text"
+  function setMsg(key, text, base) {
+    const t = String(text || "").trim();
+    const same = !t || t === String(base || "").trim();
+    if (same && !msgOf(key)) return;
+    store.msgs[key] = { text: same ? "" : t.slice(0, 2000), t: Date.now() };
+  }
+  // The "แจ้งข่าว" cards have no other edit form, so swiping one left opens this small dialog
   let msgTarget = null;
-  function openMsg(key, title, base) {
-    msgTarget = { key, base: base || "" };
-    $("msg-title").textContent = "ข้อความสำหรับคัดลอก";
-    $("msg-info").textContent = title + (base ? " · แก้จากข้อความมาตรฐานได้เลย ถ้าไม่แก้จะใช้ข้อความมาตรฐานต่อไป" : " · พิมพ์ข้อความที่จะคัดลอกไปส่ง");
-    $("msg-text").value = msgText(key, base);
+  function openMsg(key, title) {
+    msgTarget = { key };
+    $("msg-info").textContent = title;
+    $("msg-text").value = msgOf(key);
     $("msg-reset").hidden = !msgOf(key);
-    $("msg-reset").textContent = base ? "ใช้ข้อความมาตรฐาน" : "ล้างข้อความ";
     $("msgform").showModal();
   }
   function saveMsg(clear) {
-    const text = clear ? "" : $("msg-text").value.trim();
-    const same = text === msgTarget.base.trim();   // unchanged from the built-in text = keep following it
-    store.msgs[msgTarget.key] = { text: same ? "" : text.slice(0, 2000), t: Date.now() };
+    setMsg(msgTarget.key, clear ? "" : $("msg-text").value, "");
     persistLocal(); scheduleSync();
     $("msgform").close();
     refreshAll();
-    renderPhotos();
   }
-  // [copy, edit] buttons (copy only when there is something to copy); `copy` = true when the card has its own copy button
-  function msgBtns(key, title, base, withCopy) {
-    const out = [];
-    const text = msgText(key, base);
-    if (withCopy && text) {
-      const c = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
-      c.type = "button";
-      c.onclick = () => copyText(msgText(key, base), c);
-      out.push(c);
-    }
-    const e = el("button", "btn ghost sm", msgOf(key) || base ? "แก้ข้อความ" : "เพิ่มข้อความ");
-    e.type = "button";
-    e.onclick = () => openMsg(key, title, base);
-    out.push(e);
-    return out;
+  // "copy" button for a card that holds its own typed message (nothing when there is none)
+  function msgCopy(key) {
+    if (!msgOf(key)) return [];
+    const c = el("button", "btn ghost sm cpbtn", "คัดลอก");
+    c.type = "button";
+    c.onclick = () => copyText(msgOf(key), c);
+    return [c];
   }
 
   function photosMessage(month, miss) {
@@ -2940,20 +2934,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const ymU = isoDay(t).slice(0, 7), pk = "u" + ymU, keyU = boardKey("upload", ymU), isDoneU = done.has(keyU);
       const povU = store.photoOv[pk] || {};
       const sendU = parseDay(uploadSendDay(ymU, store.prefs, store.photoOv));
-      const metaU = countdown(diff(sendU, t))[0] + " · ส่งข้อความวันที่ " + sendU.getUTCDate() + " " + MONTHS[sendU.getUTCMonth()] + (povU.date ? " (ปรับเอง)" : " (" + uploadRuleText() + ")");
+      const metaU = countdown(diff(sendU, t))[0] + " · ส่งข้อความวันที่ " + sendU.getUTCDate() + " " + MONTHS[sendU.getUTCMonth()] + (povU.date ? " (ปรับเอง)" : " (" + uploadRuleShort() + ")");
       const extraU = [];
       if (povU.note) extraU.push(el("div", "meta", "โน้ต: " + povU.note));
-      const cpU = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+      const cpU = el("button", "btn ghost sm cpbtn", "คัดลอก");
       cpU.type = "button";
       cpU.onclick = () => copyText(msgText(keyU, uploadMessage(ymU)), cpU);
       const openU = el("a", "btn ghost sm", "หน้าส่งรูป");
       openU.href = UPLOAD_URL; openU.target = "_blank"; openU.rel = "noopener";
       const rowU = el("div", "btns");
       rowU.append(cpU, openU);
-      const rowU2 = el("div", "btns");
-      rowU2.append(...msgBtns(keyU, "แจ้งอัพโหลดรูปภาพ 4 ฝ่าย", uploadMessage(ymU), false));
-      extraU.push(rowU, rowU2);
-      const soonU = diff(sendU, t) <= 2;
+      extraU.push(rowU);
+      const soonU = diff(sendU, t) <= UPLOAD_NOTIFY_DAYS;
       const liU = mrow("later" + (isDoneU ? " done" : ""), MONTHS[+ymU.slice(5, 7) - 1], "แจ้งอัพโหลดรูปภาพ 4 ฝ่าย", metaU, soonU ? "ใกล้ถึงวันส่ง" : "ยังไม่ถึงวันส่ง", isDoneU ? null : soonU ? "warn" : "ok", extraU);
       const tickU = el("button", "otick" + (isDoneU ? " on" : ""));
       tickU.type = "button";
@@ -2965,7 +2957,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         renderPhotos();
       };
       liU.prepend(tickU);
-      swipeRow(liU, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "upload", pk, ym: ymU, send: sendU }) }]);
+      swipeRow(liU, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "upload", pk, ym: ymU, send: sendU, mkey: keyU, base: uploadMessage(ymU) }) }]);
       if (!isDoneU && soonU) badgeParts.photos++;
       (isDoneU ? doneLis : openLis).push(liU);
     }
@@ -2995,7 +2987,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         meta.push(countdown(diff(send, t))[0] + " · ส่งข้อความวันที่ " + send.getUTCDate() + " " + MONTHS[send.getUTCMonth()] + (pov.date ? " (ปรับเอง)" : ""));
         meta.push("ยังไม่ครบ " + miss.length + " จาก " + total + " ตำบล");
         const names = el("div", "meta", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "));
-        const cp = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+        const cp = el("button", "btn ghost sm cpbtn", "คัดลอก");
         cp.type = "button";
         cp.onclick = () => copyText(msgText(key, photosMessage(ym, miss)), cp);
         const open = el("a", "btn ghost sm", "หน้าส่งรูป");
@@ -3004,9 +2996,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         open.rel = "noopener";
         const row = el("div", "btns");
         row.append(cp, open);
-        const row2 = el("div", "btns");
-        row2.append(...msgBtns(key, "รูปสนทนาธรรม 4 ฝ่าย", photosMessage(ym, miss), false));
-        extra = [names, row, row2];
+        extra = [names, row];
         if (!isDone && diff(send, t) <= PHOTO_NOTIFY_DAYS) badgeParts.photos++;   // counts from 3 days before the send day until ticked
       }
       if (pov.note) extra.push(el("div", "meta", "โน้ต: " + pov.note));
@@ -3025,7 +3015,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         };
         li.prepend(tick);
       }
-      swipeRow(li, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "status", ym, send }) }]);
+      swipeRow(li, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "status", ym, send, mkey: key, base: miss.length ? photosMessage(ym, miss) : "" }) }]);
       (finished ? doneLis : openLis).push(li);
     }
     // reminders typed in the app
@@ -3037,9 +3027,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const soon = !!r.d && diff(r.d, t) <= 3;
       const rx = [];
       if (msgOf(key)) rx.push(el("div", "promo", msgOf(key)));
-      const rr = el("div", "btns");
-      rr.append(...msgBtns(key, r.title, "", true));
-      rx.push(rr);
+      if (msgOf(key)) { const rr = el("div", "btns"); rr.append(...msgCopy(key)); rx.push(rr); }
       const li = mrow("later" + (isDone ? " done" : ""), r.d ? MONTHS[r.d.getUTCMonth()] : "•", r.title, meta, soon ? "ใกล้ถึงกำหนด" : "ยังไม่ถึงกำหนด", isDone ? null : soon ? "warn" : "ok", rx);
       const tick = el("button", "otick" + (isDone ? " on" : ""));
       tick.type = "button";
@@ -3052,7 +3040,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       };
       li.prepend(tick);
       swipeRow(li, [
-        { label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "rem", id: r.id, r }) },
+        { label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "rem", id: r.id, r, mkey: key, base: "" }) },
         { label: "ลบ", cls: "sw-del", fn: () => deleteReminder(r) }
       ]);
       if (!isDone && r.d && diff(r.d, t) <= BADGE_DAYS) badgeParts.photos++;
@@ -3080,6 +3068,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("ph-date").value = status ? ((store.photoOv[pk] || {}).date || "") : r ? r.due : "";
     $("ph-note").value = status ? ((store.photoOv[pk] || {}).note || "") : r ? r.note : "";
     $("ph-error").textContent = "";
+    $("ph-msg").value = target.mkey ? msgText(target.mkey, target.base) : "";
+    $("ph-msg-hint").textContent = target.base ? "เว้นว่าง = ใช้ข้อความมาตรฐาน (ตั้งค่า > ข้อความของการ์ดนี้)" : "ข้อความที่จะคัดลอกไปส่ง (ถ้ามี)";
     $("ph-reset").hidden = !(status && store.photoOv[pk] && (store.photoOv[pk].date || store.photoOv[pk].note));
     $("phform").showModal();
   }
@@ -3088,10 +3078,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (date && !parse(date)) { $("ph-error").textContent = "วันที่ไม่ถูกต้อง"; return; }
     if (phTarget.kind !== "rem") {
       store.photoOv[phTarget.pk] = { date, note, t: now };
+      setMsg(phTarget.mkey, $("ph-msg").value, phTarget.base);
     } else {
       const title = $("ph-name").value.trim();
       if (!title) { $("ph-error").textContent = "ใส่เรื่องที่ต้องทำก่อน"; return; }
-      store.reminders[phTarget.id || newId()] = { title, due: date, note, t: now };
+      const id = phTarget.id || newId();
+      store.reminders[id] = { title, due: date, note, t: now };
+      setMsg(boardKey("reminder", id), $("ph-msg").value, "");
     }
     persistLocal(); scheduleSync();
     $("phform").close();
@@ -3161,23 +3154,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return li;
   }
 
-  const roomMonthStart = d => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
-
-  // "copy message" + "edit countdown date" buttons (and a note when the round has no head count per region yet)
+  // "copy message" button (and a note when the round has no head count per region yet)
   function roomActions({ r, d }) {
     const mk = roomKey(r.key), base = roomsMessage(r, d).text;
-    const btn = el("button", "btn ghost sm cpbtn", "คัดลอกข้อความ");
+    const btn = el("button", "btn ghost sm cpbtn", "คัดลอก");
     btn.type = "button";
     btn.onclick = () => copyText(msgText(mk, base), btn);
-    const eb = el("button", "btn ghost sm", "แก้วันนับถอยหลัง");
-    eb.type = "button";
-    eb.onclick = () => openRoomDate(r, d);
     const row = el("div", "btns");
-    row.append(btn, eb);
-    const row2 = el("div", "btns");
-    row2.append(...msgBtns(mk, "ห้องที่ระลึก " + fmt(d), base, false));
+    row.append(btn);
     const { missing } = roomsMessage(r, d);
-    return missing.length && !msgOf(mk) ? [row, row2, el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : [row, row2];
+    return missing.length && !msgOf(mk) ? [row, el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : [row];
   }
 
   function renderRooms(data, t) {
@@ -3256,7 +3242,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   ];
 
   // Add / edit / hide a round. state.rounds["b-<board date>"] edits (or hides) a round of the board, any other id is typed here
-  let rnTarget = null;
+  let rnTarget = null, rnBase = "";
   function openRound(r) {
     rnTarget = r || null;
     $("rn-title").textContent = r ? "แก้ไขรอบห้องที่ระลึก" : "เพิ่มรอบห้องที่ระลึก";
@@ -3264,6 +3250,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("rn-time").value = r ? r.time || "" : "";
     $("rn-count").value = r && r.count != null ? String(r.count) : "";
     $("rn-issue").value = r ? r.issue || "" : "";
+    const ov = r && store.roomDates[r.dl];
+    $("rn-dl").value = (ov && ov.date) || "";
+    rnBase = r ? roomsMessage(r, parse(r.date)).text : "";
+    $("rn-msg").value = r ? msgText(roomKey(r.key), rnBase) : "";
     $("rn-error").textContent = "";
     $("rn-reset").hidden = !(r && r.edited);
     $("rnform").showModal();
@@ -3272,8 +3262,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const date = $("rn-date").value, cnt = $("rn-count").value.trim();
     if (!parse(date)) { $("rn-error").textContent = "เลือกวันที่ก่อน"; return; }
     if (cnt && !(/^\d{1,4}$/.test(cnt) && +cnt <= 1000)) { $("rn-error").textContent = "จำนวนคนใส่เป็นตัวเลข 0–1000"; return; }
-    const id = rnTarget ? rnTarget.id : "m-" + newId();
-    store.rounds[id] = { date, time: $("rn-time").value.trim(), count: cnt === "" ? null : +cnt, issue: $("rn-issue").value.trim(), t: Date.now() };
+    const dlv = $("rn-dl").value;
+    if (dlv && !parse(dlv)) { $("rn-error").textContent = "วันที่เตือนไม่ถูกต้อง"; return; }
+    const id = rnTarget ? rnTarget.id : "m-" + newId(), now = Date.now();
+    store.rounds[id] = { date, time: $("rn-time").value.trim(), count: cnt === "" ? null : +cnt, issue: $("rn-issue").value.trim(), t: now };
+    // the countdown date is keyed by the round's own date (a board round keeps the board's date, a typed one follows its date)
+    const oldDl = rnTarget ? rnTarget.dl : null, newDl = rnTarget && !rnTarget.typed ? rnTarget.dl : date;
+    if (oldDl && oldDl !== newDl && store.roomDates[oldDl] && store.roomDates[oldDl].date) store.roomDates[oldDl] = { date: "", t: now };
+    if (dlv || (store.roomDates[newDl] && store.roomDates[newDl].date)) store.roomDates[newDl] = { date: dlv, t: now };
+    setMsg(roomKey(id), $("rn-msg").value, rnBase);
     persistLocal(); scheduleSync();
     $("rnform").close();
     refreshAll();
@@ -3289,35 +3286,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!confirm(r.typed ? "ลบรอบ " + fmt(d) + " ?" : "ซ่อนรอบ " + fmt(d) + " ? (เป็นรอบจากระบบดึงข้อมูล ซ่อนได้เฉพาะในแอปนี้)")) return;
     store.rounds[r.id] = { deleted: true, t: Date.now() };
     persistLocal(); scheduleSync();
-    refreshAll();
-  }
-
-  // Edit the date a round's countdown targets, synced via store.roomDates (keyed by the round's own date)
-  let rdTarget = null;
-  function openRoomDate(r, d) {
-    const def = roomMonthStart(d);
-    rdTarget = { key: r.dl, def };
-    const ov = store.roomDates[r.dl];
-    $("rdform-info").textContent = `รอบ ${fmt(d)} · ปกติ ${fmt(def)}`;
-    $("rd-date").value = (ov && ov.date) || isoDay(def);
-    $("rd-error").textContent = "";
-    $("rd-reset").hidden = !(ov && ov.date);
-    $("rdform").showModal();
-  }
-  function saveRoomDate() {
-    const date = $("rd-date").value;
-    if (!parse(date)) { $("rd-error").textContent = "เลือกวันที่ก่อน"; return; }
-    store.roomDates[rdTarget.key] = { date, t: Date.now() };
-    persistLocal();
-    scheduleSync();
-    $("rdform").close();
-    refreshAll();
-  }
-  function resetRoomDate() {
-    store.roomDates[rdTarget.key] = { date: "", t: Date.now() };
-    persistLocal();
-    scheduleSync();
-    $("rdform").close();
     refreshAll();
   }
 
@@ -3739,6 +3707,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
 
   function initMonthly() {
+    const d = n => n + " วัน";
+    $("info-items").textContent = "เตือนก่อนครบกำหนด " + d(NOTIFY_DAYS) + " และเตือนต่อทุกเช้าจนกว่าจะติ๊กว่าทำแล้ว";
+    $("info-rooms").textContent = "เตือนก่อนวันนับถอยหลัง " + d(ROOMS_NOTIFY_DAYS) + " และเตือนต่อจนกว่าจะติ๊กว่ายืนยันแล้ว";
+    $("info-photos").textContent = "แจ้งอัพโหลดรูป: เตือนก่อนวันส่ง " + d(UPLOAD_NOTIFY_DAYS) + " · ติดตามรูปที่ยังไม่ครบ: ก่อนวันส่ง " + d(PHOTO_NOTIFY_DAYS) + " · รายการเตือน: ก่อนครบกำหนด " + d(NOTIFY_DAYS) + " · เตือนต่อจนกว่าจะติ๊ก";
+    $("info-monthly").textContent = "เตือนก่อนถึงวัน " + d(MONTHLY_NOTIFY_DAYS) + " (ติ๊กแล้วไม่เตือน)";
+    $("info-visits").textContent = "นัดที่ยังไม่ประสาน: เตือนก่อนวันนัด " + d(UPCOMING_DAYS) + " · เดือนไหนภาคใดยังไม่มีนัด เตือนทุกเช้าจนกว่าจะมี";
+    $("info-schedule").textContent = "เตือนในเช้าวันที่มีรายการนั้น (เด้งหน้าต่างรายการวันนี้ครั้งแรกของวัน)";
     $("m-add").onclick = () => openForm(-1);
     $("f-cancel").onclick = () => $("mform").close();
     $("f-save").onclick = saveForm;
@@ -3756,9 +3731,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("msg-cancel").onclick = () => $("msgform").close();
     $("msg-save").onclick = () => saveMsg(false);
     $("msg-reset").onclick = () => saveMsg(true);
-    $("rd-cancel").onclick = () => $("rdform").close();
-    $("rd-save").onclick = saveRoomDate;
-    $("rd-reset").onclick = resetRoomDate;
     const ta = $("mjson-text"), st = $("mjson-status"), det = $("mjson");
     ta.value = monthly.json;
     const check = () => {
@@ -3855,8 +3827,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (ta.value !== want) ta.value = want;
       check();
     };
-    const dialogSave = { mform: saveForm, oform: saveOverride, rdform: saveRoomDate, rnform: saveRound, phform: savePhoto };
-    for (const id of ["mform", "oform", "rdform", "rnform", "phform"]) {
+    const dialogSave = { mform: saveForm, oform: saveOverride, rnform: saveRound, phform: savePhoto };
+    for (const id of ["mform", "oform", "rnform", "phform"]) {
       $(id).addEventListener("keydown", e => {
         if ((e.ctrlKey || e.metaKey) && e.key === "Enter") dialogSave[id]();
       });
