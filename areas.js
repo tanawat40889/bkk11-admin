@@ -1,28 +1,24 @@
-// หน้า "จัดการพื้นที่" ของ Admin: แก้โครงสร้าง รวมภาค > ภาค > เขต > ตำบล > หมู่ (ตาราง public.areas ที่ทุกโปรเจกต์ใช้ร่วมกัน)
-// สิทธิ์จริงอยู่ที่ฐานข้อมูล (ฟังก์ชัน area_* ตรวจ is_ymd_rwp_leader()); หน้านี้แค่แสดงผลและเรียกฟังก์ชัน
-// สร้างหน้าด้วย textContent / DOM เท่านั้น (ไม่ประกอบ HTML เป็นข้อความ) เหมือน access.js
 (function () {
   "use strict";
   const URL_ = "https://cqdzfsucpivsgznfpjxl.supabase.co";
-  const KEY = "sb_publishable_XkUBjE3M7HUiuDv7YwsbKA_mSu0ToEc";
-  const SESSION_KEY = "tokan_session_v1";   // shared with โทกัง / Admin / แผนที่ (same origin)
+  const PUBLISHABLE_KEY = "sb_publishable_XkUBjE3M7HUiuDv7YwsbKA_mSu0ToEc";
+  const SESSION_KEY = "tokan_session_v1";
 
 const LEVELS = ['rwp', 'phak', 'khet', 'tambon', 'moo'];
 const LEVEL_TH = { rwp: 'รวมภาค', phak: 'ภาค', khet: 'เขต', tambon: 'ตำบล', moo: 'หมู่' };
-const NO_RENAME = new Set(['rwp', 'phak']); // ตรงกับฟังก์ชัน area_rename
+const NO_RENAME = new Set(['rwp', 'phak']);
 
 const $ = id => document.getElementById(id);
 const OPEN_KEY = 'areas_open_v1';
 
-let areas = [];      // แถวจาก areas
-let aliases = [];    // แถวจาก area_aliases
-let stats = new Map(); // area_id -> จำนวนสมาชิก
+let areas = [];
+let aliases = [];
+let stats = new Map();
 let mismatches = [];
-let open = new Set(); // id ของ node ที่ขยายอยู่
-let query = '';       // คำค้นหา
-let sheetId = null;   // พื้นที่ที่เปิดแผงแก้ไขอยู่ (null = ไม่มี/เพิ่มรวมภาค)
+let open = new Set();
+let query = '';
+let sheetId = null;
 
-// ---------- session (same rules as access.js: a refresh token is single use and the other apps share it) ----------
 const load = () => { try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; } };
 const save = s => { try { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } catch (e) {} };
 const clear = () => { try { localStorage.removeItem(SESSION_KEY); } catch (e) {} };
@@ -35,7 +31,7 @@ function refresh(s) {
     if (cur && s && cur.refresh_token !== s.refresh_token && fresh(cur)) return cur;
     const base = cur && cur.refresh_token ? { ...s, ...cur } : s;
     let r;
-    try { r = await fetch(`${URL_}/auth/v1/token?grant_type=refresh_token`, { method: "POST", headers: { apikey: KEY, "content-type": "application/json" }, body: JSON.stringify({ refresh_token: base.refresh_token }) }); } catch (e) { return null; }
+    try { r = await fetch(`${URL_}/auth/v1/token?grant_type=refresh_token`, { method: "POST", headers: { apikey: PUBLISHABLE_KEY, "content-type": "application/json" }, body: JSON.stringify({ refresh_token: base.refresh_token }) }); } catch (e) { return null; }
     if (!r.ok) { const again = load(); return again && fresh(again) ? again : null; }
     const d = await r.json();
     const next = { ...base, access_token: d.access_token, refresh_token: d.refresh_token, expires_at: d.expires_at };
@@ -47,16 +43,16 @@ function refresh(s) {
 async function call(path, init = {}) {
   let s = load();
   if (!s) throw Object.assign(new Error("signed out"), { status: 401 });
-  const go = tok => fetch(`${URL_}/rest/v1/${path}`, { method: init.method || "GET", headers: { apikey: KEY, Authorization: "Bearer " + tok, "content-type": "application/json" }, body: init.body === undefined ? undefined : JSON.stringify(init.body) });
-  let r = await go(s.access_token);
+  const fetchWithToken = token => fetch(`${URL_}/rest/v1/${path}`, { method: init.method || "GET", headers: { apikey: PUBLISHABLE_KEY, Authorization: "Bearer " + token, "content-type": "application/json" }, body: init.body === undefined ? undefined : JSON.stringify(init.body) });
+  let r = await fetchWithToken(s.access_token);
   if (r.status === 401) {
     s = await refresh(s);
     if (!s) throw Object.assign(new Error("expired"), { status: 401 });
-    r = await go(s.access_token);
+    r = await fetchWithToken(s.access_token);
   }
   const text = await r.text();
   let data = null;
-  try { data = text ? JSON.parse(text) : null; } catch (e) { /* not JSON */ }
+  try { data = text ? JSON.parse(text) : null; } catch (e) {  }
   if (!r.ok) throw Object.assign(new Error((data && data.message) || `HTTP ${r.status}`), { status: r.status, code: data && data.code });
   return data;
 }
@@ -69,22 +65,21 @@ function el(tag, cls, text) {
   if (text !== undefined) e.textContent = text;
   return e;
 }
-const SVG = 'http://www.w3.org/2000/svg';
+const SVG_NS = 'http://www.w3.org/2000/svg';
 function icon(kind) {
-  const s = document.createElementNS(SVG, 'svg');
+  const s = document.createElementNS(SVG_NS, 'svg');
   s.setAttribute('viewBox', '0 0 16 16');
   s.setAttribute('class', `ico ico-${kind}`);
   s.setAttribute('aria-hidden', 'true');
-  const p = document.createElementNS(SVG, 'path');
-  p.setAttribute('d', kind === 'chev' ? 'M6 3.5 10.5 8 6 12.5' : 'M4 4l8 8M12 4l-8 8');
-  s.append(p);
+  const svgPath = document.createElementNS(SVG_NS, 'path');
+  svgPath.setAttribute('d', kind === 'chev' ? 'M6 3.5 10.5 8 6 12.5' : 'M4 4l8 8M12 4l-8 8');
+  s.append(svgPath);
   return s;
 }
 const fmt = n => Number(n).toLocaleString('th');
 
 function showMsg(text) { $('msg').textContent = text; $('msg').hidden = !text; }
 
-// ---------- โหลดข้อมูล ----------
 async function loadAll() {
   const [a, al, st, mm] = await Promise.all([
     api('areas?select=*&order=sort_order,id&limit=5000'),
@@ -101,13 +96,11 @@ const byId = id => areas.find(a => a.id === id);
 const aliasesOf = id => aliases.filter(x => x.area_id === id);
 const nextLevel = a => LEVELS[LEVELS.indexOf(a.level) + 1];
 function pathOf(a) {
-  const p = [];
-  for (let x = a; x; x = x.parent_id == null ? null : byId(x.parent_id)) p.unshift(x.name);
-  return p;
+  const parts = [];
+  for (let x = a; x; x = x.parent_id == null ? null : byId(x.parent_id)) parts.unshift(x.name);
+  return parts;
 }
 
-// ---------- ต้นไม้ ----------
-// ค้นหา: แสดงพื้นที่ที่ชื่อ/ชื่อสำรองตรง + ต้นสังกัดทั้งสาย + พื้นที่ย่อยของมัน
 function shownSet() {
   const q = query.trim().toLowerCase();
   if (!q) return null;
@@ -122,9 +115,9 @@ function shownSet() {
 }
 
 function renderSummary() {
-  const n = lv => areas.filter(a => a.level === lv).length;
+  const countAtLevel = levelName => areas.filter(a => a.level === levelName).length;
   const total = areas.filter(a => a.level === 'rwp').reduce((t, a) => t + (stats.get(a.id) ?? 0), 0);
-  $('summary').textContent = `${n('phak')} ภาค · ${n('khet')} เขต · ${n('tambon')} ตำบล · ${n('moo')} หมู่ · สมาชิก ${fmt(total)} คน`;
+  $('summary').textContent = `${countAtLevel('phak')} ภาค · ${countAtLevel('khet')} เขต · ${countAtLevel('tambon')} ตำบล · ${countAtLevel('moo')} หมู่ · สมาชิก ${fmt(total)} คน`;
 }
 
 function renderTree() {
@@ -132,18 +125,18 @@ function renderTree() {
   const shown = shownSet();
   const root = $('tree');
   root.replaceChildren();
-  const ul = el('ul', 'tree-ul');
-  areas.filter(a => a.parent_id == null && (!shown || shown.has(a.id))).forEach(a => ul.append(renderNode(a, shown)));
-  root.append(ul);
+  const treeList = el('ul', 'tree-ul');
+  areas.filter(a => a.parent_id == null && (!shown || shown.has(a.id))).forEach(a => treeList.append(renderNode(a, shown)));
+  root.append(treeList);
   $('noHit').hidden = !shown || shown.size > 0;
   const allOpen = areas.filter(a => childrenOf(a.id).length).every(a => open.has(a.id));
   $('toggleAll').textContent = allOpen ? 'ยุบทั้งหมด' : 'ขยายทั้งหมด';
   $('toggleAll').hidden = !!shown;
   if (!shown) {
-    const add = el('button', 'link', 'เพิ่มรวมภาคใหม่');
-    add.type = 'button';
-    add.addEventListener('click', () => openSheet(null));
-    root.append(add);
+    const addRootButton = el('button', 'link', 'เพิ่มรวมภาคใหม่');
+    addRootButton.type = 'button';
+    addRootButton.addEventListener('click', () => openSheet(null));
+    root.append(addRootButton);
   }
 }
 
@@ -161,7 +154,7 @@ function renderNode(a, shown) {
     main.addEventListener('click', () => {
       if (shown) return;
       isOpen ? open.delete(a.id) : open.add(a.id);
-      try { localStorage.setItem(OPEN_KEY, JSON.stringify([...open])); } catch { /* ignore */ }
+      try { localStorage.setItem(OPEN_KEY, JSON.stringify([...open])); } catch {  }
       renderTree();
     });
   } else {
@@ -175,17 +168,16 @@ function renderNode(a, shown) {
   row.append(main, edit);
   li.append(row);
 
-  const al = aliasesOf(a.id);
-  if (al.length) li.append(el('p', 'aliases', `ชื่อสำรอง: ${al.map(x => x.alias).join(', ')}`));
+  const aliasItems = aliasesOf(a.id);
+  if (aliasItems.length) li.append(el('p', 'aliases', `ชื่อสำรอง: ${aliasItems.map(x => x.alias).join(', ')}`));
   if (kids.length && isOpen) {
-    const ul = el('ul', 'tree-ul');
-    kids.forEach(k => ul.append(renderNode(k, shown)));
-    li.append(ul);
+    const treeList = el('ul', 'tree-ul');
+    kids.forEach(k => treeList.append(renderNode(k, shown)));
+    li.append(treeList);
   }
   return li;
 }
 
-// ---------- แผงแก้ไข ----------
 function setStatus(text, kind) {
   const s = $('sheetStatus');
   s.textContent = text || '';
@@ -200,7 +192,6 @@ function openSheet(id) {
   if (!$('sheet').open) $('sheet').showModal();
 }
 
-// ทำงานหนึ่งอย่าง แล้วโหลดใหม่และวาดแผงเดิมซ้ำ (แผงไม่ปิด จะได้แก้ต่อได้)
 async function act(fn, okText) {
   setStatus('กำลังบันทึก…', 'busy');
   try {
@@ -222,23 +213,22 @@ function section(title, ...kids) {
 }
 
 function textForm(label, placeholder, value, btnLabel, onSubmit) {
-  const f = el('form', 'inline-form');
-  const l = el('label');
-  l.append(el('span', 'sr', label));
-  const i = el('input');
-  i.type = 'text'; i.maxLength = 100; i.required = true; i.autocomplete = 'off'; i.placeholder = placeholder; i.value = value;
-  l.append(i);
-  const b = el('button', 'btn-solid', btnLabel);
-  b.type = 'submit';
-  f.append(l, b);
-  f.addEventListener('submit', e => { e.preventDefault(); onSubmit(i.value.trim()); });
-  return f;
+  const formEl = el('form', 'inline-form');
+  const labelEl = el('label');
+  labelEl.append(el('span', 'sr', label));
+  const inputEl = el('input');
+  inputEl.type = 'text'; inputEl.maxLength = 100; inputEl.required = true; inputEl.autocomplete = 'off'; inputEl.placeholder = placeholder; inputEl.value = value;
+  labelEl.append(inputEl);
+  const actionBtn = el('button', 'btn-solid', btnLabel);
+  actionBtn.type = 'submit';
+  formEl.append(labelEl, actionBtn);
+  formEl.addEventListener('submit', e => { e.preventDefault(); onSubmit(inputEl.value.trim()); });
+  return formEl;
 }
 
 function renderSheet() {
   const body = $('sheetBody');
   body.replaceChildren();
-  // sheetId null = เพิ่มรวมภาคใหม่
   if (sheetId == null) {
     $('sheetPath').textContent = '';
     $('sheetTitle').textContent = 'เพิ่มรวมภาคใหม่';
@@ -248,50 +238,46 @@ function renderSheet() {
   }
   const a = byId(sheetId);
   if (!a) return;
-  const n = stats.get(a.id) ?? 0, kids = childrenOf(a.id), nl = nextLevel(a);
+  const memberCount = stats.get(a.id) ?? 0, kids = childrenOf(a.id), childLevel = nextLevel(a);
   $('sheetPath').textContent = pathOf(a).slice(0, -1).join(' › ');
   $('sheetTitle').textContent = a.name;
-  $('sheetMeta').textContent = `${LEVEL_TH[a.level]} · สมาชิก ${fmt(n)} คน${kids.length ? ` · ${kids.length} ${LEVEL_TH[nl]}` : ''}`;
+  $('sheetMeta').textContent = `${LEVEL_TH[a.level]} · สมาชิก ${fmt(memberCount)} คน${kids.length ? ` · ${kids.length} ${LEVEL_TH[childLevel]}` : ''}`;
 
-  // ชื่อ
   if (NO_RENAME.has(a.level)) {
     body.append(section('ชื่อ', el('p', 'dim', `ยังเปลี่ยนชื่อ${LEVEL_TH[a.level]}ไม่ได้ เพราะโปรเจกต์อื่นยังใช้ชื่อนี้อยู่`)));
   } else {
-    const f = textForm('ชื่อ', 'ชื่อพื้นที่', a.name, 'บันทึกชื่อ', name => {
+    const formEl = textForm('ชื่อ', 'ชื่อพื้นที่', a.name, 'บันทึกชื่อ', name => {
       if (name === a.name) return setStatus('ชื่อเหมือนเดิม', 'err');
       act(() => rpc('area_rename', { p_id: a.id, p_name: name }), 'เปลี่ยนชื่อแล้ว');
     });
-    body.append(section('ชื่อ', f, el('p', 'dim', n ? `จะแก้ชื่อในข้อมูลสมาชิก ${fmt(n)} คนให้ด้วย และเก็บชื่อเดิมเป็นชื่อสำรอง` : 'ยังไม่มีสมาชิกในพื้นที่นี้')));
+    body.append(section('ชื่อ', formEl, el('p', 'dim', memberCount ? `จะแก้ชื่อในข้อมูลสมาชิก ${fmt(memberCount)} คนให้ด้วย และเก็บชื่อเดิมเป็นชื่อสำรอง` : 'ยังไม่มีสมาชิกในพื้นที่นี้')));
   }
 
-  // เพิ่มพื้นที่ย่อย
-  if (nl) {
-    body.append(section(`เพิ่ม${LEVEL_TH[nl]}ใน ${a.name}`,
-      textForm(`ชื่อ${LEVEL_TH[nl]}ใหม่`, `ชื่อ${LEVEL_TH[nl]}ใหม่`, '', 'เพิ่ม', name => {
+  if (childLevel) {
+    body.append(section(`เพิ่ม${LEVEL_TH[childLevel]}ใน ${a.name}`,
+      textForm(`ชื่อ${LEVEL_TH[childLevel]}ใหม่`, `ชื่อ${LEVEL_TH[childLevel]}ใหม่`, '', 'เพิ่ม', name => {
         open.add(a.id);
-        act(() => rpc('area_add', { p_parent: a.id, p_name: name }), `เพิ่ม${LEVEL_TH[nl]} "${name}" แล้ว`);
+        act(() => rpc('area_add', { p_parent: a.id, p_name: name }), `เพิ่ม${LEVEL_TH[childLevel]} "${name}" แล้ว`);
       })));
   }
 
-  // ชื่อสำรอง
-  const al = aliasesOf(a.id);
+  const aliasItems = aliasesOf(a.id);
   const chips = el('div', 'chips');
-  al.forEach(x => {
-    const c = el('span', 'alias', x.alias);
-    const rm = el('button', 'alias-x');
-    rm.type = 'button';
-    rm.setAttribute('aria-label', `ลบชื่อสำรอง ${x.alias}`);
-    rm.append(icon('x'));
-    rm.addEventListener('click', () => act(() => rpc('area_alias_delete', { p_alias_id: x.id }), 'ลบชื่อสำรองแล้ว'));
-    c.append(rm);
-    chips.append(c);
+  aliasItems.forEach(x => {
+    const aliasChip = el('span', 'alias', x.alias);
+    const removeButton = el('button', 'alias-x');
+    removeButton.type = 'button';
+    removeButton.setAttribute('aria-label', `ลบชื่อสำรอง ${x.alias}`);
+    removeButton.append(icon('x'));
+    removeButton.addEventListener('click', () => act(() => rpc('area_alias_delete', { p_alias_id: x.id }), 'ลบชื่อสำรองแล้ว'));
+    aliasChip.append(removeButton);
+    chips.append(aliasChip);
   });
   body.append(section('ชื่อสำรอง',
     el('p', 'dim', 'ชื่อที่โปรเจกต์หรือไฟล์อื่นสะกดต่างออกไป ระบบจะรู้ว่าเป็นพื้นที่เดียวกัน'),
-    al.length ? chips : el('p', 'dim', 'ยังไม่มี'),
+    aliasItems.length ? chips : el('p', 'dim', 'ยังไม่มี'),
     textForm('ชื่อสำรองใหม่', 'เพิ่มชื่อสำรอง', '', 'เพิ่ม', alias => act(() => rpc('area_alias_add', { p_id: a.id, p_alias: alias }), 'เพิ่มชื่อสำรองแล้ว'))));
 
-  // ลำดับ
   const sibs = areas.filter(x => (x.parent_id ?? 0) === (a.parent_id ?? 0));
   if (sibs.length > 1) {
     const i = sibs.findIndex(x => x.id === a.id);
@@ -300,29 +286,27 @@ function renderSheet() {
       [ids[i], ids[i + d]] = [ids[i + d], ids[i]];
       act(() => rpc('area_reorder', { p_ids: ids }), 'จัดลำดับแล้ว');
     };
-    const up = el('button', 'btn-outline', 'เลื่อนขึ้น'), down = el('button', 'btn-outline', 'เลื่อนลง');
-    up.type = down.type = 'button';
-    up.disabled = i === 0; down.disabled = i === sibs.length - 1;
-    up.addEventListener('click', () => go(-1)); down.addEventListener('click', () => go(1));
+    const moveUpButton = el('button', 'btn-outline', 'เลื่อนขึ้น'), down = el('button', 'btn-outline', 'เลื่อนลง');
+    moveUpButton.type = down.type = 'button';
+    moveUpButton.disabled = i === 0; down.disabled = i === sibs.length - 1;
+    moveUpButton.addEventListener('click', () => go(-1)); down.addEventListener('click', () => go(1));
     const r = el('div', 'btn-row');
-    r.append(up, down);
+    r.append(moveUpButton, down);
     body.append(section('ลำดับ', el('p', 'dim', `ลำดับที่ ${i + 1} จาก ${sibs.length} ในกลุ่มเดียวกัน`), r));
   }
 
-  // ลบ
-  const del = el('button', 'btn-danger', `ลบ${LEVEL_TH[a.level]}นี้`);
-  del.type = 'button';
-  const why = kids.length ? `ลบไม่ได้ ยังมี${LEVEL_TH[nl]}อยู่ข้างใน ${kids.length} แห่ง ต้องลบข้างในก่อน`
-    : n ? `ลบไม่ได้ ยังมีสมาชิก ${fmt(n)} คนอยู่ในพื้นที่นี้` : '';
-  del.disabled = !!why;
-  del.addEventListener('click', () => {
+  const deleteButton = el('button', 'btn-danger', `ลบ${LEVEL_TH[a.level]}นี้`);
+  deleteButton.type = 'button';
+  const blockReason = kids.length ? `ลบไม่ได้ ยังมี${LEVEL_TH[childLevel]}อยู่ข้างใน ${kids.length} แห่ง ต้องลบข้างในก่อน`
+    : memberCount ? `ลบไม่ได้ ยังมีสมาชิก ${fmt(memberCount)} คนอยู่ในพื้นที่นี้` : '';
+  deleteButton.disabled = !!blockReason;
+  deleteButton.addEventListener('click', () => {
     if (!confirm(`ลบ${LEVEL_TH[a.level]} "${a.name}" ?`)) return;
     act(() => rpc('area_delete', { p_id: a.id }), 'ลบแล้ว');
   });
-  body.append(section('ลบ', del, why ? el('p', 'dim', why) : el('p', 'dim', 'ลบแล้วย้อนกลับไม่ได้')));
+  body.append(section('ลบ', deleteButton, blockReason ? el('p', 'dim', blockReason) : el('p', 'dim', 'ลบแล้วย้อนกลับไม่ได้')));
 }
 
-// ---------- ชื่อที่ไม่ตรง ----------
 function renderMismatch() {
   const list = $('mmList');
   list.replaceChildren();
@@ -331,27 +315,26 @@ function renderMismatch() {
   badge.textContent = mismatches.length;
   if (!mismatches.length) return list.append(el('p', 'ok-note', 'ชื่อพื้นที่ทุกแห่งในข้อมูลสมาชิก ตรงกับโครงสร้างแล้ว'));
   mismatches.forEach(m => {
-    const names = [m.rwp_nt, m.phak_nt, m.sh_nt, m.ch_nt, m.ha_nt];
-    const bad = LEVELS.indexOf(m.bad_level);
+    const names = [m.rwp_name, m.phak_name, m.khet_name, m.tambon_name, m.moo_name];
+    const badIndex = LEVELS.indexOf(m.bad_level);
     const card = el('div', 'mm');
-    card.append(el('p', 'mm-title', `${LEVEL_TH[m.bad_level]} "${names[bad]}" ยังไม่มีในโครงสร้าง`));
+    card.append(el('p', 'mm-title', `${LEVEL_TH[m.bad_level]} "${names[badIndex]}" ยังไม่มีในโครงสร้าง`));
     card.append(el('p', 'dim', `${names.filter(n => n != null).join(' › ')} · สมาชิก ${fmt(m.members)} คน`));
-    const parent = bad === 0 ? null : areas.find(a => a.level === LEVELS[bad - 1] && pathOf(a).join('\u0001') === names.slice(0, bad).join('\u0001'));
-    if (bad === 0 || parent) {
-      const b = el('button', 'btn-solid', `เพิ่ม${LEVEL_TH[m.bad_level]}นี้เข้าโครงสร้าง`);
-      b.type = 'button';
-      b.addEventListener('click', async () => {
-        b.disabled = true;
-        try { await rpc('area_add', { p_parent: parent ? parent.id : null, p_name: names[bad] }); await loadAll(); renderAll(); }
-        catch (e) { b.disabled = false; alert(e.message); }
+    const parent = badIndex === 0 ? null : areas.find(a => a.level === LEVELS[badIndex - 1] && pathOf(a).join('\u0001') === names.slice(0, badIndex).join('\u0001'));
+    if (badIndex === 0 || parent) {
+      const actionBtn = el('button', 'btn-solid', `เพิ่ม${LEVEL_TH[m.bad_level]}นี้เข้าโครงสร้าง`);
+      actionBtn.type = 'button';
+      actionBtn.addEventListener('click', async () => {
+        actionBtn.disabled = true;
+        try { await rpc('area_add', { p_parent: parent ? parent.id : null, p_name: names[badIndex] }); await loadAll(); renderAll(); }
+        catch (e) { actionBtn.disabled = false; alert(e.message); }
       });
-      card.append(b);
-    } else card.append(el('p', 'dim', `ต้องเพิ่ม${LEVEL_TH[LEVELS[bad - 1]]}ที่อยู่ข้างบนก่อน`));
+      card.append(actionBtn);
+    } else card.append(el('p', 'dim', `ต้องเพิ่ม${LEVEL_TH[LEVELS[badIndex - 1]]}ที่อยู่ข้างบนก่อน`));
     list.append(card);
   });
 }
 
-// ---------- ประวัติ ----------
 const ACTION_TH = { add: 'เพิ่ม', rename: 'เปลี่ยนชื่อ', delete: 'ลบ', alias_add: 'เพิ่มชื่อสำรอง', alias_delete: 'ลบชื่อสำรอง' };
 async function renderLog() {
   const list = $('logList');
@@ -374,7 +357,6 @@ async function renderLog() {
 
 function renderAll() { renderTree(); renderMismatch(); }
 
-// ---------- เริ่มต้น ----------
 function applyTheme() {
   try { const th = localStorage.getItem("bkk11-theme"); if (th === "light" || th === "dark") document.documentElement.dataset.theme = th; } catch (e) {}
 }
@@ -385,11 +367,10 @@ function initUi() {
     const parents = areas.filter(a => childrenOf(a.id).length);
     const allOpen = parents.every(a => open.has(a.id));
     open = new Set(allOpen ? [] : parents.map(a => a.id));
-    try { localStorage.setItem(OPEN_KEY, JSON.stringify([...open])); } catch { /* ignore */ }
+    try { localStorage.setItem(OPEN_KEY, JSON.stringify([...open])); } catch {  }
     renderTree();
   });
   $('sheetClose').addEventListener('click', () => $('sheet').close());
-  // แตะนอกแผงเพื่อปิด
   $('sheet').addEventListener('click', e => { if (e.target === $('sheet')) $('sheet').close(); });
   $('sheet').addEventListener('close', () => { sheetId = null; });
 }

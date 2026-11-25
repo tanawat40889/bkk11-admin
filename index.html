@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-Qx08+y/C091kiOjg4DYF+b4pxSVck8cMVblTzrPvn6c='; style-src 'self' https://fonts.googleapis.com 'sha256-aaKr6zsND0dNXduagCHkpnrJCMwp+ZYAsgKJNjJc7xI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-RnMANDlNRl80wU2EhQKhppXnF9QUWF2fffA/SqIpS3U=' 'sha256-wzPdhiyX1IlGiSPEu+EuVYqs5skFUndoHFXLnLfd/JQ=' 'sha256-EHOfmIInTOtGFawXTnJYxYYNqxfU+dHVJtOElBFAQPU='; style-src 'self' https://fonts.googleapis.com 'sha256-mp9/vs31fuRAsRm30gt6ncKcFdQRoUV58dW9HH8ref8='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
-<script>try{var th=localStorage.getItem("bkk11-theme");if(th==="light"||th==="dark")document.documentElement.dataset.theme=th}catch(e){}</script>
+<script>try{var savedTheme=localStorage.getItem("bkk11-theme");if(savedTheme==="light"||savedTheme==="dark")document.documentElement.dataset.theme=savedTheme}catch(e){}</script>
 <style>
 :root {
   color-scheme: light;
@@ -52,7 +52,7 @@
   --sab: env(safe-area-inset-bottom, 0px);
   --bar: #0b2a6f;
   --tabs-h: 0px;
-  --hdr-h: 100px;   /* sticky header height, measured by JS */
+  --hdr-h: 100px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -108,7 +108,7 @@
 }
 * { box-sizing: border-box; margin: 0; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-bottom: calc(100px + var(--sab)); }   /* keep things scrolled into view clear of the floating menu */
+html { -webkit-text-size-adjust: 100%; scroll-padding-bottom: calc(100px + var(--sab)); }
 button { touch-action: manipulation; }
 body {
   font-family: "Noto Sans Thai", system-ui, sans-serif;
@@ -116,7 +116,7 @@ body {
   color: var(--ink);
   line-height: 1.55;
   font-size: 16px;
-  min-height: 100dvh;   /* a short page (the first tab) still fills the screen, so iOS places the fixed menu at the true bottom */
+  min-height: 100dvh;
   overscroll-behavior-y: none;
 }
 header {
@@ -134,7 +134,6 @@ header img { flex: none; width: 96px; height: auto; }
 main { padding: 0 max(16px, var(--sar)) calc(120px + var(--sab)) max(16px, var(--sal)); max-width: 640px; margin: 0 auto; }
 section { margin-top: 16px; }
 
-/* Floating glass menu at the bottom: icon with its short name underneath (iOS tab bar style) */
 .tabs {
   position: fixed;
   z-index: 20;
@@ -142,7 +141,7 @@ section { margin-top: 16px; }
   right: 0;
   margin: 0 auto;
   bottom: calc(var(--sab) + 12px);
-  translate: 0 calc(-1 * var(--sab));   /* with the JS top (which ignores the inset) this lands at bottom + inset */
+  translate: 0 calc(-1 * var(--sab));
   display: flex;
   gap: 4px;
   width: min(calc(100% - 24px - var(--sal) - var(--sar)), 420px);
@@ -274,7 +273,6 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .swact .sw-del { background: #dc2626; }
 .swbody { position: relative; background: var(--card); transition: transform .2s ease; touch-action: pan-y; }
 .swbody.drag { transition: none; }
-/* ฐานข้อมูล YMD (the former YMD DB app) */
 .ybar { position: sticky; top: var(--hdr-h); z-index: 4; display: flex; align-items: center; gap: 8px; margin: 0 calc(-1 * max(16px, var(--sal))) 0; padding: 10px max(16px, var(--sar)) 10px max(16px, var(--sal)); background: var(--bg); }
 .ybar .field { flex: 1; min-width: 0; margin: 0; }
 .ytog { display: flex; flex: none; padding: 3px; gap: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
@@ -291,7 +289,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .ycard.st-Active { --lc: var(--ok); }
 .ycard.st-Visiting { --lc: var(--warn); }
 .ycard.st-Passive { --lc: var(--mute); }
-.ycard .ctop { align-items: center; height: 4rem; }   /* every card the same height: one line for the name, one for the details */
+.ycard .ctop { align-items: center; height: 4rem; }
 .ycard .cmain { padding: 0 0 0 12px; overflow: hidden; }
 .ycard .ctitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ycard .stag { margin-left: 6px; }
@@ -343,7 +341,7 @@ dialog.full { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh
 .sstick.pin .stog .t-fold { display: inline; }
 .sstick.pin .stog svg { transform: rotate(180deg); }
 .sstick.mini .vnav { width: 40px; height: 40px; }
-#panel-schedule { overflow-anchor: none; }   /* the calendar shrinking must not make the browser re-scroll the list */
+#panel-schedule { overflow-anchor: none; }
 .scal { gap: 3px; }
 .scal .vdow { padding: 0; font-size: .6875rem; }
 .scal .vcell { min-height: 38px; gap: 2px; padding: 3px 2px; border-radius: 8px; }
@@ -719,7 +717,7 @@ dialog {
   margin: auto;
   overflow: auto;
   width: min(92vw, 520px);
-  max-height: calc(var(--vvh, 100dvh) - var(--sat) - var(--sab) - 32px);   /* never taller than what is really visible (keyboard, bars); the dialog scrolls inside */
+  max-height: calc(var(--vvh, 100dvh) - var(--sat) - var(--sab) - 32px);
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: 0;
@@ -729,10 +727,8 @@ dialog {
   border-radius: var(--r);
 }
 dialog::backdrop { background: rgb(0 0 0 / .5); }
-/* settings popups on a phone: 75% of the visible screen height, the content scrolls inside */
 @media (max-width: 700px), (max-height: 500px) { #ycols, #settings { height: calc(var(--vvh, 100dvh) * .75); } }
 .form { --fp: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: var(--fp); }
-/* long forms scroll inside the popup; the title and the buttons stay in reach */
 dialog > .form > h3:first-child { position: sticky; top: 0; z-index: 2; margin: calc(-1 * var(--fp)) calc(-1 * var(--fp)) 0; padding: var(--fp) var(--fp) 8px; background: var(--card); }
 dialog > .form > .btns:last-child { position: sticky; bottom: 0; z-index: 2; margin: 0 calc(-1 * var(--fp)) calc(-1 * var(--fp)); padding: 10px var(--fp) var(--fp); background: var(--card); border-top: 1px solid var(--line); }
 .form h3 { font-size: 1.05rem; }
@@ -813,7 +809,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   .mjson summary:hover { color: var(--brand); }
 }
 
-/* iPad / computer screens (portrait iPad from 744px up too): wider layout, tabs in a row, cards in columns, editors beside the list */
 @media (min-width: 700px) {
   :root { --maxw: 1120px; --gutter: max(24px, var(--sal), var(--sar), calc((100% - var(--maxw)) / 2)); }
   header { padding-left: var(--gutter); padding-right: var(--gutter); }
@@ -833,14 +828,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   .form textarea.plain { min-height: 220px; }
   #f-json { min-height: 140px; }
   .occ .promo { max-width: 72ch; }
-  /* Bigger touch targets for the shared pieces on tablets */
   .btn { min-height: 48px; }
   .btn.sm { min-height: 44px; }
   .mc-doc { padding-left: 32px; padding-right: 32px; }
   .scal .vcell { min-height: 46px; }
   .sstick { margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px; }
 }
-/* iPad landscape and larger screens: calendar on the left (stays in view), the long list on the right */
 @media (min-width: 1000px) {
   :root { --maxw: 1180px; }
   #panel-schedule:not([hidden]), #panel-visits:not([hidden]) { display: grid; grid-template-columns: minmax(380px, 440px) minmax(0, 1fr); gap: 0 32px; align-items: start; }
@@ -859,7 +852,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   :root { --maxw: 1260px; }
 }
 
-/* ---------- BKK11 loader (same block in Tokan / YMD Maps / Admin) ---------- */
 .bkk-loader {
   --l-bg: var(--bg, #f4f5f7);
   --l-fg: var(--text, var(--ink, #1f2430));
@@ -894,7 +886,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   margin-bottom: 6px;
 }
 
-/* วงแหวนหมุน 5 สี (สีเดียวกับไอคอนคนจับมือ) บนรางจาง ๆ */
 .bkk-loader__mark::before,
 .bkk-loader__ring {
   content: "";
@@ -942,7 +933,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   text-align: center;
 }
 
-/* โหลดนานผิดปกติ: ลิงก์ลองใหม่โผล่หลัง 20 วินาที (ใช้ CSS ล้วน จึงทำงานแม้สคริปต์พัง) */
 .bkk-loader__retry {
   margin-top: 4px;
   padding: 8px 16px;
@@ -971,7 +961,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   .bkk-loader { transition-duration: 0.01s; }
 }
 
-/* Admin: โลโก้รวมภาค 11 อย่างเดียว (ไม่มีไอคอนแอป) + แถบ 5 สีวิ่ง */
 .bkk-loader--logo { gap: 22px; }
 .bkk-loader--logo .bkk-loader__brand {
   width: min(240px, 62vw);
@@ -1001,19 +990,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   <a class="bkk-loader__retry" href="">โหลดไม่ขึ้น? ลองใหม่</a>
 </div>
 <script>
-/* BKK11 loader: BKKLoader.show(ข้อความ) / BKKLoader.hide() */
 (function () {
-  var el = document.getElementById('bkkLoader');
-  if (!el) { window.BKKLoader = { show: function () {}, hide: function () {} }; return; }
-  var text = el.querySelector('.bkk-loader__text');
+  var loader = document.getElementById('bkkLoader');
+  if (!loader) { window.BKKLoader = { show: function () {}, hide: function () {} }; return; }
+  var text = loader.querySelector('.bkk-loader__text');
   var base = text.textContent;
-  var MIN_MS = 450;            // อย่าให้แวบเร็วจนดูกระพริบ
+  var MIN_MS = 450;
   var shownAt = Date.now(), slowTimer = 0, hideTimer = 0;
 
   function arm() {
     clearTimeout(slowTimer);
     slowTimer = setTimeout(function () { text.textContent = 'ใช้เวลานานกว่าปกติ กรุณารอสักครู่…'; }, 8000);
-    el.classList.toggle('alt');  // สลับ keyframes เพื่อให้นับ 20 วินาทีของลิงก์ลองใหม่ใหม่
+    loader.classList.toggle('alt');
   }
 
   window.BKKLoader = {
@@ -1021,20 +1009,20 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       clearTimeout(hideTimer);
       text.textContent = msg || base;
       shownAt = Date.now();
-      el.classList.remove('is-hidden');
-      el.setAttribute('aria-busy', 'true');
+      loader.classList.remove('is-hidden');
+      loader.setAttribute('aria-busy', 'true');
       arm();
     },
     hide: function () {
       clearTimeout(hideTimer);
       hideTimer = setTimeout(function () {
         clearTimeout(slowTimer);
-        el.classList.add('is-hidden');
-        el.setAttribute('aria-busy', 'false');
+        loader.classList.add('is-hidden');
+        loader.setAttribute('aria-busy', 'false');
       }, Math.max(0, MIN_MS - (Date.now() - shownAt)));
     }
   };
-  el.setAttribute('aria-busy', 'true');
+  loader.setAttribute('aria-busy', 'true');
   arm();
 })();
 </script>
@@ -1767,14 +1755,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (text != null) n.textContent = text;
     return n;
   };
-  // Drawn icons for buttons and lines built in script (constant markup only; user text is always added as text)
   const ICON = {
     cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
     pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
     share: '<path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>'
   };
   const icoHtml = name => '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">' + ICON[name] + '</svg>';
-  // element = [drawn icon] + text
   const withIco = (name, text, tag = "span", cls = "") => {
     const n = el(tag, cls);
     n.innerHTML = icoHtml(name);
@@ -1789,7 +1775,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const today = () => parse(new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" }));
   const fmt = d => `${DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear() + 543}`;
   const diff = (d, t) => Math.round((d - t) / 864e5);
-  const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : null;
+  const safeUrl = link => /^https?:\/\//i.test(link || "") ? link : null;
 
   function countdown(n) {
     if (n < 0) return ["เลยมา " + -n + " วัน", "mute"];
@@ -1806,13 +1792,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   };
   const icsEsc = v => String(v).replace(/\\/g, "\\\\").replace(/[;,]/g, "\\$&").replace(/\r?\n/g, "\\n");
 
-  // RFC 5545: fold lines longer than 75 octets (never inside a UTF-8 character)
   function fold(line) {
-    const enc = new TextEncoder();
+    const encoder = new TextEncoder();
     const out = [];
     let cur = "", bytes = 0;
     for (const ch of line) {
-      const n = enc.encode(ch).length;
+      const n = encoder.encode(ch).length;
       if (bytes + n > 73) { out.push(cur); cur = " " + ch; bytes = 1 + n; }
       else { cur += ch; bytes += n; }
     }
@@ -1820,7 +1805,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return out.join("\r\n");
   }
 
-  // All-day event on the due date. Alarms: 09:00 seven days before and 09:00 the day before.
   function calendarFile(it, d) {
     const day = x => x.toISOString().slice(0, 10).replace(/-/g, "");
     const stamp = new Date().toISOString().replace(/[-:]|\.\d{3}/g, "");
@@ -1865,7 +1849,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     setTimeout(() => URL.revokeObjectURL(href), 10000);
   }
 
-  // <state-lib>
   const RETAIN_YEARS = 2;
   const ID_RE = /^[\w-]{1,64}$/;
   const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -1915,8 +1898,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!s || typeof s !== "object") return out;
     if (Array.isArray(s.items)) {
       for (const x of s.items.slice(0, 500)) {
-        const c = cleanItem(x);
-        if (c) out.items.push(c);
+        const cleaned = cleanItem(x);
+        if (cleaned) out.items.push(cleaned);
       }
     }
     if (s.json && typeof s.json === "object") out.json = { text: str(s.json.text, 20000), t: Number(s.json.t) || 0 };
@@ -1931,8 +1914,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         if (v && typeof v === "object" && Number.isFinite(v.t)) out.prefs[k] = { text: str(v.text, 5000), t: v.t };
       }
     }
-    // Per-round override of the date used for a rooms-tab card's countdown, keyed by the round's own
-    // (board-supplied) date; "" means "cleared, use the default 1st-of-month countdown" but still wins merges.
     if (s.roomDates && typeof s.roomDates === "object") {
       for (const [k, v] of Object.entries(s.roomDates).slice(0, 2000)) {
         if (!DAY_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
@@ -1940,14 +1921,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         out.roomDates[k] = { date: v.date === "" ? "" : String(v.date), t: v.t };
       }
     }
-    // Memorial-room rounds edited or typed here, keyed by id: "b-<board date>" replaces / hides the board's round of that
-    // date, any other id is a round typed in the app. Photo reminders: photoOv = the send day / note of a month's
-    // status card (key YYYY-MM), reminders = to-dos typed in the app. All last-write-wins per key; deleted = tombstone.
     if (s.rounds && typeof s.rounds === "object") {
       for (const [k, v] of Object.entries(s.rounds).slice(0, 600)) {
         if (!ID_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
         if (v.deleted) { out.rounds[k] = { deleted: true, t: v.t }; continue; }
-        if (v.reset) { out.rounds[k] = { reset: true, t: v.t }; continue; }   // "b-" ids only: back to the board's own round
+        if (v.reset) { out.rounds[k] = { reset: true, t: v.t }; continue; }
         if (!DAY_RE.test(String(v.date))) continue;
         const count = Number(v.count);
         out.rounds[k] = { date: String(v.date), time: str(v.time, 60), count: v.count != null && v.count !== "" && Number.isFinite(count) && count >= 0 && count <= 1000 ? Math.round(count) : null, issue: str(v.issue, 60), t: v.t };
@@ -1955,7 +1933,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
     if (s.photoOv && typeof s.photoOv === "object") {
       for (const [k, v] of Object.entries(s.photoOv).slice(0, 200)) {
-        if (!/^u?\d{4}-\d{2}$/.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;   // "YYYY-MM" = the follow-up card, "uYYYY-MM" = the upload-notice card
+        if (!/^u?\d{4}-\d{2}$/.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
         out.photoOv[k] = { date: DAY_RE.test(String(v.date)) ? String(v.date) : "", note: str(v.note, 300), t: v.t };
       }
     }
@@ -1968,7 +1946,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         out.reminders[k] = { title, due: DAY_RE.test(String(v.due)) ? String(v.due) : "", note: str(v.note, 300), t: v.t };
       }
     }
-    // The message to copy for a card of the to-send tab, keyed by the card's done-mark key; "" = cleared (use the built-in text)
     if (s.msgs && typeof s.msgs === "object") {
       for (const [k, v] of Object.entries(s.msgs).slice(0, 1500)) {
         if (!ID_RE.test(k) || !v || typeof v !== "object" || !Number.isFinite(v.t)) continue;
@@ -1978,13 +1955,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return out;
   }
 
-  // Last write wins per record; the same item saved twice (e.g. imported on two devices: same title and same schedule) collapses to the newest.
-  // Items that only share a title but have another schedule are different items and both stay.
   const sameItemKey = x => [x.title, x.weekday, x.nth, x.time].join("|");
   function mergeStates(a, b) {
-    const A = normalizeState(a), B = normalizeState(b);
+    const stateA = normalizeState(a), stateB = normalizeState(b);
     const byId = new Map();
-    for (const x of [...A.items, ...B.items]) {
+    for (const x of [...stateA.items, ...stateB.items]) {
       const cur = byId.get(x.id);
       if (!cur || x.updatedAt >= cur.updatedAt) byId.set(x.id, x);
     }
@@ -1996,23 +1971,22 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (!cur || x.updatedAt > cur.updatedAt || (x.updatedAt === cur.updatedAt && x.id > cur.id)) best.set(k, x);
     }
     items = items.filter(x => x.deleted || best.get(sameItemKey(x)) === x).sort((p, q) => (p.id < q.id ? -1 : 1));
-    const done = { ...A.done };
-    for (const [k, v] of Object.entries(B.done)) if (!done[k] || v.t >= done[k].t) done[k] = v;
-    const prefs = { ...A.prefs };
-    for (const [k, v] of Object.entries(B.prefs)) if (!prefs[k] || v.t >= prefs[k].t) prefs[k] = v;
-    const roomDates = { ...A.roomDates };
-    for (const [k, v] of Object.entries(B.roomDates)) if (!roomDates[k] || v.t >= roomDates[k].t) roomDates[k] = v;
-    const lww = (x, y) => { const o = { ...x }; for (const [k, v] of Object.entries(y)) if (!o[k] || v.t >= o[k].t) o[k] = v; return o; };
-    return { items, json: B.json.t >= A.json.t ? B.json : A.json, done, prefs, roomDates, rounds: lww(A.rounds, B.rounds), photoOv: lww(A.photoOv, B.photoOv), reminders: lww(A.reminders, B.reminders), msgs: lww(A.msgs, B.msgs) };
+    const done = { ...stateA.done };
+    for (const [k, v] of Object.entries(stateB.done)) if (!done[k] || v.t >= done[k].t) done[k] = v;
+    const prefs = { ...stateA.prefs };
+    for (const [k, v] of Object.entries(stateB.prefs)) if (!prefs[k] || v.t >= prefs[k].t) prefs[k] = v;
+    const roomDates = { ...stateA.roomDates };
+    for (const [k, v] of Object.entries(stateB.roomDates)) if (!roomDates[k] || v.t >= roomDates[k].t) roomDates[k] = v;
+    const newerWins = (x, y) => { const o = { ...x }; for (const [k, v] of Object.entries(y)) if (!o[k] || v.t >= o[k].t) o[k] = v; return o; };
+    return { items, json: stateB.json.t >= stateA.json.t ? stateB.json : stateA.json, done, prefs, roomDates, rounds: newerWins(stateA.rounds, stateB.rounds), photoOv: newerWins(stateA.photoOv, stateB.photoOv), reminders: newerWins(stateA.reminders, stateB.reminders), msgs: newerWins(stateA.msgs, stateB.msgs) };
   }
 
-  // Drops everything older than RETAIN_YEARS: old tombstones, done marks, per-month overrides
   function pruneState(s, nowMs) {
-    const st = normalizeState(s);
+    const state = normalizeState(s);
     const cut = cutoffMs(nowMs);
     const d = new Date(cut);
     const cutYm = d.getUTCFullYear() * 12 + d.getUTCMonth();
-    const items = st.items
+    const items = state.items
       .filter(x => !(x.deleted && x.updatedAt < cut))
       .map(x => {
         if (x.deleted) return x;
@@ -2024,22 +1998,21 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         return { ...x, overrides };
       });
     const done = {};
-    for (const [k, v] of Object.entries(st.done)) if (v.t >= cut) done[k] = v;
+    for (const [k, v] of Object.entries(state.done)) if (v.t >= cut) done[k] = v;
     const roomDates = {};
-    for (const [k, v] of Object.entries(st.roomDates)) if (v.t >= cut) roomDates[k] = v;
-    const cd = cutoffDay(nowMs);
+    for (const [k, v] of Object.entries(state.roomDates)) if (v.t >= cut) roomDates[k] = v;
+    const cutoffDate = cutoffDay(nowMs);
     const rounds = {};
-    for (const [k, v] of Object.entries(st.rounds)) if (v.deleted || v.reset ? v.t >= cut : v.date >= cd) rounds[k] = v;
+    for (const [k, v] of Object.entries(state.rounds)) if (v.deleted || v.reset ? v.t >= cut : v.date >= cutoffDate) rounds[k] = v;
     const photoOv = {};
-    for (const [k, v] of Object.entries(st.photoOv)) if (v.t >= cut) photoOv[k] = v;
+    for (const [k, v] of Object.entries(state.photoOv)) if (v.t >= cut) photoOv[k] = v;
     const reminders = {};
-    for (const [k, v] of Object.entries(st.reminders)) if (v.deleted ? v.t >= cut : (v.due || "9999") >= cd || v.t >= cut) reminders[k] = v;
+    for (const [k, v] of Object.entries(state.reminders)) if (v.deleted ? v.t >= cut : (v.due || "9999") >= cutoffDate || v.t >= cut) reminders[k] = v;
     const msgs = {};
-    for (const [k, v] of Object.entries(st.msgs)) if (v.t >= cut) msgs[k] = v;
-    return { items, json: st.json, done, prefs: st.prefs, roomDates, rounds, photoOv, reminders, msgs };
+    for (const [k, v] of Object.entries(state.msgs)) if (v.t >= cut) msgs[k] = v;
+    return { items, json: state.json, done, prefs: state.prefs, roomDates, rounds, photoOv, reminders, msgs };
   }
 
-  // The board published by the scheduled task (rooms + things to submit)
   const cleanRegions = r => {
     const out = {};
     if (r && typeof r === "object") {
@@ -2074,7 +2047,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         linkText: str(i.linkText, 200),
         verify: !!i.verify
       }));
-    // Schedule from the monthly "BB / BT รายการเดือน" table, only what concerns ยุวชนชาย: date (+ optional endDate), time, place, ฝ่าย, title
     const events = (Array.isArray(b.events) ? b.events : []).slice(0, 600)
       .filter(e => e && DAY_RE.test(String(e.date)) && str(e.title, 300).trim())
       .map(e => ({
@@ -2106,65 +2078,55 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       events: (b.events || []).filter(e => !e.date || e.date >= cut)
     };
   }
-  // Recurring events ("the 2nd Monday of each month") with per-month overrides; also drives the daily push
-  const NOTIFY_DAYS = 10;          // to-submit items
-  const MONTHLY_NOTIFY_DAYS = 5;   // recurring monthly events
-  const PHOTO_NOTIFY_DAYS = 3;     // the 4-division photo chase starts this many days before its send day
-  const UPLOAD_NOTIFY_DAYS = 3;    // the monthly "upload your photos" message, this many days before its send day
-  const PAST_NOTIFY_DAYS = 10;     // an item that passed its date keeps being notified until it is ticked, but only this many days
+  const NOTIFY_DAYS = 10;
+  const MONTHLY_NOTIFY_DAYS = 5;
+  const PHOTO_NOTIFY_DAYS = 3;
+  const UPLOAD_NOTIFY_DAYS = 3;
+  const PAST_NOTIFY_DAYS = 10;
   const DAY_MS = 864e5;
   const isoDay = d => d.toISOString().slice(0, 10);
   const ymKey = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
   const parseDay = s => (DAY_RE.test(String(s)) ? new Date(Date.UTC(+String(s).slice(0, 4), +String(s).slice(5, 7) - 1, +String(s).slice(8, 10))) : null);
 
-  // Key of a "to submit" item inside the done marks
   const boardKey = (title, due) => {
-    let h = 5381;
-    for (const ch of (title || "") + "|" + (due || "")) h = ((h << 5) + h + ch.codePointAt(0)) >>> 0;
-    return h.toString(16);
+    let hash = 5381;
+    for (const char of (title || "") + "|" + (due || "")) hash = ((hash << 5) + hash + char.codePointAt(0)) >>> 0;
+    return hash.toString(16);
   };
 
-  // Memorial rooms: the LINE confirmation is due on a round's deadline day, announced ROOMS_NOTIFY_DAYS ahead
   const ROOMS_NOTIFY_DAYS = 7;
   const roomKey = day => boardKey("room", day);
-  // The board's rounds with the edits made here (state.rounds["b-<date>"] replaces or hides one) plus the rounds typed
-  // here. key = what the done mark uses (the board date, or the id of a typed round); dl = what roomDates is keyed by.
   function effectiveRooms(boardRooms, rounds) {
-    const R = rounds || {}, out = [];
+    const roundMap = rounds || {}, out = [];
     for (const r of boardRooms || []) {
-      const ov = R["b-" + r.date];
-      if (ov && ov.deleted) continue;
-      out.push(ov && !ov.reset ? { ...r, date: ov.date, time: ov.time, count: ov.count, issue: ov.issue, key: r.date, dl: r.date, id: "b-" + r.date, edited: true } : { ...r, key: r.date, dl: r.date, id: "b-" + r.date });
+      const override = roundMap["b-" + r.date];
+      if (override && override.deleted) continue;
+      out.push(override && !override.reset ? { ...r, date: override.date, time: override.time, count: override.count, issue: override.issue, key: r.date, dl: r.date, id: "b-" + r.date, edited: true } : { ...r, key: r.date, dl: r.date, id: "b-" + r.date });
     }
-    for (const [id, v] of Object.entries(R)) if (!id.startsWith("b-") && !v.deleted && !v.reset) out.push({ date: v.date, time: v.time, count: v.count, issue: v.issue, key: id, dl: v.date, id, typed: true });
+    for (const [id, v] of Object.entries(roundMap)) if (!id.startsWith("b-") && !v.deleted && !v.reset) out.push({ date: v.date, time: v.time, count: v.count, issue: v.issue, key: id, dl: v.date, id, typed: true });
     return out.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
   }
-  // A saved roomDates override, else the 1st of the round's own month
   const roomDeadline = (day, roomDates) => {
     const d = parseDay(day);
     if (!d) return null;
-    const ov = roomDates && roomDates[day];
-    return (ov && ov.date && parseDay(ov.date)) || new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+    const override = roomDates && roomDates[day];
+    return (override && override.date && parseDay(override.date)) || new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
   };
-  // Same for an effectiveRooms() entry: the override is looked up by x.dl, the default is the 1st of the shown date's month
   const roomDeadlineOf = (x, roomDates) => {
     const d = parseDay(x.date);
     if (!d) return null;
-    const ov = roomDates && roomDates[x.dl];
-    return (ov && ov.date && parseDay(ov.date)) || new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+    const override = roomDates && roomDates[x.dl];
+    return (override && override.date && parseDay(override.date)) || new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
   };
 
-  // 4-division meeting photos: BKK11-4DivisionMeeting's Apps Script reports, per area, which of the 2 pictures
-  // (รูปที่1 = ภาพบรรยากาศ, รูปที่2 = ภาพถ่ายหมู่) are in this month's Drive folder
   const PHOTO_API = "https://script.google.com/macros/s/AKfycbx0IgSpakNWcEQLuo8f2S9sA0xtOYNw6XgqxfkjVH-zs9fUzpccFgM3cHDGliiLYEOY/exec?api=status";
   const PHOTO_SLOT_NAMES = ["ภาพบรรยากาศ", "ภาพถ่ายหมู่"];
   const photoKey = ym => boardKey("photos", ym);
   const photoLabel = name => String(name).replace(/^(.+?)-(.+)$/, "$2 (ตำบล$1)");
-  // Areas that have not sent every picture yet, in the API's order; null when the status is unusable
-  function photoMissing(st) {
-    if (!st || !YM_RE.test(String(st.month)) || !Array.isArray(st.areas)) return null;
+  function photoMissing(state) {
+    if (!state || !YM_RE.test(String(state.month)) || !Array.isArray(state.areas)) return null;
     const out = [];
-    for (const a of st.areas) {
+    for (const a of state.areas) {
       if (!a || !Array.isArray(a.sent)) continue;
       const missing = PHOTO_SLOT_NAMES.filter((_, i) => !a.sent[i]);
       if (missing.length) out.push({ name: String(a.name), label: photoLabel(a.name), missing, partial: missing.length < PHOTO_SLOT_NAMES.length });
@@ -2173,50 +2135,43 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   const lastDayOfMonth = d => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0));
 
-  // nth = 1..4, or 0 for the last one in the month
-  function nthWeekday(y, m, wd, nth) {
+  function nthWeekday(y, m, weekday, nth) {
     if (nth === 0) {
       const last = new Date(Date.UTC(y, m + 1, 0));
-      return new Date(Date.UTC(y, m, last.getUTCDate() - ((last.getUTCDay() - wd + 7) % 7)));
+      return new Date(Date.UTC(y, m, last.getUTCDate() - ((last.getUTCDay() - weekday + 7) % 7)));
     }
     const first = new Date(Date.UTC(y, m, 1));
-    return new Date(Date.UTC(y, m, 1 + ((wd - first.getUTCDay() + 7) % 7) + (nth - 1) * 7));
+    return new Date(Date.UTC(y, m, 1 + ((weekday - first.getUTCDay() + 7) % 7) + (nth - 1) * 7));
   }
 
-  // Upcoming occurrences sorted by effective date. A per-month override (it.overrides["YYYY-MM"])
-  // moves that one month's date; JSON variables still use the rule's own month.
-  function occurrences(it, t, count) {
+  function occurrences(item, t, count) {
     const out = [];
     const y = t.getUTCFullYear(), m = t.getUTCMonth();
     for (let i = -1; i < count + 3; i++) {
-      const yy = y + Math.floor((m + i) / 12), mm = (((m + i) % 12) + 12) % 12;
-      const rule = nthWeekday(yy, mm, it.weekday, it.nth);
-      const key = ymKey(yy, mm);
-      const ov = (it.overrides && it.overrides[key]) || null;
-      const date = (ov && ov.date && parseDay(ov.date)) || rule;
-      if (date >= t) out.push({ date, rule, key, month: mm, ov });
+      const year = y + Math.floor((m + i) / 12), monthNo = (((m + i) % 12) + 12) % 12;
+      const rule = nthWeekday(year, monthNo, item.weekday, item.nth);
+      const key = ymKey(year, monthNo);
+      const override = (item.overrides && item.overrides[key]) || null;
+      const date = (override && override.date && parseDay(override.date)) || rule;
+      if (date >= t) out.push({ date, rule, key, month: monthNo, ov: override });
     }
     return out.sort((a, b) => a.date - b.date).slice(0, count);
   }
 
-  // The monthly "please upload your photos" message is sent on a weekday of the nth week (prefs.uploadRule.text = "weekday:nth",
-  // 0 = Sunday, nth 0 = last; default the 3rd Sunday, i.e. before the 4th-weekend meeting); photoOv["uYYYY-MM"].date moves one month
   const UPLOAD_RULE = "0:3";
   const UPLOAD_RULE_RE = /^([0-6]):([0-4])$/;
   function uploadSendDay(ym, prefs, photoOv) {
-    const ov = (photoOv || {})["u" + ym];
-    if (ov && DAY_RE.test(String(ov.date))) return ov.date;
+    const override = (photoOv || {})["u" + ym];
+    if (override && DAY_RE.test(String(override.date))) return override.date;
     const r = UPLOAD_RULE_RE.exec(String((((prefs || {}).uploadRule) || {}).text || "")) || UPLOAD_RULE_RE.exec(UPLOAD_RULE);
     const y = YM_RE.exec(ym);
     return isoDay(nthWeekday(+y[1], +y[2] - 1, +r[1], +r[2]));
   }
-  // </state-lib>
 
-  // ---------- data shared across devices: localStorage first, optional sync through /api/sync ----------
   const STATE_KEY = "bkk11-state";
   const newId = () => (crypto.randomUUID ? crypto.randomUUID() : "i" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
   const itemSig = it => JSON.stringify([it.title, it.weekday, it.nth, it.time, it.promote, it.json, it.overrides || {}]);
-  const itemKey = it => boardKey(it.title, it.due);   // a changed title/due date counts as a new item
+  const itemKey = it => boardKey(it.title, it.due);
 
   const DEVICE_KEY = "bkk11-device-id";
   const deviceId = (() => {
@@ -2227,22 +2182,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     } catch (e) { return newId(); }
   })();
 
-  let store = emptyState();      // full state incl. tombstones (this is what gets synced)
-  let done = new Set();          // views derived from `store`
+  let store = emptyState();
+  let done = new Set();
   const monthly = { items: [], json: "" };
-  // The ภาค list is not written in this file: it is the ภาค level of the shared area tree (public.areas), cached for offline use
   const PHAK_KEY = "bkk11-phaks";
   let PHAKS = (() => { try { const c = JSON.parse(localStorage.getItem(PHAK_KEY) || "[]"); return Array.isArray(c) ? c.filter(x => typeof x === "string" && x) : []; } catch (e) { return []; } })();
   const VCLS = ["bbn", "bkt", "c2", "c3", "c4", "c5"], VCOLOR = ["เขียว", "เหลือง", "ฟ้า", "ม่วง", "ส้ม", "ชมพู"];
   const phakIdx = p => Math.max(0, PHAKS.indexOf(p)) % VCLS.length;
   const phakCls = p => VCLS[phakIdx(p)];
-  // Who may use which feature (public.access_my -> { owner, features }). Closed by default; the owner is always allowed.
-  // The server enforces it (Edge Function + row-level security); this only decides what is shown. Until it is known the tabs stay as they are.
   const ACCESS_KEY = "bkk11-access";
   let ACCESS = { known: false, owner: false, features: [] };
-  const can = f => ACCESS.known && (ACCESS.owner || ACCESS.features.includes(f));
-  const uiOpen = f => !ACCESS.known || can(f);
-  const settings = { roomsTemplate: "", photosTemplate: "", uploadTemplate: "", uploadRule: "" };   // "" = use the built-in message
+  const canUse = f => ACCESS.known && (ACCESS.owner || ACCESS.features.includes(f));
+  const uiOpen = f => !ACCESS.known || canUse(f);
+  const settings = { roomsTemplate: "", photosTemplate: "", uploadTemplate: "", uploadRule: "" };
   let sigs = new Map();
   let lastData = null;
   let refreshJsonBox = () => {};
@@ -2253,7 +2205,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const v = JSON.parse(localStorage.getItem(STATE_KEY) || "null");
       if (v) return pruneState(v, Date.now());
     } catch (e) {}
-    // one-time migration from the first version's keys
     const st = emptyState();
     const now = Date.now();
     try {
@@ -2265,7 +2216,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       for (const k of JSON.parse(localStorage.getItem("bkk11-done") || "[]")) st.done[k] = { on: true, t: now };
     } catch (e) {}
     const out = normalizeState(st);
-    try { localStorage.setItem(STATE_KEY, JSON.stringify(out)); } catch (e) {}   // keep the generated ids stable
+    try { localStorage.setItem(STATE_KEY, JSON.stringify(out)); } catch (e) {}
     return out;
   }
   function adoptStore() {
@@ -2280,7 +2231,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   const persistLocal = () => { try { localStorage.setItem(STATE_KEY, JSON.stringify(store)); } catch (e) {} };
 
-  // Turns edits made to monthly.items / monthly.json / done into timestamped records
   function commitLocal() {
     const now = Date.now();
     let changed = false;
@@ -2289,8 +2239,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (!it.id) it.id = newId();
       if (!it.overrides) it.overrides = {};
       live.add(it.id);
-      const sig = itemSig(it);
-      if (sigs.get(it.id) !== sig) { it.updatedAt = now; sigs.set(it.id, sig); changed = true; }
+      const signature = itemSig(it);
+      if (sigs.get(it.id) !== signature) { it.updatedAt = now; sigs.set(it.id, signature); changed = true; }
     }
     const gone = store.items.filter(x => !x.deleted && !live.has(x.id)).map(x => ({ id: x.id, deleted: true, updatedAt: now }));
     if (gone.length) changed = true;
@@ -2323,30 +2273,23 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     renderMonthly();
     refreshJsonBox();
     refreshTemplateBox();
-    // the open monthly-data editor shows what was synced in, unless a value is being typed
     if ($("mdata").open && !$("mdata-body").contains(document.activeElement)) renderMdata();
   }
 
-  // ---------- shared sign-in: the same member session (storage key) as โทกัง and ที่อยู่น้อง, so one login covers all three sites ----------
-  // The Supabase project behind โทกัง holds the members; row-level security limits what each person can read, and the
-  // Edge Function /admin (sync, board, push) only accepts รวมภาค / ภาค leaders of the ยุวชนชาย division or the scheduled task's token.
   const SUPA_URL = "https://cqdzfsucpivsgznfpjxl.supabase.co";
-  const SUPA_KEY = "sb_publishable_XkUBjE3M7HUiuDv7YwsbKA_mSu0ToEc";   // publishable (public) client key of that project, same one the โทกัง site ships
+  const SUPA_KEY = "sb_publishable_XkUBjE3M7HUiuDv7YwsbKA_mSu0ToEc";
   const API = SUPA_URL + "/functions/v1/admin";
   const SESSION_KEY = "tokan_session_v1";
-  const ELIG_KEY = "bkk11-eligible";          // { sub, ok }: the eligibility check result for the signed-in member
+  const ELIG_KEY = "bkk11-eligible";
   const memSession = () => { try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; } };
   const setMemSession = v => { try { if (v) localStorage.setItem(SESSION_KEY, JSON.stringify(v)); else localStorage.removeItem(SESSION_KEY); } catch (e) {} };
   const eligOk = s => { try { const e = JSON.parse(localStorage.getItem(ELIG_KEY)); return !!(e && e.ok && s && e.sub === jwtClaims(s.access_token).sub); } catch (er) { return false; } };
   const setEligible = (s, ok) => { try { localStorage.setItem(ELIG_KEY, JSON.stringify({ sub: jwtClaims(s.access_token).sub, ok })); } catch (e) {} };
   const memAuthed = () => { const s = memSession(); return !!(s && s.access_token && eligOk(s)); };
-  // Who may use the app: รวมภาค / ภาค leaders of the ยุวชนชาย division
   const ELIGIBLE_LEVELS = ["all", "phak"];
   const ELIGIBLE_DIVISION = "ยุวชนชาย";
   let msTarget = null, msTimer = 0, msSeq = 0;
 
-  // The sign-in screen covers the app; everything behind it is inert. This gates the page's UI, while the data itself
-  // (members, visit calendar, sync, push) is protected on the server.
   function setLocked(locked) {
     BKKLoader.hide();
     $("mlogin").hidden = !locked;
@@ -2373,16 +2316,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     for (const d of document.querySelectorAll("dialog[open]")) d.close();
     showLoginForm(message);
   }
-  function jwtClaims(tok) {
+  function jwtClaims(token) {
     try {
-      const b = String(tok).split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      const b = String(token).split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
       return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(b + "=".repeat((4 - (b.length % 4)) % 4)), c => c.charCodeAt(0))));
     } catch (e) { return {}; }
   }
-  // null = the server refused the refresh token (session over); throws when the network is down (keep the session)
-  // One refresh at a time: refresh tokens are single-use, so several calls that all find the access token expired (as happens
-  // right after coming back from the background) must share one request, or the losers would be refused and logged out.
-  // โทกัง / แผนที่ share this session, so a token another page already rotated is used instead of refreshing again.
   let refreshing = null;
   const sessionFresh = x => !!(x && x.access_token && x.expires_at && x.expires_at * 1000 > Date.now() + 60000);
   function refreshMember(s) {
@@ -2397,7 +2336,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         body: JSON.stringify({ refresh_token: base.refresh_token })
       });
       if (!r.ok) {
-        const again = memSession();   // refused because another page rotated the token a moment ago: use theirs
+        const again = memSession();
         return again && again.refresh_token !== base.refresh_token && sessionFresh(again) ? again : null;
       }
       const d = await r.json();
@@ -2407,29 +2346,27 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     })().finally(() => { refreshing = null; });
     return refreshing;
   }
-  // REST call to the member database as the signed-in member, with one silent token refresh on 401
   async function memReq(method, path, body, extra) {
     let s = memSession();
     if (!s) { requireLogin(); throw Object.assign(new Error("signed out"), { status: 401 }); }
-    const go = tok => fetch(SUPA_URL + path, {
+    const fetchWithToken = token => fetch(SUPA_URL + path, {
       method,
-      headers: { apikey: SUPA_KEY, Authorization: "Bearer " + tok, ...(body !== undefined ? { "content-type": "application/json" } : {}), ...extra },
+      headers: { apikey: SUPA_KEY, Authorization: "Bearer " + token, ...(body !== undefined ? { "content-type": "application/json" } : {}), ...extra },
       body: body !== undefined ? JSON.stringify(body) : undefined
     });
-    let res = await go(s.access_token);
+    let res = await fetchWithToken(s.access_token);
     if (res.status === 401) {
       s = await refreshMember(s);
       if (!s) { requireLogin("หมดเวลาเข้าสู่ระบบ กรุณาเข้าสู่ระบบใหม่"); throw Object.assign(new Error("signed out"), { status: 401 }); }
-      res = await go(s.access_token);
+      res = await fetchWithToken(s.access_token);
     }
     if (!res.ok) throw Object.assign(new Error(method + " " + res.status), { status: res.status, body: await res.text().catch(() => "") });
     const text = res.status === 204 ? "" : await res.text();
     return text ? JSON.parse(text) : null;
   }
   const memGet = path => memReq("GET", path);
-  // The admin API (sync / push) with the same member token; same silent refresh
   async function apiFetch(path, init = {}) {
-    const call = tok => fetch(API + path, { ...init, headers: { ...(init.headers || {}), authorization: "Bearer " + tok } });
+    const call = token => fetch(API + path, { ...init, headers: { ...(init.headers || {}), authorization: "Bearer " + token } });
     const s = memSession();
     if (!s || !s.access_token) return new Response(JSON.stringify({ error: "signed out" }), { status: 401 });
     let res = await call(s.access_token);
@@ -2441,11 +2378,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return res;
   }
   const likeTokens = q => q.split(/\s+/).map(t => t.replace(/[,()*%:\\"']/g, "")).filter(Boolean).slice(0, 3);
-  const nameFilter = toks => "(" + toks.map(t => `or(name_t.ilike.*${t}*,saku_t.ilike.*${t}*)`).join(",") + ")";
+  const nameFilter = toks => "(" + toks.map(t => `or(given_name.ilike.*${t}*,family_name.ilike.*${t}*)`).join(",") + ")";
   async function memSearch(q) {
     const toks = likeTokens(q);
     if (!toks.length) return [];
-    const params = new URLSearchParams({ select: "name_t,saku_t,po_nt,ch_nt,ha_nt", order: "name_t", limit: "20" });
+    const params = new URLSearchParams({ select: "given_name,family_name,position_name,tambon_name,moo_name", order: "given_name", limit: "20" });
     params.set("and", nameFilter(toks));
     return memGet("/rest/v1/tokan?" + params);
   }
@@ -2454,10 +2391,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!ELIGIBLE_LEVELS.includes((profile || {}).level)) return false;
     const mt = (jwtClaims(session.access_token).app_metadata || {}).mt_co;
     if (!mt) return false;
-    const res = await fetch(`${SUPA_URL}/rest/v1/tokan?select=fa_nt&mt_co=eq.${encodeURIComponent(mt)}`, { headers: { apikey: SUPA_KEY, Authorization: "Bearer " + session.access_token } });
+    const res = await fetch(`${SUPA_URL}/rest/v1/tokan?select=division_name&mt_co=eq.${encodeURIComponent(mt)}`, { headers: { apikey: SUPA_KEY, Authorization: "Bearer " + session.access_token } });
     if (!res.ok) throw new Error("eligibility " + res.status);
     const rows = await res.json();
-    return !!rows[0] && String(rows[0].fa_nt || "").trim() === ELIGIBLE_DIVISION;
+    return !!rows[0] && String(rows[0].division_name || "").trim() === ELIGIBLE_DIVISION;
   }
   function renderAccount() {
     const p = (memSession() || {}).profile;
@@ -2479,7 +2416,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const d = await res.json().catch(() => ({}));
       if (!res.ok || !d.session) { $("mlogin-error").textContent = d.error && d.error !== "server" ? d.error : "เข้าสู่ระบบไม่สำเร็จ ลองใหม่อีกครั้ง"; return; }
       if (!(await isEligible(d.session, d.profile))) { $("mlogin-error").textContent = "บัญชีนี้ไม่มีสิทธิ์ใช้งาน (เฉพาะผู้นำระดับรวมภาคและภาค ยุวชนชาย)"; return; }
-      setMemSession({ ...d.session, profile: d.profile });   // same shape โทกัง stores, so both sites stay signed in
+      setMemSession({ ...d.session, profile: d.profile });
       setEligible(d.session, true);
       $("mlogin-code").value = "";
       $("mlogin-error").textContent = "";
@@ -2496,7 +2433,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("acct-logout").onclick = () => requireLogin();
   $("mlogin-logout").onclick = () => requireLogin();
   $("mlogin-retry").onclick = () => gateStart();
-  // Signed in on โทกัง / ที่อยู่น้อง already? Then there is nothing to type here: check once that this member may use the app
   async function gateStart() {
     const s = memSession();
     if (!s || !s.access_token) { showLoginForm(); return; }
@@ -2535,10 +2471,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     clearTimeout(syncTimer);
     syncTimer = setTimeout(syncNow, 1500);
   }
-  // One PUT both pushes this device's state and returns the merged result from the server
   async function syncNow() {
     if (!memAuthed()) { setSyncStatus("ยังไม่ได้ล็อกอิน", true); return { ok: false, message: "ยังไม่ได้ล็อกอิน" }; }
-    if (ACCESS.known && !can("items")) { setSyncStatus("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฟีเจอร์ต้องส่ง", true); return { ok: false, message: "ไม่มีสิทธิ์" }; }
+    if (ACCESS.known && !canUse("items")) { setSyncStatus("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฟีเจอร์ต้องส่ง", true); return { ok: false, message: "ไม่มีสิทธิ์" }; }
     if (syncing) { syncDirty = true; return { ok: false, message: "กำลังซิงก์อยู่ รอสักครู่แล้วลองอีกครั้ง" }; }
     syncing = true;
     syncDirty = false;
@@ -2569,7 +2504,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
   }
 
-  // The board (rooms + things to submit) comes from the admin API (/board); the copy embedded in this page is the fallback
   let board = null;
   async function loadBoard() {
     try {
@@ -2582,7 +2516,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     } catch (e) {}
   }
 
-  // ---------- push notifications on this device ----------
   const PUSH_KEY = "bkk11-push-on";
   const NAME_KEY = "bkk11-device-name";
   let pushInfo = null;
@@ -2594,16 +2527,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const setPref = (k, v) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch (e) {} };
   const deviceName = () => getPref(NAME_KEY) || guessName();
   const b64ToBytes = str => {
-    const raw = atob((str + "=".repeat((4 - (str.length % 4)) % 4)).replace(/-/g, "+").replace(/_/g, "/"));
-    return Uint8Array.from(raw, c => c.charCodeAt(0));
+    const binary = atob((str + "=".repeat((4 - (str.length % 4)) % 4)).replace(/-/g, "+").replace(/_/g, "/"));
+    return Uint8Array.from(binary, c => c.charCodeAt(0));
   };
   const pushFetch = (method, body) => apiFetch("/push", {
     method,
     headers: { "content-type": "application/json" },
     body: body ? JSON.stringify(body) : undefined
   });
-  const withTimeout = (promise, ms, message) =>
-    Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(message)), ms))]);
+  const withTimeout = (promise, timeoutMs, message) =>
+    Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(message)), timeoutMs))]);
   const swReady = () => withTimeout(navigator.serviceWorker.ready, 8000, "service worker ยังไม่พร้อม ลองเปิดแอปใหม่");
 
   function setPushStatus(text, bad) {
@@ -2620,16 +2553,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
 
   async function subscribeAndRegister(publicKey) {
-    const reg = await swReady();
-    let sub = await reg.pushManager.getSubscription();
-    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(publicKey) });
-    const res = await pushFetch("PUT", { deviceId, name: deviceName(), subscription: sub.toJSON() });
+    const registration = await swReady();
+    let pushSub = await registration.pushManager.getSubscription();
+    if (!pushSub) pushSub = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(publicKey) });
+    const res = await pushFetch("PUT", { deviceId, name: deviceName(), subscription: pushSub.toJSON() });
     if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "ลงทะเบียนไม่สำเร็จ (" + res.status + ")");
     setPref(PUSH_KEY, "1");
     return (await res.json()).devices;
   }
 
-  // Shows the current state; quietly re-registers this device if it was enabled but the server lost track of it
   async function refreshPush() {
     $("push-name").value = $("push-name").value || deviceName();
     if (!pushSupported()) {
@@ -2639,7 +2571,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         : "เบราว์เซอร์นี้ไม่รองรับ push", true);
     }
     if (!memAuthed()) return setPushStatus("ล็อกอินก่อน แล้วจึงเปิดแจ้งเตือนได้", true);
-    if (ACCESS.known && !can("items")) return setPushStatus("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฟีเจอร์ต้องส่ง จึงเปิดแจ้งเตือนไม่ได้", true);
+    if (ACCESS.known && !canUse("items")) return setPushStatus("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฟีเจอร์ต้องส่ง จึงเปิดแจ้งเตือนไม่ได้", true);
     setPushStatus("กำลังตรวจสอบ…");
     try {
       const res = await pushFetch("GET");
@@ -2648,12 +2580,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       pushInfo = await res.json();
       if (!pushInfo.enabled) return setPushStatus("เซิร์ฟเวอร์ยังไม่ได้ตั้งกุญแจ VAPID", true);
       let devices = pushInfo.devices;
-      if (getPref(PUSH_KEY) === "1" && Notification.permission === "granted" && !devices.some(d => d.id === deviceId && d.owned !== false)) {   // owned=false: registered before the server recorded who owns a device; sign it up again
+      if (getPref(PUSH_KEY) === "1" && Notification.permission === "granted" && !devices.some(d => d.id === deviceId && d.owned !== false)) {
         devices = await subscribeAndRegister(pushInfo.publicKey);
       }
       renderPushDevices(devices);
-      const on = devices.some(d => d.id === deviceId);
-      setPushStatus(on
+      const registered = devices.some(d => d.id === deviceId);
+      setPushStatus(registered
         ? "เปิดอยู่: เตือนทุกเช้า ~08:00 และเมื่อมีการแก้ไขจากอีกเครื่อง"
         : Notification.permission === "denied" ? "ปิดการแจ้งเตือนไว้ เปิดที่ ตั้งค่าของเครื่อง/เบราว์เซอร์" : "ยังไม่ได้เปิดในเครื่องนี้");
     } catch (e) {
@@ -2664,7 +2596,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   async function enablePush() {
     if (!pushSupported()) return refreshPush();
     if (!memAuthed()) return setPushStatus("ล็อกอินก่อน แล้วจึงเปิดแจ้งเตือนได้", true);
-    const asked = Notification.requestPermission();   // must run straight from the tap
+    const asked = Notification.requestPermission();
     setPushStatus("กำลังตั้งค่า…");
     try {
       if ((await asked) !== "granted") return setPushStatus("ไม่ได้รับอนุญาต เปิดที่ ตั้งค่าของเครื่อง/เบราว์เซอร์ แล้วลองใหม่", true);
@@ -2684,9 +2616,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   async function disablePush() {
     try {
       if (pushSupported()) {
-        const reg = await swReady();
-        const sub = await reg.pushManager.getSubscription();
-        if (sub) await sub.unsubscribe();
+        const registration = await swReady();
+        const pushSub = await registration.pushManager.getSubscription();
+        if (pushSub) await pushSub.unsubscribe();
       }
       setPref(PUSH_KEY, "");
       if (memAuthed()) await pushFetch("DELETE", { deviceId });
@@ -2765,9 +2697,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (it.verify) body.append(el("span", "verify", "ตรวจสอบกับต้นฉบับ"));
     if (msgOf(key)) {
       body.append(el("div", "promo", msgOf(key)));
-      const mr = el("div", "btns");
-      mr.append(...msgCopy(key));
-      body.append(mr);
+      const buttonRow = el("div", "btns");
+      buttonRow.append(...msgCopy(key));
+      body.append(buttonRow);
     }
     if (d && n >= 0 && !isDone) {
       const b = el("button", "cal", "เพิ่มในปฏิทิน · เตือนก่อน 7 วัน");
@@ -2794,26 +2726,23 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return c;
   }
 
-  // App icon badge (iOS 16.4+ installed web app; needs notification permission there)
-  // Counts items due within BADGE_DAYS days (today included).
   const BADGE_DAYS = NOTIFY_DAYS;
-  const UPCOMING_DAYS = 7;   // นัดเยี่ยมที่ยังไม่ประสาน: notified this many days ahead (same number as notify.mjs, so the push shows the same count)
+  const UPCOMING_DAYS = 7;
   const badgeOk = () => typeof navigator.setAppBadge === "function";
   const hasNotif = () => typeof Notification !== "undefined";
   let badgeCount = 0;
-  // Counts shown as red bubbles on the tab icons; their sum goes on the app icon
   const badgeParts = { rooms: 0, photos: 0, items: 0, monthly: 0, visits: 0 };
   function refreshBadges() {
-    const put = (sel, n) => {
+    const putBadge = (sel, n) => {
       const b = document.querySelector(sel);
       b.textContent = n > 99 ? "99+" : String(n);
       b.hidden = !n;
     };
-    const bp = uiOpen("items") ? badgeParts : { ...badgeParts, rooms: 0, photos: 0, items: 0, monthly: 0 };   // no counts for a feature the account may not use
-    for (const id of ["items", "rooms", "photos", "monthly"]) put("#subtab-" + id + " .bdg", bp[id]);
-    put("#tab-visits .bdg", bp.visits);
-    const total = bp.rooms + bp.photos + bp.items + bp.monthly + bp.visits;
-    put("#tab-items .bdg", bp.rooms + bp.photos + bp.items + bp.monthly);
+    const visibleBadges = uiOpen("items") ? badgeParts : { ...badgeParts, rooms: 0, photos: 0, items: 0, monthly: 0 };
+    for (const id of ["items", "rooms", "photos", "monthly"]) putBadge("#subtab-" + id + " .bdg", visibleBadges[id]);
+    putBadge("#tab-visits .bdg", visibleBadges.visits);
+    const total = visibleBadges.rooms + visibleBadges.photos + visibleBadges.items + visibleBadges.monthly + visibleBadges.visits;
+    putBadge("#tab-items .bdg", visibleBadges.rooms + visibleBadges.photos + visibleBadges.items + visibleBadges.monthly);
     setBadge(total);
   }
   function setBadge(n) {
@@ -2827,14 +2756,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   function initBadgeAsk() {
     const ask = $("badge-ask"), msg = $("badge-msg"), btn = $("badge-btn");
-    const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
     const standalone = navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
-    const phone = ios || matchMedia("(pointer: coarse)").matches;   // app-icon badges only matter on phones/tablets
+    const phone = isIos || matchMedia("(pointer: coarse)").matches;
     const update = () => {
       let text = "", button = false;
       if (!phone) {
-        // nothing to ask on a computer
-      } else if (ios && !standalone) {
+      } else if (isIos && !standalone) {
         text = "ติดตั้งแอปก่อน: แชร์ > เพิ่มไปยังหน้าจอโฮม";
       } else if (badgeOk() && hasNotif()) {
         if (Notification.permission === "default") {
@@ -2843,7 +2771,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         } else if (Notification.permission === "denied") {
           text = "เปิดแจ้งเตือนที่ ตั้งค่า > แจ้งเตือน > รภ.11";
         }
-      } else if (ios) {
+      } else if (isIos) {
         text = "ลบไอคอนแล้วเพิ่มใหม่ (ต้อง iOS 16.4 ขึ้นไป)";
       }
       msg.textContent = text;
@@ -2882,7 +2810,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   ].join("\n");
   const roomsTemplate = () => settings.roomsTemplate || defaultRoomsTemplate();
 
-  // ---------- รูปสนทนาธรรม 4 ฝ่าย: who has not sent both pictures this month (status comes from BKK11-4DivisionMeeting) ----------
   const UPLOAD_URL = "https://tanawat40889.github.io/bkk11-4divisionmeeting/?openExternalBrowser=1";
   const PHOTO_DEADLINE_DAY = 5;
   const DEFAULT_PHOTOS_TEMPLATE = [
@@ -2899,7 +2826,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     "ขอบคุณมากครับ 🙏"
   ].join("\n");
   const photosTemplate = () => settings.photosTemplate || DEFAULT_PHOTOS_TEMPLATE;
-  // The monthly "please upload your photos" message (sent before the 4th-weekend meeting); {เดือนนี้} = the month
   const DEFAULT_UPLOAD_TEMPLATE = [
     "สวัสดีครับ",
     "",
@@ -2945,18 +2871,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   const uploadMessage = ym => uploadTemplate().replace(/\{\s*([^{}\n]+?)\s*\}/g, (x, k) => (k === "เดือนนี้" ? MONTH_FULL[+ym.slice(5, 7) - 1] : x));
   const photos = { status: null, error: false, loading: false };
 
-  // A message to copy and send for any card of the to-send tab, keyed by the card's done-mark key (synced in state.msgs).
-  // base = the built-in text (a template, or "" when there is none); the typed message wins while it is set.
   const msgOf = key => ((store.msgs[key] || {}).text || "");
   const msgText = (key, base) => msgOf(key) || base || "";
-  // Saves (or clears) the message of a card; text equal to the built-in one, or empty, means "follow the built-in text"
   function setMsg(key, text, base) {
     const t = String(text || "").trim();
     const same = !t || t === String(base || "").trim();
     if (same && !msgOf(key)) return;
     store.msgs[key] = { text: same ? "" : t.slice(0, 2000), t: Date.now() };
   }
-  // The "แจ้งข่าว" cards have no other edit form, so swiping one left opens this small dialog
   let msgTarget = null;
   function openMsg(key, title) {
     msgTarget = { key };
@@ -2971,7 +2893,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("msgform").close();
     refreshAll();
   }
-  // "copy" button for a card that holds its own typed message (nothing when there is none)
   function msgCopy(key) {
     if (!msgOf(key)) return [];
     const c = el("button", "btn ghost sm cpbtn", "คัดลอก");
@@ -2994,36 +2915,36 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     renderPhotosList();
   }
   function renderPhotosList() {
-    const ul = $("photos"), doneUl = $("photos-done"), t = today();
+    const photoList = $("photos"), donePhotoList = $("photos-done"), t = today();
     badgeParts.photos = 0;
     const openLis = [], doneLis = [];
-    {   // the monthly upload notice, sent on the weekday of the nth week set in the settings (or the day typed for this month)
-      const ymU = isoDay(t).slice(0, 7), pk = "u" + ymU, keyU = boardKey("upload", ymU), isDoneU = done.has(keyU);
-      const povU = store.photoOv[pk] || {};
-      const sendU = parseDay(uploadSendDay(ymU, store.prefs, store.photoOv));
-      const nU = diff(sendU, t);
+    {
+      const uploadYm = isoDay(t).slice(0, 7), cardKey = "u" + uploadYm, uploadKey = boardKey("upload", uploadYm), uploadDone = done.has(uploadKey);
+      const povU = store.photoOv[cardKey] || {};
+      const sendU = parseDay(uploadSendDay(uploadYm, store.prefs, store.photoOv));
+      const daysToUploadSend = diff(sendU, t);
       const metaU = "ส่ง " + sendU.getUTCDate() + " " + MONTHS[sendU.getUTCMonth()] + " · " + (povU.date ? "ปรับเอง" : uploadRuleShort());
       const extraU = [];
       if (povU.note) extraU.push(el("div", "meta", povU.note));
       const openU = el("a", "lnk", "หน้าส่งรูป ›");
       openU.href = UPLOAD_URL; openU.target = "_blank"; openU.rel = "noopener";
       extraU.push(openU);
-      const soonU = nU <= UPLOAD_NOTIFY_DAYS;
-      const [pxU, pkU] = pillOf(nU, isDoneU);
-      const liU = mrow("later" + (isDoneU ? " done" : ""), "", "แจ้งอัพโหลดรูป", metaU, pxU, pkU, extraU, [copyIcon(() => msgText(keyU, uploadMessage(ymU)))]);
-      const tickU = el("button", "otick" + (isDoneU ? " on" : ""));
+      const soonU = daysToUploadSend <= UPLOAD_NOTIFY_DAYS;
+      const [pxU, pkU] = pillOf(daysToUploadSend, uploadDone);
+      const uploadCard = mrow("later" + (uploadDone ? " done" : ""), "", "แจ้งอัพโหลดรูป", metaU, pxU, pkU, extraU, [copyIcon(() => msgText(uploadKey, uploadMessage(uploadYm)))]);
+      const tickU = el("button", "otick" + (uploadDone ? " on" : ""));
       tickU.type = "button";
-      tickU.setAttribute("aria-pressed", String(isDoneU));
-      tickU.setAttribute("aria-label", isDoneU ? "ยกเลิกส่งข้อความแล้ว" : "ทำเครื่องหมายว่าส่งข้อความแล้ว");
+      tickU.setAttribute("aria-pressed", String(uploadDone));
+      tickU.setAttribute("aria-label", uploadDone ? "ยกเลิกส่งข้อความแล้ว" : "ทำเครื่องหมายว่าส่งข้อความแล้ว");
       tickU.onclick = () => {
-        if (isDoneU) done.delete(keyU); else done.add(keyU);
+        if (uploadDone) done.delete(uploadKey); else done.add(uploadKey);
         saveDone();
         renderPhotos();
       };
-      liU.prepend(tickU);
-      swipeRow(liU, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "upload", pk, ym: ymU, send: sendU, mkey: keyU, base: uploadMessage(ymU) }) }]);
-      if (!isDoneU && soonU && nU >= -PAST_NOTIFY_DAYS) badgeParts.photos++;
-      (isDoneU ? doneLis : openLis).push(liU);
+      uploadCard.prepend(tickU);
+      swipeRow(uploadCard, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "upload", pk: cardKey, ym: uploadYm, send: sendU, mkey: uploadKey, base: uploadMessage(uploadYm) }) }]);
+      if (!uploadDone && soonU && daysToUploadSend >= -PAST_NOTIFY_DAYS) badgeParts.photos++;
+      (uploadDone ? doneLis : openLis).push(uploadCard);
     }
     if (!photos.status) {
       if (!photos.error) openLis.push(el("p", "empty", "กำลังโหลดสถานะรูป…"));
@@ -3038,23 +2959,23 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (miss) {
       const total = st.areas.length;
       const ym = st.month, y = +ym.slice(0, 4), m = +ym.slice(5, 7) - 1;
-      const pov = store.photoOv[ym] || {};
-      const send = (pov.date && parseDay(pov.date)) || lastDayOfMonth(new Date(Date.UTC(y, m, 1)));
+      const photoOverride = store.photoOv[ym] || {};
+      const send = (photoOverride.date && parseDay(photoOverride.date)) || lastDayOfMonth(new Date(Date.UTC(y, m, 1)));
       const key = photoKey(ym), isDone = done.has(key);
-      const nS = diff(send, t);
+      const daysToSend = diff(send, t);
       let extra = [], side = [];
-      const meta = miss.length ? "ส่ง " + send.getUTCDate() + " " + MONTHS[send.getUTCMonth()] + (pov.date ? " · ปรับเอง" : "") + " · ขาด " + miss.length + "/" + total : "ครบทุกตำบล (" + total + ")";
+      const meta = miss.length ? "ส่ง " + send.getUTCDate() + " " + MONTHS[send.getUTCMonth()] + (photoOverride.date ? " · ปรับเอง" : "") + " · ขาด " + miss.length + "/" + total : "ครบทุกตำบล (" + total + ")";
       if (miss.length) {
         extra = [el("div", "meta clamp", miss.map(a => a.label + (a.partial ? " (ขาด" + a.missing.join(", ") + ")" : "")).join(" · "))];
         const open = el("a", "lnk", "หน้าส่งรูป ›");
         open.href = UPLOAD_URL; open.target = "_blank"; open.rel = "noopener";
         extra.push(open);
         side = [copyIcon(() => msgText(key, photosMessage(ym, miss)))];
-        if (!isDone && nS <= PHOTO_NOTIFY_DAYS && nS >= -PAST_NOTIFY_DAYS) badgeParts.photos++;   // counts from PHOTO_NOTIFY_DAYS before the send day until ticked
+        if (!isDone && daysToSend <= PHOTO_NOTIFY_DAYS && daysToSend >= -PAST_NOTIFY_DAYS) badgeParts.photos++;
       }
-      if (pov.note) extra.unshift(el("div", "meta", pov.note));
+      if (photoOverride.note) extra.unshift(el("div", "meta", photoOverride.note));
       const finished = isDone || !miss.length;
-      const [pxS, pkS] = miss.length ? pillOf(nS, isDone) : ["ครบแล้ว", isDone ? null : "ok"];
+      const [pxS, pkS] = miss.length ? pillOf(daysToSend, isDone) : ["ครบแล้ว", isDone ? null : "ok"];
       const li = mrow("later" + (finished ? " done" : ""), "", "ติดตามรูป", meta, pxS, pkS, extra, side);
       if (miss.length) {
         const tick = el("button", "otick" + (isDone ? " on" : ""));
@@ -3071,16 +2992,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       swipeRow(li, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openPhoto({ kind: "status", ym, send, mkey: key, base: miss.length ? photosMessage(ym, miss) : "" }) }]);
       (finished ? doneLis : openLis).push(li);
     }
-    // reminders typed in the app
     const rems = Object.entries(store.reminders).filter(([, v]) => !v.deleted).map(([id, v]) => ({ id, ...v, d: parse(v.due) }))
       .sort((a, b) => (a.d || 1e15) - (b.d || 1e15));
     for (const r of rems) {
       const key = boardKey("reminder", r.id), isDone = done.has(key);
       const meta = [r.d ? fmt(r.d) : "ไม่ระบุวัน", r.note].filter(Boolean).join(" · ");
-      const rx = [];
-      if (msgOf(key)) rx.push(el("div", "meta clamp", msgOf(key)));
+      const extras = [];
+      if (msgOf(key)) extras.push(el("div", "meta clamp", msgOf(key)));
       const [pxR, pkR] = r.d ? pillOf(diff(r.d, t), isDone) : [null, null];
-      const li = mrow("later" + (isDone ? " done" : ""), "", r.title, meta, pxR, pkR, rx, msgOf(key) ? [copyIcon(() => msgOf(key))] : null);
+      const li = mrow("later" + (isDone ? " done" : ""), "", r.title, meta, pxR, pkR, extras, msgOf(key) ? [copyIcon(() => msgOf(key))] : null);
       const tick = el("button", "otick" + (isDone ? " on" : ""));
       tick.type = "button";
       tick.setAttribute("aria-pressed", String(isDone));
@@ -3098,31 +3018,30 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       if (!isDone && r.d && diff(r.d, t) <= BADGE_DAYS && diff(r.d, t) >= -PAST_NOTIFY_DAYS) badgeParts.photos++;
       (isDone ? doneLis : openLis).push(li);
     }
-    ul.replaceChildren(...(openLis.length ? openLis : [el("p", "empty", doneLis.length ? "ไม่มีรายการค้าง" : "ยังไม่มีรายการ")]));
+    photoList.replaceChildren(...(openLis.length ? openLis : [el("p", "empty", doneLis.length ? "ไม่มีรายการค้าง" : "ยังไม่มีรายการ")]));
     $("photos-done-wrap").hidden = !doneLis.length;
     $("photos-done-sum").textContent = `ทำแล้ว (${doneLis.length})`;
-    doneUl.replaceChildren(...doneLis);
+    donePhotoList.replaceChildren(...doneLis);
     refreshBadges();
   }
 
-  // One dialog for two things: the send day / note of this month's status card, and reminders typed here
   let phTarget = null;
   function openPhoto(target) {
     phTarget = target;
-    const status = target.kind !== "rem", r = target.r, pk = target.kind === "upload" ? target.pk : target.ym;
-    target.pk = pk;
+    const status = target.kind !== "rem", r = target.r, cardKey = target.kind === "upload" ? target.pk : target.ym;
+    target.pk = cardKey;
     $("ph-title").textContent = target.kind === "upload" ? "แก้การแจ้งอัพโหลดรูปเดือนนี้" : status ? "แก้การแจ้งรูปเดือนนี้" : r ? "แก้ไขรายการเตือน" : "เพิ่มรายการเตือน";
     $("ph-info").hidden = !status;
     if (status) $("ph-info").textContent = target.kind === "upload" ? "ปกติส่งข้อความ " + uploadRuleText() + " (ตั้งได้ที่ ตั้งค่า)" : "ปกติส่งข้อความวันสุดท้ายของเดือน";
     $("ph-name-wrap").hidden = status;
     $("ph-name").value = r ? r.title : "";
     $("ph-date-lab").textContent = status ? "วันส่งข้อความ" : "วันที่ต้องทำ";
-    $("ph-date").value = status ? ((store.photoOv[pk] || {}).date || "") : r ? r.due : "";
-    $("ph-note").value = status ? ((store.photoOv[pk] || {}).note || "") : r ? r.note : "";
+    $("ph-date").value = status ? ((store.photoOv[cardKey] || {}).date || "") : r ? r.due : "";
+    $("ph-note").value = status ? ((store.photoOv[cardKey] || {}).note || "") : r ? r.note : "";
     $("ph-error").textContent = "";
     $("ph-msg").value = target.mkey ? msgText(target.mkey, target.base) : "";
     $("ph-msg-hint").textContent = target.base ? "เว้นว่าง = ใช้ข้อความมาตรฐาน (ตั้งค่า > ข้อความของการ์ดนี้)" : "ข้อความที่จะคัดลอกไปส่ง (ถ้ามี)";
-    $("ph-reset").hidden = !(status && store.photoOv[pk] && (store.photoOv[pk].date || store.photoOv[pk].note));
+    $("ph-reset").hidden = !(status && store.photoOv[cardKey] && (store.photoOv[cardKey].date || store.photoOv[cardKey].note));
     $("phform").showModal();
   }
   function savePhoto() {
@@ -3171,8 +3090,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     renderPhotos();
   }
 
-  // {วันที่จัดและเวลา} -> 22 กันยายน 2569 เวลา 10:00-12:00 น.   ({วัน} = อังคาร, {รวม} = total, {ชื่อภาค} = head count)
-  // Locked: each region always sends 3 people per round, whatever the board says
   const regionDefaults = () => Object.fromEntries(PHAKS.map(p => [p, 3]));
   function roomsMessage(r, d) {
     const regions = { ...(r.regions || {}), ...regionDefaults() };
@@ -3192,7 +3109,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return { text, missing: [...missing] };
   }
 
-  // One row of the to-send tab: tick | title + one line | countdown pill + copy icon. `mon` is unused (the date is in the title).
   function mrow(cls, mon, title, meta, pillText, kind, extra, side) {
     const li = el("li", "mrow " + cls);
     const body = el("div", "mbody");
@@ -3205,7 +3121,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (sd.childNodes.length) li.append(sd);
     return li;
   }
-  // countdown pill for a day count; a not-yet-ticked item that is already late stays red (the "keep nagging" rule)
   const pillOf = (n, isDone) => { if (isDone) return [null, null]; const [txt, k] = countdown(n); return [txt, n < 0 ? "bad" : k]; };
   const ICON_COPY = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>';
   function copyIcon(getText, label) {
@@ -3217,13 +3132,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return b;
   }
 
-  // copy icon (and a note when the round has no head count per region yet)
   function roomActions({ r, d }) {
-    const mk = roomKey(r.key), base = roomsMessage(r, d).text;
+    const messageKey = roomKey(r.key), base = roomsMessage(r, d).text;
     const { missing } = roomsMessage(r, d);
     return {
-      side: [copyIcon(() => msgText(mk, base))],
-      extra: missing.length && !msgOf(mk) ? [el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : []
+      side: [copyIcon(() => msgText(messageKey, base))],
+      extra: missing.length && !msgOf(messageKey) ? [el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" "))] : []
     };
   }
 
@@ -3240,8 +3154,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       r.edited && "แก้แล้ว"
     ].filter(Boolean);
 
-    // The reminder that matters is sending the LINE confirmation message by the round's deadline date,
-    // not the round's event date itself, so the day-count counts down to that deadline (can show "เลยมา" if it already passed).
     const meta = x => {
       const m = info(x);
       const ov = store.roomDates[x.r.dl];
@@ -3250,18 +3162,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     };
     const upAll = rooms.filter(x => x.d >= t);
     const isDoneRoom = x => done.has(roomKey(x.r.key));
-    const up = upAll.filter(x => !isDoneRoom(x)).slice(0, UPCOMING_MAX);
+    const upcoming = upAll.filter(x => !isDoneRoom(x)).slice(0, UPCOMING_MAX);
     const doneRooms = upAll.filter(isDoneRoom);
     badgeParts.rooms = upAll.filter(x => {
       const n = diff(roomDeadlineOf(x.r, store.roomDates), t);
-      return n <= ROOMS_NOTIFY_DAYS && n >= -PAST_NOTIFY_DAYS && !isDoneRoom(x);   // a passed deadline (round still ahead) keeps counting until ticked, for PAST_NOTIFY_DAYS days
+      return n <= ROOMS_NOTIFY_DAYS && n >= -PAST_NOTIFY_DAYS && !isDoneRoom(x);
     }).length;
     refreshBadges();
     const roomCard = (x, i, finished) => {
       const key = roomKey(x.r.key), isDone = done.has(key);
-      const ra = roomActions(x);
+      const actions = roomActions(x);
       const [px, pk] = pillOf(diff(roomDeadlineOf(x.r, store.roomDates), t), finished);
-      const li = mrow(finished ? "later done" : i === 0 ? "next" : "later", "", fmt(x.d), meta(x), px, pk, ra.extra, ra.side);
+      const li = mrow(finished ? "later done" : i === 0 ? "next" : "later", "", fmt(x.d), meta(x), px, pk, actions.extra, actions.side);
       const tick = el("button", "otick" + (isDone ? " on" : ""));
       tick.type = "button";
       tick.setAttribute("aria-pressed", String(isDone));
@@ -3274,7 +3186,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       li.prepend(tick);
       return swipeRow(li, roundActs(x));
     };
-    $("rooms").replaceChildren(...up.map((x, i) => roomCard(x, i, false)));
+    $("rooms").replaceChildren(...upcoming.map((x, i) => roomCard(x, i, false)));
     $("rooms-done-wrap").hidden = !doneRooms.length;
     $("rooms-done-sum").textContent = `ทำแล้ว (${doneRooms.length})`;
     $("rooms-done").replaceChildren(...doneRooms.map(x => roomCard(x, 0, true)));
@@ -3285,13 +3197,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("rooms-past-wrap").hidden = !past.length;
     $("rooms-past-sum").textContent = `ดูย้อนหลัง 1 ปี (${past.length} รอบ)`;
     $("rooms-past").replaceChildren(...past.map(x =>
-      swipeRow((() => { const ra = roomActions(x); return mrow("past", "", fmt(x.d), meta(x), null, null, ra.extra, ra.side); })(), roundActs(x))));
+      swipeRow((() => { const actions = roomActions(x); return mrow("past", "", fmt(x.d), meta(x), null, null, actions.extra, actions.side); })(), roundActs(x))));
 
-    if (!up.length && !past.length && !doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ยังไม่มีข้อมูลรอบ"));
-    else if (!up.length && doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ทำครบทุกรอบแล้ว"));
+    if (!upcoming.length && !past.length && !doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ยังไม่มีข้อมูลรอบ"));
+    else if (!upcoming.length && doneRooms.length) $("rooms").replaceChildren(el("p", "empty", "ทำครบทุกรอบแล้ว"));
   }
 
-  // Rows can be swiped left to show their buttons (the same as the cards in the other tabs)
   function swipeRow(li, actions) {
     const inner = el("div", "minner");
     inner.append(...li.childNodes);
@@ -3303,7 +3214,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     { label: "ลบ", cls: "sw-del", fn: () => deleteRound(x.r) }
   ];
 
-  // Add / edit / hide a round. state.rounds["b-<board date>"] edits (or hides) a round of the board, any other id is typed here
   let rnTarget = null, rnBase = "";
   function openRound(r) {
     rnTarget = r || null;
@@ -3321,14 +3231,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("rnform").showModal();
   }
   function saveRound() {
-    const date = $("rn-date").value, cnt = $("rn-count").value.trim();
+    const date = $("rn-date").value, countText = $("rn-count").value.trim();
     if (!parse(date)) { $("rn-error").textContent = "เลือกวันที่ก่อน"; return; }
-    if (cnt && !(/^\d{1,4}$/.test(cnt) && +cnt <= 1000)) { $("rn-error").textContent = "จำนวนคนใส่เป็นตัวเลข 0–1000"; return; }
+    if (countText && !(/^\d{1,4}$/.test(countText) && +countText <= 1000)) { $("rn-error").textContent = "จำนวนคนใส่เป็นตัวเลข 0–1000"; return; }
     const dlv = $("rn-dl").value;
     if (dlv && !parse(dlv)) { $("rn-error").textContent = "วันที่เตือนไม่ถูกต้อง"; return; }
     const id = rnTarget ? rnTarget.id : "m-" + newId(), now = Date.now();
-    store.rounds[id] = { date, time: $("rn-time").value.trim(), count: cnt === "" ? null : +cnt, issue: $("rn-issue").value.trim(), t: now };
-    // the countdown date is keyed by the round's own date (a board round keeps the board's date, a typed one follows its date)
+    store.rounds[id] = { date, time: $("rn-time").value.trim(), count: countText === "" ? null : +countText, issue: $("rn-issue").value.trim(), t: now };
     const oldDl = rnTarget ? rnTarget.dl : null, newDl = rnTarget && !rnTarget.typed ? rnTarget.dl : date;
     if (oldDl && oldDl !== newDl && store.roomDates[oldDl] && store.roomDates[oldDl].date) store.roomDates[oldDl] = { date: "", t: now };
     if (dlv || (store.roomDates[newDl] && store.roomDates[newDl].date)) store.roomDates[newDl] = { date: dlv, t: now };
@@ -3364,7 +3273,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const doneItems = items.filter(isDone);
     const upcoming = open.filter(x => !x.d || x.d >= t);
     const overdue = open.filter(x => x.d && x.d < t).reverse();
-    badgeParts.items = upcoming.filter(x => x.d && diff(x.d, t) <= BADGE_DAYS).length + overdue.filter(x => diff(x.d, t) >= -PAST_NOTIFY_DAYS).length;   // overdue ones keep counting until ticked, for PAST_NOTIFY_DAYS days
+    badgeParts.items = upcoming.filter(x => x.d && diff(x.d, t) <= BADGE_DAYS).length + overdue.filter(x => diff(x.d, t) >= -PAST_NOTIFY_DAYS).length;
     refreshBadges();
 
     const emptyText = doneItems.length ? "ทำครบทุกรายการแล้ว" : "ไม่มีรายการ";
@@ -3382,8 +3291,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
     const b = parse(data.builtAt);
     $("updated").textContent = b ? "อัปเดตล่าสุด " + fmt(b) : "";
-    // The weekly scheduled task writes its own next-expected-refresh date; if that date has passed
-    // (with a day's grace) and nothing refreshed the board since, the automation has gone quiet.
     const nextRun = parse(data.nextRun);
     const stale = !!(nextRun && nextRun < t && (!b || b < nextRun));
     $("stale").hidden = !stale;
@@ -3393,11 +3300,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("stale").textContent = stale ? "ข้อมูลยังไม่อัปเดตตามกำหนด (ควรอัปเดต " + fmt(nextRun) + ") ตรวจสอบระบบดึงข้อมูล" : "";
   }
 
-  // ---------- รายการประจำเดือน (เก็บในเครื่องนี้) ----------
   const DAY_TH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
   const EN_MON = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
-  // {Today} -> วันจันทร์ที่ 21 ม.ค. 2569
   const MONTH_FULL = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
   const todayText = d => `วัน${DAY_TH[d.getUTCDay()]}ที่ ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear() + 543}`;
   const patternText = it =>
@@ -3407,23 +3312,22 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function monthIndex(key) {
     const k = String(key).trim().toLowerCase().replace(/\./g, "");
     if (/^\d{1,2}$/.test(k)) return +k >= 1 && +k <= 12 ? +k - 1 : -1;
-    const th = MONTHS.findIndex(m => m.replace(/\./g, "") === k);
-    return th >= 0 ? th : EN_MON.indexOf(k.slice(0, 3));
+    const monthIdx = MONTHS.findIndex(m => m.replace(/\./g, "") === k);
+    return monthIdx >= 0 ? monthIdx : EN_MON.indexOf(k.slice(0, 3));
   }
 
-  // Accepts strict JSON, and also the loose form: [ Jan: { link: "a.html", month: "x" }, ... ]
   function parseMonthJson(text) {
     const empty = () => Array.from({ length: 12 }, () => ({}));
-    const src = String(text || "").trim();
-    if (!src) return { data: empty(), count: 0, bad: [] };
+    const trimmed = String(text || "").trim();
+    if (!trimmed) return { data: empty(), count: 0, bad: [] };
     let obj;
     try {
-      obj = JSON.parse(src);
+      obj = JSON.parse(trimmed);
     } catch (e) {
-      let f = src;
+      let f = trimmed;
       if (/^\[\s*[^\s{"\[]+\s*:/.test(f) && f.endsWith("]")) f = "{" + f.slice(1, -1) + "}";
       f = f.replace(/([{,]\s*)([A-Za-z_฀-๿][\w฀-๿.]*)\s*:/g, '$1"$2":').replace(/,\s*([}\]])/g, "$1");
-      try { obj = JSON.parse(f); } catch (e2) { return { error: "รูปแบบไม่ถูกต้อง ตรวจวงเล็บ { } [ ] เครื่องหมายคำพูด และลูกน้ำ" }; }
+      try { obj = JSON.parse(f); } catch (parseError) { return { error: "รูปแบบไม่ถูกต้อง ตรวจวงเล็บ { } [ ] เครื่องหมายคำพูด และลูกน้ำ" }; }
     }
     const entries = Array.isArray(obj)
       ? obj.flatMap(o => (o && typeof o === "object" ? Object.entries(o) : []))
@@ -3440,11 +3344,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return { data, count, bad, filled: data.filter(m => Object.keys(m).length).length };
   }
 
-  // Replaces {Today} and {key} (case-insensitive, spaces allowed inside the braces)
-  function fillTemplate(tpl, date, vars) {
+  function fillTemplate(templateText, date, vars) {
     const v = { ...vars, today: todayText(date), thismonth: MONTH_FULL[date.getUTCMonth()] };
     const missing = new Set();
-    const text = String(tpl).replace(/\{\s*([^{}\s]+)\s*\}/g, (m, k) => {
+    const text = String(templateText).replace(/\{\s*([^{}\s]+)\s*\}/g, (m, k) => {
       const key = k.toLowerCase();
       if (Object.prototype.hasOwnProperty.call(v, key)) return v[key];
       missing.add(k);
@@ -3462,49 +3365,47 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     toastTimer = setTimeout(() => { t.hidden = true; }, 2800);
   }
 
-  // Copies text and always says what happened (button label + a short message with a preview)
   async function copyText(text, btn) {
     const icon = btn.classList.contains("ibtn");
     const label = btn.dataset.label || btn.textContent;
     btn.dataset.label = label;
-    const say = (buttonText, message) => {
+    const announce = (buttonText, message) => {
       if (icon) { btn.classList.add("ok"); setTimeout(() => btn.classList.remove("ok"), 1200); toast(message); return; }
       btn.textContent = buttonText;
       toast(message);
       setTimeout(() => { btn.textContent = label; }, 1500);
     };
     text = String(text == null ? "" : text);
-    if (!text.trim()) return say("ไม่มีข้อมูล", "ไม่มีข้อมูลให้คัดลอก");
+    if (!text.trim()) return announce("ไม่มีข้อมูล", "ไม่มีข้อมูลให้คัดลอก");
     let ok = true;
     try {
       await navigator.clipboard.writeText(text);
     } catch (e) {
-      const ta = el("textarea");
-      ta.value = text;
-      ta.style.cssText = "position:fixed;opacity:0;top:0";
-      document.body.append(ta);
-      ta.select();
-      ta.setSelectionRange(0, text.length);
-      try { ok = document.execCommand("copy"); } catch (e2) { ok = false; }
-      ta.remove();
+      const textArea = el("textarea");
+      textArea.value = text;
+      textArea.style.cssText = "position:fixed;opacity:0;top:0";
+      document.body.append(textArea);
+      textArea.select();
+      textArea.setSelectionRange(0, text.length);
+      try { ok = document.execCommand("copy"); } catch (copyError) { ok = false; }
+      textArea.remove();
     }
-    if (!ok) return say("คัดลอกไม่สำเร็จ", "คัดลอกไม่สำเร็จ ลองใหม่อีกครั้ง");
+    if (!ok) return announce("คัดลอกไม่สำเร็จ", "คัดลอกไม่สำเร็จ ลองใหม่อีกครั้ง");
     const flat = text.replace(/\s+/g, " ").trim();
-    say("คัดลอกแล้ว", `คัดลอกแล้ว (${[...text].length} ตัวอักษร)\n${flat.slice(0, 42)}${flat.length > 42 ? "…" : ""}`);
+    announce("คัดลอกแล้ว", `คัดลอกแล้ว (${[...text].length} ตัวอักษร)\n${flat.slice(0, 42)}${flat.length > 42 ? "…" : ""}`);
   }
 
-  const MONTHLY_SHOWN = 2;      // upcoming months listed on each card
-  const MONTHLY_LOOKAHEAD = 8;  // fetched to find the next occurrence not yet ticked done
+  const MONTHLY_SHOWN = 2;
+  const MONTHLY_LOOKAHEAD = 8;
 
-  function monthlyCard(it, i, t, g, occ) {
+  function monthlyCard(it, i, t, g, occList) {
     const occKey = o => boardKey(it.id, isoDay(o.date));
     const isOccDone = o => done.has(occKey(o));
-    // The card's own tick marks the nearest occurrence done, which also silences its notification
-    const near = occ[0];
+    const near = occList[0];
     const nearDone = !!near && isOccDone(near);
     const c = el("li", "card" + (nearDone ? " done" : ""));
     c.style.setProperty("--lc", "var(--lv-all)");
-    const own = parseMonthJson(it.json);
+    const parsedMonth = parseMonthJson(it.json);
 
     const tick = el("button", "tick" + (nearDone ? " on" : ""));
     tick.type = "button";
@@ -3531,16 +3432,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
     head.append(el("span", "chev"));
 
-    // Rendered promote text for one occurrence (a per-month override wins over the default text)
     const occView = o => {
-      const vars = { ...(g.data ? g.data[o.month] : {}), ...(own.data ? own.data[o.month] : {}) };
-      const tpl = (o.ov && o.ov.promote && o.ov.promote.trim()) ? o.ov.promote : (it.promote || "");
-      return { ...fillTemplate(tpl, o.date, vars), time: (o.ov && o.ov.time) || it.time || "" };
+      const vars = { ...(g.data ? g.data[o.month] : {}), ...(parsedMonth.data ? parsedMonth.data[o.month] : {}) };
+      const promoteText = (o.ov && o.ov.promote && o.ov.promote.trim()) ? o.ov.promote : (it.promote || "");
+      return { ...fillTemplate(promoteText, o.date, vars), time: (o.ov && o.ov.time) || it.time || "" };
     };
 
     const body = el("div", "body flush");
 
-    // item-level actions first
     const actions = el("div", "btns top");
     const edit = el("button", "btn ghost", "แก้ไขรายการ");
     edit.type = "button";
@@ -3557,14 +3456,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     actions.append(edit, del);
     body.append(actions);
 
-    if (own.error) body.append(el("p", "warnline", "JSON เฉพาะรายการอ่านไม่ได้: " + own.error));
+    if (parsedMonth.error) body.append(el("p", "warnline", "JSON เฉพาะรายการอ่านไม่ได้: " + parsedMonth.error));
 
-    // one row per upcoming month; its message shows only after tapping the row
     const months = el("div", "occlist");
-    occ.forEach(o => {
+    occList.forEach(o => {
       const { text, missing, time } = occView(o);
       const done1 = isOccDone(o);
-      const box = el("div", "occ" + (done1 ? " done" : ""));
+      const occCard = el("div", "occ" + (done1 ? " done" : ""));
 
       const otick = el("button", "otick" + (done1 ? " on" : ""));
       otick.type = "button";
@@ -3577,42 +3475,42 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         renderMonthly();
       };
 
-      const oh = el("button", "occ-head");
-      oh.type = "button";
-      oh.setAttribute("aria-expanded", "false");
-      const dl = el("span", "occ-date", fmt(o.date) + (time ? " · " + time : ""));
-      if (o.ov) dl.append(" ", el("span", "tag", "แก้เดือนนี้"));
-      if (done1) oh.append(dl, el("span", "pill ok", "ทำแล้ว"), el("span", "chev"));
-      else { const [cd, ck] = countdown(diff(o.date, t)); oh.append(dl, el("span", "pill " + ck, cd), el("span", "chev")); }
+      const occHead = el("button", "occ-head");
+      occHead.type = "button";
+      occHead.setAttribute("aria-expanded", "false");
+      const occDate = el("span", "occ-date", fmt(o.date) + (time ? " · " + time : ""));
+      if (o.ov) occDate.append(" ", el("span", "tag", "แก้เดือนนี้"));
+      if (done1) occHead.append(occDate, el("span", "pill ok", "ทำแล้ว"), el("span", "chev"));
+      else { const [cd, ck] = countdown(diff(o.date, t)); occHead.append(occDate, el("span", "pill " + ck, cd), el("span", "chev")); }
 
       const top = el("div", "occtop");
-      top.append(otick, oh);
+      top.append(otick, occHead);
 
-      const ob = el("div", "occ-body");
-      ob.hidden = true;
-      if (o.ov && o.ov.date && o.ov.date !== isoDay(o.rule)) ob.append(el("div", "meta", "ปกติ " + fmt(o.rule)));
-      ob.append(el("div", "promo", text || "(ยังไม่ได้ใส่ข้อความโปรโมท)"));
-      if (missing.length) ob.append(el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" ")));
-      const row = el("div", "btns");
+      const occBody = el("div", "occ-body");
+      occBody.hidden = true;
+      if (o.ov && o.ov.date && o.ov.date !== isoDay(o.rule)) occBody.append(el("div", "meta", "ปกติ " + fmt(o.rule)));
+      occBody.append(el("div", "promo", text || "(ยังไม่ได้ใส่ข้อความโปรโมท)"));
+      if (missing.length) occBody.append(el("div", "warnline", "ยังไม่มีข้อมูล " + missing.map(k => "{" + k + "}").join(" ")));
+      const occButtonRow = el("div", "btns");
       if (text) {
         const b = el("button", "btn ghost sm", "คัดลอก");
         b.type = "button";
         b.onclick = () => copyText(text, b);
-        row.append(b);
+        occButtonRow.append(b);
       }
-      const ed = el("button", "btn ghost sm", "แก้เดือนนี้");
-      ed.type = "button";
-      ed.onclick = () => openOverride(i, o);
-      row.append(ed);
-      ob.append(row);
+      const editButton = el("button", "btn ghost sm", "แก้เดือนนี้");
+      editButton.type = "button";
+      editButton.onclick = () => openOverride(i, o);
+      occButtonRow.append(editButton);
+      occBody.append(occButtonRow);
 
-      oh.onclick = () => {
-        const open = oh.getAttribute("aria-expanded") !== "true";
-        oh.setAttribute("aria-expanded", String(open));
-        ob.hidden = !open;
+      occHead.onclick = () => {
+        const open = occHead.getAttribute("aria-expanded") !== "true";
+        occHead.setAttribute("aria-expanded", String(open));
+        occBody.hidden = !open;
       };
-      box.append(top, ob);
-      months.append(box);
+      occCard.append(top, occBody);
+      months.append(occCard);
     });
     body.append(months);
 
@@ -3625,34 +3523,33 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     };
     const top = el("div", "ctop");
     top.append(tick, head);
-    const nextForCopy = occ.find(o => !isOccDone(o)) || occ[0];
+    const nextForCopy = occList.find(o => !isOccDone(o)) || occList[0];
     const next = nextForCopy ? occView(nextForCopy).text : "";
     if (next) {
-      const cb = copyIcon(() => next, "คัดลอกข้อความโปรโมทครั้งถัดไป");
-      cb.classList.add("ctopcp");
-      top.append(cb);
+      const copyButton = copyIcon(() => next, "คัดลอกข้อความโปรโมทครั้งถัดไป");
+      copyButton.classList.add("ctopcp");
+      top.append(copyButton);
     }
     makeSwipe(c, top, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openForm(i) }, { label: "ลบ", cls: "sw-del", fn: delItem }]);
     c.append(body);
     return c;
   }
 
-  // Sorted by the nearest upcoming date; an occurrence that has passed is replaced by next month's
   function renderMonthly() {
     const t = today();
-    const g = parseMonthJson(monthly.json);
+    const monthlyData = parseMonthJson(monthly.json);
     const list = monthly.items
       .map((it, i) => {
-        const occ = occurrences(it, new Date(t.getTime() - PAST_NOTIFY_DAYS * 864e5), MONTHLY_LOOKAHEAD);   // a passed, unticked one stays for PAST_NOTIFY_DAYS days
-        const nextUndone = occ.find(o => !done.has(boardKey(it.id, isoDay(o.date))));
-        return { it, i, occ: occ.slice(0, MONTHLY_SHOWN), sortDate: (nextUndone || occ[0] || {}).date };
+        const occList = occurrences(it, new Date(t.getTime() - PAST_NOTIFY_DAYS * 864e5), MONTHLY_LOOKAHEAD);
+        const nextUndone = occList.find(o => !done.has(boardKey(it.id, isoDay(o.date))));
+        return { it, i, occ: occList.slice(0, MONTHLY_SHOWN), sortDate: (nextUndone || occList[0] || {}).date };
       })
       .sort((a, b) => (a.sortDate || 1e15) - (b.sortDate || 1e15));
     badgeParts.monthly = list.filter(x => x.sortDate && diff(x.sortDate, t) <= MONTHLY_NOTIFY_DAYS).length;
     refreshBadges();
     const nearDone = x => !!x.occ[0] && done.has(boardKey(x.it.id, isoDay(x.occ[0].date)));
-    const openCards = list.filter(x => !nearDone(x)).map(x => monthlyCard(x.it, x.i, t, g, x.occ));
-    const doneCards = list.filter(nearDone).map(x => monthlyCard(x.it, x.i, t, g, x.occ));
+    const openCards = list.filter(x => !nearDone(x)).map(x => monthlyCard(x.it, x.i, t, monthlyData, x.occ));
+    const doneCards = list.filter(nearDone).map(x => monthlyCard(x.it, x.i, t, monthlyData, x.occ));
     const emptyText = doneCards.length ? "ทำครบทุกรายการแล้ว" : "ยังไม่มีรายการ";
     $("monthly").replaceChildren(...(openCards.length ? openCards : [el("p", "empty", emptyText)]));
     $("monthly-done-wrap").hidden = !doneCards.length;
@@ -3660,7 +3557,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("monthly-done").replaceChildren(...doneCards);
   }
 
-  // Edit one month only (e.g. a postponed date) without touching the recurring rule
   let ovTarget = null;
   const monthlyIndex = id => monthly.items.findIndex(x => x.id === id);
   function openOverride(i, o) {
@@ -3703,7 +3599,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return { ok: true, text: `มีข้อมูล ${r.filled} จาก 12 เดือน` + (r.bad.length ? " · ข้ามคีย์ที่อ่านไม่ได้: " + r.bad.join(", ") : "") };
   }
 
-  let editing = "";   // id of the item being edited ("" = adding one)
+  let editing = "";
   function openForm(i) {
     editing = i >= 0 ? monthly.items[i].id : "";
     const it = i >= 0 ? monthly.items[i] : { title: "", weekday: 1, nth: 2, time: "", promote: "", json: "" };
@@ -3719,9 +3615,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   function saveForm() {
     const title = $("f-title").value.trim();
-    const own = jsonStatusText($("f-json").value);
+    const jsonStatus = jsonStatusText($("f-json").value);
     if (!title) { $("f-error").textContent = "ใส่ชื่อรายการก่อน"; return; }
-    if (!own.ok) { $("f-error").textContent = "JSON เฉพาะรายการ: " + own.text; return; }
+    if (!jsonStatus.ok) { $("f-error").textContent = "JSON เฉพาะรายการ: " + jsonStatus.text; return; }
     const item = {
       title,
       weekday: +$("f-weekday").value,
@@ -3732,7 +3628,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     };
     const i = editing ? monthlyIndex(editing) : -1;
     if (editing && i < 0) { $("f-error").textContent = "รายการนี้ถูกลบหรือเปลี่ยนไปแล้ว ปิดแล้วลองใหม่"; return; }
-    // the same title on the same weekday/nth/time is the same item (sync keeps only one of those), so it is refused here
     if (monthly.items.some((x, k) => k !== i && x.title === title && x.weekday === item.weekday && x.nth === item.nth && x.time === item.time)) {
       $("f-error").textContent = "มีรายการชื่อเดียวกันและวันเวลาเดียวกันอยู่แล้ว";
       return;
@@ -3740,7 +3635,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (i >= 0) {
       item.id = monthly.items[i].id;
       item.overrides = monthly.items[i].overrides;
-      item.updatedAt = monthly.items[i].updatedAt;   // an unchanged save keeps its timestamp (commitLocal bumps it only on a real change)
+      item.updatedAt = monthly.items[i].updatedAt;
       monthly.items[i] = item;
     } else {
       monthly.items.push(item);
@@ -3752,36 +3647,32 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   const JSON_SKELETON = "[\n" + EN_MON.map(m => "  " + m + ": {}").join(",\n") + "\n]";
 
-  // Read-only view of the parsed JSON: one row per month, key: value lines
   function renderReader(text) {
     const r = parseMonthJson(text);
-    const box = $("mreader");
+    const readerEl = $("mreader");
     if (r.error) {
-      box.replaceChildren(el("p", "warnline", "อ่าน JSON ไม่ได้ จึงแสดงตัวอ่านไม่ได้"));
+      readerEl.replaceChildren(el("p", "warnline", "อ่าน JSON ไม่ได้ จึงแสดงตัวอ่านไม่ได้"));
       return;
     }
-    box.replaceChildren(...r.data.map((m, i) => {
+    readerEl.replaceChildren(...r.data.map((m, i) => {
       const keys = Object.keys(m);
-      const row = el("div", "mr" + (keys.length ? "" : " blank"));
+      const metaRow = el("div", "mr" + (keys.length ? "" : " blank"));
       const vals = el("div", "mr-v");
       if (keys.length) {
         keys.forEach(k => {
-          const kv = el("div", "kv");
-          kv.append(el("span", "k", k), el("span", "v", m[k]));
-          vals.append(kv);
+          const kvRow = el("div", "kv");
+          kvRow.append(el("span", "k", k), el("span", "v", m[k]));
+          vals.append(kvRow);
         });
       } else {
         vals.append("ว่าง");
       }
-      row.append(el("div", "mr-m", MONTHS[i]), vals);
-      return row;
+      metaRow.append(el("div", "mr-m", MONTHS[i]), vals);
+      return metaRow;
     }));
   }
 
-  // Friendly editor for the monthly replacement data: pick a field ({link}, {month}...), fill one value per month.
-  // Each edit is written back as strict JSON into monthly.json (the same text the advanced box in settings shows).
   const mdata = { keys: [], sel: "", adding: false };
-  // Edits always start from the current saved JSON (another device may have changed it since the editor was drawn)
   const mdFresh = () => { const r = parseMonthJson(monthly.json); return r.error ? null : r.data; };
   const mdSetCell = (i, key, val) => {
     const rows = mdFresh();
@@ -3819,30 +3710,30 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       b.onclick = () => { mdata.sel = k; mdata.adding = false; renderMdata(); };
       chips.append(b);
     }
-    const nb = el("button", "newk", "+ เพิ่มช่อง");
-    nb.type = "button";
-    nb.onclick = () => { mdata.adding = true; renderMdata(); };
-    chips.append(nb);
+    const addFieldButton = el("button", "newk", "+ เพิ่มช่อง");
+    addFieldButton.type = "button";
+    addFieldButton.onclick = () => { mdata.adding = true; renderMdata(); };
+    chips.append(addFieldButton);
     parts.push(chips);
     if (mdata.adding) {
-      const row = el("div", "mdnew");
-      const inp = el("input");
-      inp.placeholder = "ชื่อช่อง เช่น link หรือ month";
-      inp.autocapitalize = "off"; inp.autocomplete = "off"; inp.spellcheck = false; inp.setAttribute("aria-label", "ชื่อช่อง");
+      const newFieldRow = el("div", "mdnew");
+      const inputEl = el("input");
+      inputEl.placeholder = "ชื่อช่อง เช่น link หรือ month";
+      inputEl.autocapitalize = "off"; inputEl.autocomplete = "off"; inputEl.spellcheck = false; inputEl.setAttribute("aria-label", "ชื่อช่อง");
       const ok = el("button", "btn", "ตกลง");
       ok.type = "button";
       const add = () => {
-        const k = cleanKey(inp.value);
+        const k = cleanKey(inputEl.value);
         if (!k) return;
         if (!mdata.keys.includes(k)) mdata.keys.push(k);
         mdata.sel = k; mdata.adding = false;
         renderMdata();
       };
       ok.onclick = add;
-      inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); add(); } };
-      row.append(inp, ok);
-      parts.push(row);
-      setTimeout(() => inp.focus(), 0);
+      inputEl.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); add(); } };
+      newFieldRow.append(inputEl, ok);
+      parts.push(newFieldRow);
+      setTimeout(() => inputEl.focus(), 0);
     } else if (mdata.sel) {
       parts.push(el("h4", "mdsec", "ค่าของ {" + mdata.sel + "} แต่ละเดือน"));
       const list = el("div", "mdrows");
@@ -3852,15 +3743,15 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         const row = el("div", "mdrow");
         const lab = el("label", "mn", String(i + 1));
         lab.append(el("small", "", MONTHS[i]));
-        const inp = el("input");
-        inp.id = "mdv" + i;
-        lab.htmlFor = inp.id;
+        const inputEl = el("input");
+        inputEl.id = "mdv" + i;
+        lab.htmlFor = inputEl.id;
         const before = m[key] || "";
-        inp.value = before;
-        inp.autocapitalize = "off"; inp.autocomplete = "off"; inp.spellcheck = false;
-        inp.oninput = () => { clearTimeout(timer); timer = setTimeout(() => mdSetCell(i, key, inp.value), 300); };
-        inp.onblur = () => { clearTimeout(timer); if (inp.value !== before) mdSetCell(i, key, inp.value); };
-        row.append(lab, inp);
+        inputEl.value = before;
+        inputEl.autocapitalize = "off"; inputEl.autocomplete = "off"; inputEl.spellcheck = false;
+        inputEl.oninput = () => { clearTimeout(timer); timer = setTimeout(() => mdSetCell(i, key, inputEl.value), 300); };
+        inputEl.onblur = () => { clearTimeout(timer); if (inputEl.value !== before) mdSetCell(i, key, inputEl.value); };
+        row.append(lab, inputEl);
         list.append(row);
       });
       parts.push(list);
@@ -3908,54 +3799,52 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("msg-cancel").onclick = () => $("msgform").close();
     $("msg-save").onclick = () => saveMsg(false);
     $("msg-reset").onclick = () => saveMsg(true);
-    const ta = $("mjson-text"), st = $("mjson-status"), det = $("mjson");
-    ta.value = monthly.json;
-    let jsonDirty = false, tplDirty = false, ptplDirty = false;   // typed here and not saved yet: a sync must not overwrite it
+    const jsonText = $("mjson-text"), statusEl = $("mjson-status"), detailsEl = $("mjson");
+    jsonText.value = monthly.json;
+    let jsonDirty = false, tplDirty = false, ptplDirty = false;
     const check = () => {
-      const r = jsonStatusText(ta.value);
-      st.textContent = r.text;
-      st.style.color = r.ok ? "" : "var(--bad)";
-      renderReader(ta.value);
+      const r = jsonStatusText(jsonText.value);
+      statusEl.textContent = r.text;
+      statusEl.style.color = r.ok ? "" : "var(--bad)";
+      renderReader(jsonText.value);
       return r.ok;
     };
     const persist = () => {
-      if (!check()) return;   // half-typed JSON stays in the box (dirty) until it is valid
+      if (!check()) return;
       jsonDirty = false;
-      if (ta.value === monthly.json) return;
-      monthly.json = ta.value;
+      if (jsonText.value === monthly.json) return;
+      monthly.json = jsonText.value;
       saveMonthly();
       renderMonthly();
     };
     let timer = 0;
-    ta.oninput = () => {
+    jsonText.oninput = () => {
       jsonDirty = true;
       check();
       clearTimeout(timer);
       timer = setTimeout(persist, 300);
     };
-    // Opening an empty JSON box pre-fills the twelve empty months
-    det.addEventListener("toggle", () => {
-      if (det.open && !ta.value.trim()) {
-        ta.value = JSON_SKELETON;
+    detailsEl.addEventListener("toggle", () => {
+      if (detailsEl.open && !jsonText.value.trim()) {
+        jsonText.value = JSON_SKELETON;
         check();
       }
     });
-    // message template for the memorial-room tab
-    const tpl = $("rooms-tpl-text");
-    tpl.value = roomsTemplate();
+    const templateEl = $("rooms-tpl-text");
+    templateEl.value = roomsTemplate();
     let tplTimer = 0;
-    tpl.oninput = () => {
+    templateEl.oninput = () => {
       tplDirty = true;
       clearTimeout(tplTimer);
       tplTimer = setTimeout(() => {
         tplDirty = false;
-        settings.roomsTemplate = tpl.value === defaultRoomsTemplate() ? "" : tpl.value;
+        settings.roomsTemplate = templateEl.value === defaultRoomsTemplate() ? "" : templateEl.value;
         saveMonthly();
       }, 400);
     };
     $("rooms-tpl-reset").onclick = () => {
       settings.roomsTemplate = "";
-      tpl.value = defaultRoomsTemplate();
+      templateEl.value = defaultRoomsTemplate();
       saveMonthly();
     };
     const ptpl = $("photos-tpl-text");
@@ -3975,8 +3864,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       ptpl.value = DEFAULT_PHOTOS_TEMPLATE;
       saveMonthly();
     };
-    const utpl = $("upload-tpl-text"), upW = $("up-weekday"), upN = $("up-nth");
-    const showRule = () => { const [w, n] = uploadRule().split(":"); upW.value = w; upN.value = n; };
+    const utpl = $("upload-tpl-text"), uploadWeekdayEl = $("up-weekday"), uploadNthEl = $("up-nth");
+    const showRule = () => { const [w, n] = uploadRule().split(":"); uploadWeekdayEl.value = w; uploadNthEl.value = n; };
     utpl.value = uploadTemplate();
     showRule();
     let utplTimer = 0;
@@ -3994,8 +3883,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       saveMonthly();
       renderPhotos();
     };
-    upW.onchange = upN.onchange = () => {
-      const v = upW.value + ":" + upN.value;
+    uploadWeekdayEl.onchange = uploadNthEl.onchange = () => {
+      const v = uploadWeekdayEl.value + ":" + uploadNthEl.value;
       settings.uploadRule = v === UPLOAD_RULE ? "" : v;
       saveMonthly();
       renderPhotos();
@@ -4003,14 +3892,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     refreshTemplateBox = () => {
       if (utpl.value !== uploadTemplate()) utpl.value = uploadTemplate();
       showRule();
-      if (!tplDirty && document.activeElement !== tpl && tpl.value !== roomsTemplate()) tpl.value = roomsTemplate();
+      if (!tplDirty && document.activeElement !== templateEl && templateEl.value !== roomsTemplate()) templateEl.value = roomsTemplate();
       if (!ptplDirty && document.activeElement !== ptpl && ptpl.value !== photosTemplate()) ptpl.value = photosTemplate();
       renderPhotos();
     };
     refreshJsonBox = () => {
-      if (!jsonDirty && document.activeElement !== ta) {
-        const want = monthly.json || (det.open ? JSON_SKELETON : "");
-        if (ta.value !== want) ta.value = want;
+      if (!jsonDirty && document.activeElement !== jsonText) {
+        const want = monthly.json || (detailsEl.open ? JSON_SKELETON : "");
+        if (jsonText.value !== want) jsonText.value = want;
       }
       check();
     };
@@ -4028,11 +3917,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let curSub = "items";
   function showTab(id, focus) {
     tabs.forEach(t => {
-      const on = t.dataset.tab === id;
-      t.setAttribute("aria-selected", String(on));
-      t.tabIndex = on ? 0 : -1;
-      $("panel-" + t.dataset.tab).hidden = !on;
-      if (on && focus) t.focus();
+      const isActive = t.dataset.tab === id;
+      t.setAttribute("aria-selected", String(isActive));
+      t.tabIndex = isActive ? 0 : -1;
+      $("panel-" + t.dataset.tab).hidden = !isActive;
+      if (isActive && focus) t.focus();
     });
     if (id === "visits") {
       try { history.replaceState(null, "", "#visits"); } catch (e) {}
@@ -4053,11 +3942,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function showSub(id, focus) {
     curSub = id;
     SUBS.forEach(k => {
-      const on = k === id, t = $("subtab-" + k);
-      t.setAttribute("aria-selected", String(on));
-      t.tabIndex = on ? 0 : -1;
-      $("sub-" + k).hidden = !on;
-      if (on) { t.scrollIntoView({ inline: "nearest", block: "nearest" }); if (focus) t.focus(); }
+      const isActive = k === id, t = $("subtab-" + k);
+      t.setAttribute("aria-selected", String(isActive));
+      t.tabIndex = isActive ? 0 : -1;
+      $("sub-" + k).hidden = !isActive;
+      if (isActive) { t.scrollIntoView({ inline: "nearest", block: "nearest" }); if (focus) t.focus(); }
     });
     try { history.replaceState(null, "", "#" + id); } catch (e) {}
   }
@@ -4073,11 +3962,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     t.onkeydown = e => {
       const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
       if (!k) return;
-      const vis = tabs.filter(x => !x.hidden), j = vis.indexOf(t);
-      showTab(vis[(j + k + vis.length) % vis.length].dataset.tab, true);
+      const visibleTabs = tabs.filter(x => !x.hidden), tabIndex = visibleTabs.indexOf(t);
+      showTab(visibleTabs[(tabIndex + k + visibleTabs.length) % visibleTabs.length].dataset.tab, true);
     };
   });
-  // Light/dark choice is per device (auto follows the phone); the early script in <head> applies it before first paint
   const THEME_KEY = "bkk11-theme";
   const THEME_BAR = { light: "#ffffff", dark: "#151d2e" };
   function applyTheme(mode) {
@@ -4101,7 +3989,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     };
   });
 
-  // ---------- บทพิธีกรงานวัด: an editable ceremony script read on a phone/iPad; names typed or looked up in the member database ----------
   const MC_KEY = "bkk11-mc";
   const MC_BUILTIN = ["วันที่", "เดือน", "ปี"];
   const MC_VAR = /\{\s*([^{}\n]+?)\s*\}/g;
@@ -4135,13 +4022,13 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     "ลำดับสุดท้าย ขอเรียนเชิญสมาชิกและแขกผู้มีเกียรติทุกท่านสวดไดโมขุ 3 คำ เป็นอันเสร็จพิธี"
   ].join("\n");
   const MC_MIN = 16, MC_MAX = 44;
-  let mc = { date: "", values: {}, tpl: "", size: 24 };
+  let monthlyEditor = { date: "", values: {}, tpl: "", size: 24 };
   try {
     const v = JSON.parse(localStorage.getItem(MC_KEY) || "null");
-    if (v && typeof v === "object") mc = { ...mc, date: DAY_RE.test(v.date) ? v.date : "", values: v.values && typeof v.values === "object" ? v.values : {}, tpl: typeof v.tpl === "string" ? v.tpl : "", size: Math.min(MC_MAX, Math.max(MC_MIN, Number(v.size) || 24)) };
+    if (v && typeof v === "object") monthlyEditor = { ...monthlyEditor, date: DAY_RE.test(v.date) ? v.date : "", values: v.values && typeof v.values === "object" ? v.values : {}, tpl: typeof v.tpl === "string" ? v.tpl : "", size: Math.min(MC_MAX, Math.max(MC_MIN, Number(v.size) || 24)) };
   } catch (e) {}
-  const saveMc = () => { try { localStorage.setItem(MC_KEY, JSON.stringify(mc)); } catch (e) {} };
-  const mcTemplate = () => mc.tpl || DEFAULT_MC;
+  const saveMc = () => { try { localStorage.setItem(MC_KEY, JSON.stringify(monthlyEditor)); } catch (e) {} };
+  const mcTemplate = () => monthlyEditor.tpl || DEFAULT_MC;
   const mcVars = tpl => {
     const out = [];
     tpl.replace(MC_VAR, (m, k) => { if (!MC_BUILTIN.includes(k) && !out.includes(k)) out.push(k); return m; });
@@ -4164,7 +4051,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     node.append(text.slice(last));
   }
   function mcNodes() {
-    const vals = { ...mcDateVars(mc.date), ...mc.values };
+    const vals = { ...mcDateVars(monthlyEditor.date), ...monthlyEditor.values };
     const blocks = mcTemplate().replace(/\r/g, "").split(/\n{2,}/).map(b => b.trim()).filter(Boolean);
     return blocks.map(b => {
       if (/^-{3,}$/.test(b)) return el("div", "mc-gap");
@@ -4175,16 +4062,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     });
   }
   function renderMcDoc() {
-    $("mc-doc").style.setProperty("--mc-size", mc.size + "px");
-    $("mc-size").textContent = mc.size + "px";
+    $("mc-doc").style.setProperty("--mc-size", monthlyEditor.size + "px");
+    $("mc-size").textContent = monthlyEditor.size + "px";
     $("mc-doc").replaceChildren(...mcNodes());
   }
-  // Thai text shaping is far better in the browser's own print engine than in a JS PDF library, so "save as PDF"
-  // prints a clean copy of the script and the file name comes from the document title
   const printTitle = document.title;
   function printMc() {
     $("print-root").replaceChildren(...mcNodes());
-    document.title = "บทพิธีกรงานวัด " + (mc.date || isoDay(today()));
+    document.title = "บทพิธีกรงานวัด " + (monthlyEditor.date || isoDay(today()));
     window.print();
   }
   addEventListener("afterprint", () => { document.title = printTitle; $("print-root").replaceChildren(); });
@@ -4198,8 +4083,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       input.type = "text";
       input.autocomplete = "off";
       input.placeholder = "พิมพ์ชื่อ หรือกดค้นหาสมาชิก";
-      input.value = mc.values[k] || "";
-      input.oninput = () => { mc.values[k] = input.value; saveMc(); };
+      input.value = monthlyEditor.values[k] || "";
+      input.oninput = () => { monthlyEditor.values[k] = input.value; saveMc(); };
       const find = el("button", "btn ghost sm", "ค้นหาสมาชิก");
       find.type = "button";
       find.onclick = () => openMemberSearch(k, input);
@@ -4249,7 +4134,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("mc").scrollTo(0, 0);
   }
   function openMc() {
-    mc.date = isoDay(today());
+    monthlyEditor.date = isoDay(today());
     $("mc").showModal();
     $("mc-wake").hidden = !navigator.wakeLock;
     $("mc-wake").textContent = "ค้างจอ";
@@ -4261,21 +4146,21 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("mc-go").onclick = () => setMcMode("read");
   $("mc-clear").onclick = () => {
     if (!confirm("ล้างชื่อที่กรอกไว้ทั้งหมด?")) return;
-    mc.values = {};
+    monthlyEditor.values = {};
     saveMc();
     renderMcFields();
   };
-  $("mc-minus").onclick = () => { mc.size = Math.max(MC_MIN, mc.size - 2); saveMc(); renderMcDoc(); };
-  $("mc-plus").onclick = () => { mc.size = Math.min(MC_MAX, mc.size + 2); saveMc(); renderMcDoc(); };
+  $("mc-minus").onclick = () => { monthlyEditor.size = Math.max(MC_MIN, monthlyEditor.size - 2); saveMc(); renderMcDoc(); };
+  $("mc-plus").onclick = () => { monthlyEditor.size = Math.min(MC_MAX, monthlyEditor.size + 2); saveMc(); renderMcDoc(); };
   $("mc-pdf").onclick = printMc;
   $("mc-wake").onclick = () => setWake(!wakeLock);
   $("mc-tpl").oninput = () => {
-    mc.tpl = $("mc-tpl").value === DEFAULT_MC ? "" : $("mc-tpl").value;
+    monthlyEditor.tpl = $("mc-tpl").value === DEFAULT_MC ? "" : $("mc-tpl").value;
     saveMc();
   };
   $("mc-tpl-reset").onclick = () => {
     if (!confirm("คืนบทเป็นค่าเริ่มต้น? ข้อความที่แก้ไว้จะหาย")) return;
-    mc.tpl = "";
+    monthlyEditor.tpl = "";
     saveMc();
     $("mc-tpl").value = DEFAULT_MC;
   };
@@ -4306,31 +4191,30 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const q = $("ms-q").value.trim();
     if (!q) { $("ms-list").replaceChildren(); $("ms-status").textContent = "พิมพ์ชื่อหรือนามสกุลเพื่อค้นหา"; return; }
     msTimer = setTimeout(async () => {
-      const seq = ++msSeq;
+      const requestNo = ++msSeq;
       $("ms-status").textContent = "กำลังค้นหา…";
       try {
         const rows = await memSearch(q);
-        if (seq !== msSeq) return;
+        if (requestNo !== msSeq) return;
         $("ms-status").textContent = rows.length ? `พบ ${rows.length}${rows.length >= 20 ? "+" : ""} รายการ` : "ไม่พบ ลองพิมพ์ให้สั้นลง หรือใช้ข้อความที่พิมพ์";
         $("ms-list").replaceChildren(...rows.map(r => {
-          const name = [r.name_t, r.saku_t].filter(Boolean).join(" ");
+          const name = [r.given_name, r.family_name].filter(Boolean).join(" ");
           const li = el("li");
           const b = el("button");
           b.type = "button";
-          b.append(el("span", null, name), el("small", null, [r.po_nt, r.ch_nt, r.ha_nt].filter(Boolean).join(" · ")));
+          b.append(el("span", null, name), el("small", null, [r.position_name, r.tambon_name, r.moo_name].filter(Boolean).join(" · ")));
           b.onclick = () => pickName(name);
           li.append(b);
           return li;
         }));
       } catch (err) {
-        if (seq !== msSeq) return;
+        if (requestNo !== msSeq) return;
         $("ms-list").replaceChildren();
         if (err.status !== 401) $("ms-status").textContent = "ค้นหาไม่สำเร็จ ลองใหม่อีกครั้ง";
       }
     }, 300);
   };
 
-  // Swipe a card to the left to reveal its action buttons (แก้ไข / ลบ); a tap on an opened card closes it
   let swOpen = null;
   function closeSwipe() {
     if (!swOpen) return;
@@ -4341,7 +4225,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   }
   document.addEventListener("pointerdown", e => { if (swOpen && !swOpen.contains(e.target)) closeSwipe(); }, true);
   function makeSwipe(li, body, actions) {
-    const SW_W = actions.length * 72;   // each action button is 72px wide
+    const SW_W = actions.length * 72;
     const act = el("div", "swact");
     for (const a of actions) {
       const b = el("button", a.cls, a.label);
@@ -4353,36 +4237,36 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     wrap.append(body);
     li.classList.add("swipe");
     li.append(act, wrap);
-    let x0 = 0, y0 = 0, base = 0, dx = 0, mode = 0, pid = null, moved = false;
+    let dragStartX = 0, dragStartY = 0, dragBase = 0, offsetX = 0, mode = 0, activePointer = null, moved = false;
     wrap.addEventListener("pointerdown", e => {
       if (e.pointerType === "mouse" && e.button !== 0) return;
-      x0 = e.clientX; y0 = e.clientY; mode = 0; pid = e.pointerId;
-      base = li.classList.contains("open") ? -SW_W : 0;
-      dx = base;
+      dragStartX = e.clientX; dragStartY = e.clientY; mode = 0; activePointer = e.pointerId;
+      dragBase = li.classList.contains("open") ? -SW_W : 0;
+      offsetX = dragBase;
     });
     wrap.addEventListener("pointermove", e => {
-      if (e.pointerId !== pid) return;
-      const mx = e.clientX - x0, my = e.clientY - y0;
+      if (e.pointerId !== activePointer) return;
+      const moveX = e.clientX - dragStartX, moveY = e.clientY - dragStartY;
       if (!mode) {
-        if (Math.abs(mx) > 8 && Math.abs(mx) > Math.abs(my)) {
+        if (Math.abs(moveX) > 8 && Math.abs(moveX) > Math.abs(moveY)) {
           mode = 1;
           if (swOpen && swOpen !== li) closeSwipe();
           li.classList.add("dragging");
           wrap.classList.add("drag");
-          try { wrap.setPointerCapture(pid); } catch (er) {}
-        } else if (Math.abs(my) > 8) mode = 2;
+          try { wrap.setPointerCapture(activePointer); } catch (err) {}
+        } else if (Math.abs(moveY) > 8) mode = 2;
       }
-      if (mode === 1) { dx = Math.max(-SW_W, Math.min(0, base + mx)); wrap.style.transform = `translateX(${dx}px)`; }
+      if (mode === 1) { offsetX = Math.max(-SW_W, Math.min(0, dragBase + moveX)); wrap.style.transform = `translateX(${offsetX}px)`; }
     });
     const end = e => {
-      if (e.pointerId !== pid) return;
-      pid = null;
+      if (e.pointerId !== activePointer) return;
+      activePointer = null;
       if (mode !== 1) return;
       wrap.classList.remove("drag");
       li.classList.remove("dragging");
       moved = true;
       setTimeout(() => { moved = false; }, 60);
-      if (dx < -SW_W / 2) { li.classList.add("open"); swOpen = li; wrap.style.transform = `translateX(${-SW_W}px)`; }
+      if (offsetX < -SW_W / 2) { li.classList.add("open"); swOpen = li; wrap.style.transform = `translateX(${-SW_W}px)`; }
       else { li.classList.remove("open"); if (swOpen === li) swOpen = null; wrap.style.transform = ""; }
     };
     wrap.addEventListener("pointerup", end);
@@ -4393,13 +4277,10 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }, true);
   }
 
-  // ---------- รายการ: every event comes from public.schedule_events ('pdf' rows = the monthly news-table, filled by the weekly task; 'manual' rows = typed here) ----------
   const YMD_WHO = /ยุวชนชาย|ผช|ยช|มิไรบุ/;
   let sMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
-  let sSel = "", sInit = false, sManual = [], sEdit = null;   // sManual = all rows of schedule_events (both sources)
-  // only 'manual' rows can be edited here (mid set); 'pdf' rows are replaced by the weekly task. A row without source (before the column existed) counts as manual
+  let sSel = "", sInit = false, sManual = [], sEdit = null;
   const manualEvent = r => ({ date: r.event_date, ...(r.end_date ? { endDate: r.end_date } : {}), time: r.event_time || "", place: r.place || "", who: r.who || "", title: r.title, ...(r.source === "pdf" ? {} : { mid: r.id }), row: r });
-  // รายการ has no number on its tab; instead the first time the app opens each morning, the events of today (starting or still running) pop up once
   const TODAY_SEEN_KEY = "bkk11-today-seen";
   function eventsToday() {
     const k = isoDay(today());
@@ -4427,7 +4308,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }));
     $("today").showModal();
   }
-  const EVENTS_KEY = "bkk11-events";   // last list read from the table, so the tab still works offline (cleared on sign-out)
+  const EVENTS_KEY = "bkk11-events";
   try { const c = JSON.parse(localStorage.getItem(EVENTS_KEY) || "null"); if (Array.isArray(c) && memAuthed()) sManual = c; } catch (e) {}
   async function loadManual() {
     if (!memAuthed()) return;
@@ -4436,30 +4317,29 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       try { localStorage.setItem(EVENTS_KEY, JSON.stringify(sManual)); } catch (e) {}
     } catch (e) {
       if (e.status === 401) return;
-      try { const c = JSON.parse(localStorage.getItem(EVENTS_KEY) || "null"); sManual = Array.isArray(c) ? c : []; } catch (er) { sManual = []; }
+      try { const c = JSON.parse(localStorage.getItem(EVENTS_KEY) || "null"); sManual = Array.isArray(c) ? c : []; } catch (err) { sManual = []; }
     }
     showTodayPopup();
     if (!$("panel-schedule").hidden) renderSchedule();
   }
   const evEnd = e => e.endDate || e.date;
   const evIsYmd = e => YMD_WHO.test(e.who || "");
-  // The month grid. Cells carry their week number; in the collapsed (.mini) state only the week being scrolled through shows
-  let sEvs = [], sWk = -1, sCells = [], sMini = false, sOpen = false, sGroups = [], sRaf = 0;   // sOpen: the user pulled the calendar open while scrolled
+  let sEvs = [], selectedWeek = -1, sCells = [], sMini = false, sOpen = false, sGroups = [], sRaf = 0;
   function drawCal() {
     const evs = sEvs;
     const y = sMonth.getUTCFullYear(), m = sMonth.getUTCMonth(), ym = y + "-" + pad2(m + 1);
     const first = ym + "-01", last = ym + "-" + pad2(new Date(Date.UTC(y, m + 1, 0)).getUTCDate());
     $("s-month").textContent = MONTH_FULL[m] + " " + (y + 543);
     const todayKey = isoDay(today());
-    const dow = new Date(Date.UTC(y, m, 1)).getUTCDay();
+    const firstWeekday = new Date(Date.UTC(y, m, 1)).getUTCDay();
     const cells = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"].map(d => el("div", "vdow", d));
     sCells = [];
-    for (let i = 0; i < dow; i++) { const b = el("div", "vcell blank"); b.dataset.w = "0"; sCells.push(b); }
+    for (let i = 0; i < firstWeekday; i++) { const b = el("div", "vcell blank"); b.dataset.w = "0"; sCells.push(b); }
     for (let d = 1, n = new Date(Date.UTC(y, m + 1, 0)).getUTCDate(); d <= n; d++) {
       const key = ym + "-" + pad2(d), list = evs.filter(e => e.date <= key && evEnd(e) >= key);
       const b = el("button", "vcell" + (key === todayKey ? " today" : "") + (key === sSel ? " sel" : ""));
       b.type = "button";
-      b.dataset.w = String(Math.floor((dow + d - 1) / 7));
+      b.dataset.w = String(Math.floor((firstWeekday + d - 1) / 7));
       b.setAttribute("aria-label", `${d} ${MONTH_FULL[m]} มี ${list.length} รายการ`);
       const dots = el("span", "vdots");
       list.slice(0, 4).forEach(e => dots.append(el("i", "vdot " + (evIsYmd(e) ? "ymd" : "all"))));
@@ -4475,21 +4355,20 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("s-cal").replaceChildren(...cells, ...sCells);
     markWeek();
     const inMonth = evs.filter(e => e.date <= last && evEnd(e) >= first);
-    const am = $("s-addmonth");
-    am.hidden = !inMonth.length;
-    am.innerHTML = icoHtml("cal") + " ทั้งเดือน (" + inMonth.length + ")";
-    am.setAttribute("aria-label", `เพิ่มรายการทั้งเดือน ${inMonth.length} รายการลงปฏิทิน`);
-    am.onclick = () => addToCalendar(inMonth, "events-" + ym + ".ics");
+    const addMonthButton = $("s-addmonth");
+    addMonthButton.hidden = !inMonth.length;
+    addMonthButton.innerHTML = icoHtml("cal") + " ทั้งเดือน (" + inMonth.length + ")";
+    addMonthButton.setAttribute("aria-label", `เพิ่มรายการทั้งเดือน ${inMonth.length} รายการลงปฏิทิน`);
+    addMonthButton.onclick = () => addToCalendar(inMonth, "events-" + ym + ".ics");
   }
-  function markWeek() { for (const c of sCells) c.classList.toggle("cur", c.dataset.w === String(sWk)); }
-  const sWide = () => matchMedia("(min-width: 1000px)").matches;   // side-by-side layout: the calendar stays whole
-  // Make the calendar show the week of this day (switching month when the day is in another one)
+  function markWeek() { for (const c of sCells) c.classList.toggle("cur", c.dataset.w === String(selectedWeek)); }
+  const sWide = () => matchMedia("(min-width: 1000px)").matches;
   function followDay(key) {
     const ym = sMonth.getUTCFullYear() + "-" + pad2(sMonth.getUTCMonth() + 1);
-    const mk = key.slice(0, 7);
-    const wk = Math.floor((new Date(Date.UTC(+mk.slice(0, 4), +mk.slice(5, 7) - 1, 1)).getUTCDay() + (+key.slice(8)) - 1) / 7);
-    if (mk !== ym) { sMonth = new Date(Date.UTC(+mk.slice(0, 4), +mk.slice(5, 7) - 1, 1)); sWk = wk; drawCal(); }
-    else if (wk !== sWk) { sWk = wk; markWeek(); }
+    const monthKey = key.slice(0, 7);
+    const wk = Math.floor((new Date(Date.UTC(+monthKey.slice(0, 4), +monthKey.slice(5, 7) - 1, 1)).getUTCDay() + (+key.slice(8)) - 1) / 7);
+    if (monthKey !== ym) { sMonth = new Date(Date.UTC(+monthKey.slice(0, 4), +monthKey.slice(5, 7) - 1, 1)); selectedWeek = wk; drawCal(); }
+    else if (wk !== selectedWeek) { selectedWeek = wk; markWeek(); }
   }
   function setMini(on, key) {
     const st = $("s-stick");
@@ -4501,19 +4380,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     sRaf = 0;
     const panel = $("panel-schedule");
     if (panel.hidden || sWide()) { if (sMini) setMini(false); return; }
-    const hh = document.querySelector("header").offsetHeight, top = panel.getBoundingClientRect().top - hh;   // < 0 once the calendar is stuck under the header
-    if (sOpen && top > -8) sOpen = false;   // back at the top: the calendar is whole anyway
-    const tg = $("s-tog"), st = $("s-stick");
-    st.classList.toggle("pin", sOpen);
-    tg.setAttribute("aria-expanded", String(sOpen || !sMini && top >= -24));
-    tg.setAttribute("aria-label", sOpen ? "ย่อปฏิทิน" : "ขยายปฏิทิน");
+    const headerHeight = document.querySelector("header").offsetHeight, top = panel.getBoundingClientRect().top - headerHeight;
+    if (sOpen && top > -8) sOpen = false;
+    const toggleButton = $("s-tog"), stickyEl = $("s-stick");
+    stickyEl.classList.toggle("pin", sOpen);
+    toggleButton.setAttribute("aria-expanded", String(sOpen || !sMini && top >= -24));
+    toggleButton.setAttribute("aria-label", sOpen ? "ย่อปฏิทิน" : "ขยายปฏิทิน");
     if (sOpen) { if (sMini) setMini(false); return; }
     if (sMini ? top > -8 : top < -24) { setMini(!sMini); if (!sMini) return; }
     if (!sMini) return;
-    const sb = $("s-stick").getBoundingClientRect().bottom;
-    let g = sGroups[0];
-    for (const x of sGroups) { if (x.getBoundingClientRect().top <= sb + 2) g = x; else break; }
-    if (g) setMini(true, g.dataset.day);
+    const stickyBottom = $("s-stick").getBoundingClientRect().bottom;
+    let group = sGroups[0];
+    for (const x of sGroups) { if (x.getBoundingClientRect().top <= stickyBottom + 2) group = x; else break; }
+    if (group) setMini(true, group.dataset.day);
   }
   $("s-tog").onclick = () => { sOpen = !sOpen; sSync(); $("panel-schedule").style.setProperty("--sstick", $("s-stick").offsetHeight + "px"); };
   const sQueue = () => { if (!sRaf) sRaf = requestAnimationFrame(sSync); };
@@ -4527,15 +4406,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     sEvs = evs;
     drawCal();
 
-    // One long scrolling list under the (sticky) calendar: every event, grouped by month then day
     const shown = evs;
     const out = [];
     let lastDay = "", lastMonth = "";
     for (const e of shown) {
-      const mk = e.date.slice(0, 7);
-      if (mk !== lastMonth) {
-        lastMonth = mk;
-        out.push(el("li", "smonth", MONTH_FULL[+mk.slice(5) - 1] + " " + (+mk.slice(0, 4) + 543)));
+      const monthKey = e.date.slice(0, 7);
+      if (monthKey !== lastMonth) {
+        lastMonth = monthKey;
+        out.push(el("li", "smonth", MONTH_FULL[+monthKey.slice(5) - 1] + " " + (+monthKey.slice(0, 4) + 543)));
       }
       if (e.date !== lastDay) {
         lastDay = e.date;
@@ -4547,9 +4425,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       const top = el("div", "ctop");
       const head = el("div", "chead");
       const main = el("div", "cmain");
-      const ttl = el("div", "ctitle", e.title);
-      if (e.mid) ttl.append(el("span", "stag", "เพิ่มเอง"));
-      main.append(ttl);
+      const titleEl = el("div", "ctitle", e.title);
+      if (e.mid) titleEl.append(el("span", "stag", "เพิ่มเอง"));
+      main.append(titleEl);
       if (e.place) main.append(withIco("pin", e.place, "div", "meta"));
       const add = el("button", "addcal");
       add.innerHTML = icoHtml("cal") + " เพิ่มลงปฏิทิน";
@@ -4571,19 +4449,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (jump && sSel) scrollToDay(sSel, true);
     else if (!sInit && evs.length && !$("panel-schedule").hidden) { sInit = true; setTimeout(() => scrollToDay(todayKey, false), 60); }
   }
-  // "Add to calendar": a one-event .ics file that opens the phone's calendar app (times are Bangkok time)
   const icsText = v => String(v).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/[,;]/g, c => "\\" + c);
   function eventLines(e) {
-    const ymd = d => d.replace(/-/g, "");
+    const compactDate = d => d.replace(/-/g, "");
     const addDay = (d, n) => isoDay(new Date(parseDay(d).getTime() + n * DAY_MS));
     const m = /^(\d{1,2})[:.](\d{2})(?:\s*-\s*(\d{1,2})[:.](\d{2}))?/.exec(e.time || "");
-    const hm = (h, mi) => pad2(h) + pad2(mi) + "00";
+    const icsTime = (hour, minute) => pad2(hour) + pad2(minute) + "00";
     let when;
     if (m) {
-      const end = m[3] ? hm(+m[3], +m[4]) : hm(Math.min(+m[1] + 1, 23), +m[2]);
-      when = ["DTSTART;TZID=Asia/Bangkok:" + ymd(e.date) + "T" + hm(+m[1], +m[2]), "DTEND;TZID=Asia/Bangkok:" + ymd(e.endDate || e.date) + "T" + end];
+      const end = m[3] ? icsTime(+m[3], +m[4]) : icsTime(Math.min(+m[1] + 1, 23), +m[2]);
+      when = ["DTSTART;TZID=Asia/Bangkok:" + compactDate(e.date) + "T" + icsTime(+m[1], +m[2]), "DTEND;TZID=Asia/Bangkok:" + compactDate(e.endDate || e.date) + "T" + end];
     } else {
-      when = ["DTSTART;VALUE=DATE:" + ymd(e.date), "DTEND;VALUE=DATE:" + ymd(addDay(e.endDate || e.date, 1))];
+      when = ["DTSTART;VALUE=DATE:" + compactDate(e.date), "DTEND;VALUE=DATE:" + compactDate(addDay(e.endDate || e.date, 1))];
     }
     const stamp = new Date().toISOString().replace(/[-:]|\.\d+/g, "");
     let h = 5381;
@@ -4605,22 +4482,20 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
-  // Scroll the list to a day (or the next day that has something)
   function scrollToDay(key, smooth) {
     const g = [...$("s-list").querySelectorAll(".sgroup")].find(x => x.dataset.day >= key);
     if (!g) return;
-    if (!sWide() && !sOpen) setMini(true, g.dataset.day);   // we are about to scroll down: the calendar collapses to that day's week first
+    if (!sWide() && !sOpen) setMini(true, g.dataset.day);
     g.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
   }
   function moveSMonth(delta) {
     sMonth = new Date(Date.UTC(sMonth.getUTCFullYear(), sMonth.getUTCMonth() + delta, 1));
     sSel = "";
     renderSchedule();
-    if (sMini) scrollToDay(isoDay(sMonth), true);   // collapsed calendar follows the list, so take the list to that month
+    if (sMini) scrollToDay(isoDay(sMonth), true);
   }
   $("s-prev").onclick = () => moveSMonth(-1);
   $("s-next").onclick = () => moveSMonth(1);
-  // Add / edit an event by hand (table public.schedule_events)
   const timeParts = t => { const m = /^(\d{1,2})[:.](\d{2})(?:\s*-\s*(\d{1,2})[:.](\d{2}))?/.exec(t || ""); return m ? [pad2(+m[1]) + ":" + m[2], m[3] ? pad2(+m[3]) + ":" + m[4] : ""] : ["", ""]; };
   function openEvForm(row) {
     sEdit = row;
@@ -4653,12 +4528,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("sf-cancel").onclick = () => $("sform").close();
   $("sf-del").onclick = async () => { if (sEdit && (await deleteEv(sEdit))) $("sform").close(); };
   $("sf-save").onclick = async () => {
-    const title = $("sf-title").value.trim(), date = $("sf-date").value, end = $("sf-end").value, t1 = $("sf-t1").value, t2 = $("sf-t2").value;
+    const title = $("sf-title").value.trim(), date = $("sf-date").value, end = $("sf-end").value, startTime = $("sf-t1").value, endTime = $("sf-t2").value;
     if (!title) { $("sf-err").textContent = "ใส่ชื่อรายการก่อน"; return; }
     if (!parse(date)) { $("sf-err").textContent = "เลือกวันที่ก่อน"; return; }
     if (end && end <= date) { $("sf-err").textContent = "วันสิ้นสุดต้องหลังวันเริ่ม"; return; }
-    if (t2 && !t1) { $("sf-err").textContent = "ใส่เวลาเริ่มก่อน"; return; }
-    const body = { title, event_date: date, end_date: end || null, event_time: t1 ? t1 + (t2 ? "-" + t2 : "") : null, place: $("sf-place").value.trim() || null, who: $("sf-who").value.trim() || null };
+    if (endTime && !startTime) { $("sf-err").textContent = "ใส่เวลาเริ่มก่อน"; return; }
+    const body = { title, event_date: date, end_date: end || null, event_time: startTime ? startTime + (endTime ? "-" + endTime : "") : null, place: $("sf-place").value.trim() || null, who: $("sf-who").value.trim() || null };
     $("sf-save").disabled = true;
     $("sf-err").textContent = "กำลังบันทึก…";
     try {
@@ -4677,14 +4552,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   };
   $("s-today").onclick = () => { const t = today(); sMonth = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); sSel = isoDay(t); renderSchedule(true); };
 
-  // ---------- นัดเยี่ยมน้อง: a shared calendar (table public.visits, protected by row-level security) ----------
   const VISIT_STATUS = { coordinating: "กำลังประสานงานน้อง", coordinated: "ประสานงานน้องแล้ว" };
   const pad2 = n => String(n).padStart(2, "0");
   let vMonth = (() => { const t = today(); return new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), 1)); })();
   let vRows = [], vSelDay = "", vSeq = 0, vEdit = null, vStatus = "coordinating", vMissing = [];
   const vName = r => [r.first_name, r.last_name].filter(Boolean).join(" ");
-  // Shown everywhere in the visit calendar: the nickname, or the real name when there is none
-  // Visits saved with a real name only get their nickname looked up from bkk11_contacts (matched by name + surname, only when unambiguous)
   const vNickCache = new Map();
   const vNickKey = r => r.first_name + "|" + (r.last_name || "");
   const vNick = r => r.nickname || vNickCache.get(vNickKey(r)) || "";
@@ -4696,7 +4568,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     await Promise.all(todo.map(async r => {
       let nick = "";
       try {
-        const m = await memGet("/rest/v1/tokan?" + new URLSearchParams({ select: "bkk11_contacts(nickname)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
+        const m = await memGet("/rest/v1/tokan?" + new URLSearchParams({ select: "bkk11_contacts(nickname)", division_name: "eq." + ELIGIBLE_DIVISION, given_name: "eq." + r.first_name, family_name: "eq." + r.last_name, limit: "2" }));
         if (m.length === 1) nick = ((m[0].bkk11_contacts || []).map(x => String(x.nickname || "").trim()).find(Boolean)) || "";
       } catch (e) { return; }
       vNickCache.set(vNickKey(r), nick);
@@ -4707,18 +4579,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 
   async function loadVisits() {
     if (!memAuthed()) return;
-    const seq = ++vSeq;
+    const requestNo = ++vSeq;
     const y = vMonth.getUTCFullYear(), m = vMonth.getUTCMonth();
     const params = new URLSearchParams({ select: "*", order: "visit_date,visit_time" });
     params.set("and", `(visit_date.gte.${isoDay(new Date(Date.UTC(y, m, 1)))},visit_date.lte.${isoDay(new Date(Date.UTC(y, m + 1, 0)))})`);
     let msg = "";
     try {
       const rows = await memGet("/rest/v1/visits?" + params);
-      if (seq !== vSeq) return;
+      if (requestNo !== vSeq) return;
       vRows = rows;
-      resolveNicks(rows).then(found => { if (found && seq === vSeq) renderVisits(); });
+      resolveNicks(rows).then(found => { if (found && requestNo === vSeq) renderVisits(); });
     } catch (e) {
-      if (seq !== vSeq || e.status === 401) return;
+      if (requestNo !== vSeq || e.status === 401) return;
       vRows = [];
       msg = e.status === 404 || /PGRST205/.test(e.body || "") ? "ยังไม่ได้ตั้งค่าตารางนัดเยี่ยมในฐานข้อมูล" : "โหลดนัดเยี่ยมไม่สำเร็จ ลองใหม่อีกครั้ง";
     }
@@ -4728,7 +4600,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     loadCoverage();
   }
 
-  // Every month each ภาค needs at least one visit on the calendar: count this month's visits whatever month is on screen
   async function loadCoverage() {
     if (!memAuthed()) return;
     const t = today(), y = t.getUTCFullYear(), m = t.getUTCMonth();
@@ -4741,7 +4612,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     } catch (e) {
       return;
     }
-    // visits still being coordinated that are dated up to UPCOMING_DAYS days ahead (today included) or already past: one notification each
     try {
       const soon = new URLSearchParams({ select: "id", status: "eq.coordinating" });
       soon.set("visit_date", "lte." + isoDay(new Date(t.getTime() + UPCOMING_DAYS * 864e5)));
@@ -4779,7 +4649,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         if (e.status !== 401) toast("เปลี่ยนสถานะไม่สำเร็จ");
       }
       renderVisits();
-      loadCoverage();   // the tab's notification number follows the tick
+      loadCoverage();
     };
     const side = el("div", "vside");
     const share = el("button", "vshare");
@@ -4791,10 +4661,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     makeSwipe(li, top, [{ label: "แก้ไข", cls: "sw-edit", fn: () => openVisit(r) }, { label: "ลบ", cls: "sw-del", fn: () => deleteVisit(r) }]);
     return li;
   }
-  // ---- share a visit as a message card ("<ผู้แชร์> เชิญชวนให้คุณไปเยี่ยม…"), with the น้อง's Google Maps link when bkk11_contacts has one
   const MAP_RE = /^https?:\/\/\S+$/i;
   let vShare = null;
-  // The signed-in leader's own nickname (their row in bkk11_contacts, matched by member code); the real name is used when there is none
   let mySharerNick = "", mySharerFor = "";
   async function loadMyNick() {
     const s = memSession();
@@ -4808,17 +4676,17 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       mySharerFor = code;
     } catch (e) {}
   }
-  function shareText(r, map) {
+  function shareText(r, mapLink) {
     const sharer = mySharerNick || ((memSession() || {}).profile || {}).name || "มีผู้ใช้";
     const who = vNick(r) || r.first_name;
     const when = fmt(parse(r.visit_date)) + (r.visit_time ? " · " + String(r.visit_time).slice(0, 5) + " น." : "");
-    return { sharer, who, when, text: [`🤝 ${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`, `📅 ${when}`, ...(map ? ["📍 " + map] : [])].join("\n") };
+    return { sharer, who, when, text: [`🤝 ${sharer} เชิญชวนให้คุณไปเยี่ยมน้อง ${who}`, `📅 ${when}`, ...(mapLink ? ["📍 " + mapLink] : [])].join("\n") };
   }
   async function findMap(r) {
     const pick = rows => { for (const x of rows) if (x && MAP_RE.test(String(x.google_map || "").trim())) return String(x.google_map).trim(); return ""; };
     try {
       if (r.first_name && r.last_name) {
-        const rows = await memGet("/rest/v1/tokan?" + new URLSearchParams({ select: "bkk11_contacts(google_map)", fa_nt: "eq." + ELIGIBLE_DIVISION, name_t: "eq." + r.first_name, saku_t: "eq." + r.last_name, limit: "2" }));
+        const rows = await memGet("/rest/v1/tokan?" + new URLSearchParams({ select: "bkk11_contacts(google_map)", division_name: "eq." + ELIGIBLE_DIVISION, given_name: "eq." + r.first_name, family_name: "eq." + r.last_name, limit: "2" }));
         if (rows.length === 1) { const m = pick(rows[0].bkk11_contacts || []); if (m) return m; }
       }
       if (r.nickname) {
@@ -4952,7 +4820,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("vf-del").hidden = !row;
     $("vform").showModal();
   }
-  // Looks the น้อง up by real name / surname (members) and by nickname (bkk11_contacts, linked or not yet linked to a member)
   async function visitMemberSearch(q) {
     const toks = likeTokens(q);
     if (!toks.length) return [];
@@ -4960,24 +4827,24 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const soft = p => p.catch(e => { if (e.status === 401) throw e; return []; });
     const byName = (async () => {
       const url = embed => {
-        const p = new URLSearchParams({ select: "name_t,saku_t,phak_nt,ch_nt,ha_nt" + (embed ? ",bkk11_contacts(nickname)" : ""), fa_nt: "eq." + ELIGIBLE_DIVISION, order: "name_t", limit: "20" });
+        const p = new URLSearchParams({ select: "given_name,family_name,phak_name,tambon_name,moo_name" + (embed ? ",bkk11_contacts(nickname)" : ""), division_name: "eq." + ELIGIBLE_DIVISION, order: "given_name", limit: "20" });
         p.set("and", nameFilter(toks));
         return "/rest/v1/tokan?" + p;
       };
       try { return await memGet(url(true)); } catch (e) { if (e.status === 401) throw e; return memGet(url(false)); }
     })();
     const byNick = soft(memGet("/rest/v1/bkk11_contacts?" + new URLSearchParams({
-      select: "nickname,tokan!inner(name_t,saku_t,phak_nt,ch_nt,ha_nt)", "tokan.fa_nt": "eq." + ELIGIBLE_DIVISION, nickname: "ilike.*" + nick + "*", limit: "20"
+      select: "nickname,tokan!inner(given_name,family_name,phak_name,tambon_name,moo_name)", "tokan.division_name": "eq." + ELIGIBLE_DIVISION, nickname: "ilike.*" + nick + "*", limit: "20"
     })));
     const unlinked = soft(memGet("/rest/v1/bkk11_contacts?" + new URLSearchParams({ select: "nickname", mt_co: "is.null", nickname: "ilike.*" + nick + "*", limit: "10" })));
     const [a, b, c] = await Promise.all([byName, byNick, unlinked]);
     const out = new Map();
     const put = (m, nicks) => {
       if (!m) return;
-      const key = [m.name_t, m.saku_t].join("|");
+      const key = [m.given_name, m.family_name].join("|");
       const cur = out.get(key);
       const names = [...new Set([...(cur ? cur.bkk11_contacts.map(x => x.nickname) : []), ...nicks].filter(Boolean))];
-      out.set(key, { name_t: m.name_t, saku_t: m.saku_t, phak_nt: m.phak_nt, ch_nt: m.ch_nt, ha_nt: m.ha_nt, bkk11_contacts: names.map(n => ({ nickname: n })) });
+      out.set(key, { given_name: m.given_name, family_name: m.family_name, phak_name: m.phak_name, tambon_name: m.tambon_name, moo_name: m.moo_name, bkk11_contacts: names.map(n => ({ nickname: n })) });
     };
     for (const r of a) put(r, (r.bkk11_contacts || []).map(x => x.nickname));
     for (const r of b) put(r.tokan, [r.nickname]);
@@ -4989,11 +4856,11 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const q = $("vf-q").value.trim();
     if (!q) { $("vf-list").replaceChildren(); $("vf-status").textContent = "ค้นหาแล้วแตะชื่อ หรือพิมพ์ชื่อในช่องด้านล่างเองก็ได้"; return; }
     vqTimer = setTimeout(async () => {
-      const seq = ++vqSeq;
+      const requestNo = ++vqSeq;
       $("vf-status").textContent = "กำลังค้นหา…";
       try {
         const rows = await visitMemberSearch(q);
-        if (seq !== vqSeq) return;
+        if (requestNo !== vqSeq) return;
         $("vf-status").textContent = rows.length ? `พบ ${rows.length}${rows.length >= 20 ? "+" : ""} รายการ` : "ไม่พบ ลองพิมพ์ให้สั้นลง หรือพิมพ์ชื่อในช่องด้านล่างเอง";
         $("vf-list").replaceChildren(...rows.map(r => {
           const nicks = (r.bkk11_contacts || []).map(x => x.nickname);
@@ -5011,21 +4878,21 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
             li.append(b);
             return li;
           }
-          b.append(el("span", null, [r.name_t, r.saku_t].filter(Boolean).join(" ") + (nicks[0] ? " (" + nicks[0] + ")" : "")), el("small", null, ["ภาค" + r.phak_nt, r.ch_nt, r.ha_nt].filter(Boolean).join(" · ")));
+          b.append(el("span", null, [r.given_name, r.family_name].filter(Boolean).join(" ") + (nicks[0] ? " (" + nicks[0] + ")" : "")), el("small", null, ["ภาค" + r.phak_name, r.tambon_name, r.moo_name].filter(Boolean).join(" · ")));
           b.onclick = () => {
-            $("vf-first").value = r.name_t || "";
-            $("vf-last").value = r.saku_t || "";
-            if (PHAKS.includes(r.phak_nt)) $("vf-phak").value = r.phak_nt;
+            $("vf-first").value = r.given_name || "";
+            $("vf-last").value = r.family_name || "";
+            if (PHAKS.includes(r.phak_name)) $("vf-phak").value = r.phak_name;
             $("vf-nick").value = nicks[0] || "";
             showNicks(nicks);
             $("vf-list").replaceChildren();
-            $("vf-status").textContent = "เลือกแล้ว: " + [r.name_t, r.saku_t].filter(Boolean).join(" ");
+            $("vf-status").textContent = "เลือกแล้ว: " + [r.given_name, r.family_name].filter(Boolean).join(" ");
           };
           li.append(b);
           return li;
         }));
       } catch (e) {
-        if (seq === vqSeq && e.status !== 401) $("vf-status").textContent = "ค้นหาไม่สำเร็จ ลองใหม่อีกครั้ง";
+        if (requestNo === vqSeq && e.status !== 401) $("vf-status").textContent = "ค้นหาไม่สำเร็จ ลองใหม่อีกครั้ง";
       }
     }, 300);
   };
@@ -5078,8 +4945,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!$("settings").open) $("settings").showModal();
     refreshPush();
   }
-  // ---------- ฐานข้อมูล YMD (was the separate YMD DB app): the contact book bkk11_contacts + its custom columns, behind the `maps` permission.
-  // Favourites, the ticked columns, the offline copy and the saved places keep the old app's localStorage keys, so they carry over on this device.
   const Y_FAV = "ymd_favorites", Y_CACHE = "ymd_places_cache", Y_VIS = "ymd_visible_cols", Y_NOTES = "ymd_custom_places", Y_SEED = "ymd_custom_seeded_v1", Y_SEEDN = "ymd_custom_seeded_names";
   const TOKAN_URL = "https://tanawat40889.github.io/bkk11-tokan/";
   const Y_STATUSES = ["Active", "Visiting", "Passive"];
@@ -5114,14 +4979,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
 ];
   const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-  const Y = { people: [], columns: [], favs: new Set(lsGet(Y_FAV, [])), vis: lsGet(Y_VIS, {}), notes: lsGet(Y_NOTES, []), q: "", nq: "", sub: "people", status: "Active", loaded: 0, loading: false, editId: null, link: { mtCo: null, name: "" }, linkOrig: null, linkSeq: 0, linkTimer: 0 };
-  const yId = p => "id:" + p.id;
-  const yVisible = k => Y.vis[k] !== false;
-  const yMap = r => ({ id: r.id, mtCo: r.mt_co, nickname: r.nickname || "", googleMap: r.google_map, status: r.status, khet: r.tokan ? r.tokan.sh_nt : null, phone: r.phone, note: r.note, extra: r.extra || {} });
-  const yCol = new Intl.Collator("th", { numeric: true, sensitivity: "base" });   // Thai alphabetical, numbers in numeric order
+  const contacts = { people: [], columns: [], favs: new Set(lsGet(Y_FAV, [])), vis: lsGet(Y_VIS, {}), notes: lsGet(Y_NOTES, []), q: "", nq: "", sub: "people", status: "Active", loaded: 0, loading: false, editId: null, link: { mtCo: null, name: "" }, linkOrig: null, linkSeq: 0, linkTimer: 0 };
+  const favKey = p => "id:" + p.id;
+  const yVisible = k => contacts.vis[k] !== false;
+  const yMap = r => ({ id: r.id, mtCo: r.mt_co, nickname: r.nickname || "", googleMap: r.google_map, status: r.status, khet: r.tokan ? r.tokan.khet_name : null, phone: r.phone, note: r.note, extra: r.extra || {} });
+  const yCol = new Intl.Collator("th", { numeric: true, sensitivity: "base" });
   const yByName = (a, b) => yCol.compare(a, b);
-  const ySort = () => Y.people.sort((a, b) => yByName(a.nickname, b.nickname));
-  const yCache = () => lsSet(Y_CACHE, { people: Y.people, columns: Y.columns });
+  const ySort = () => contacts.people.sort((a, b) => yByName(a.nickname, b.nickname));
+  const yCache = () => lsSet(Y_CACHE, { people: contacts.people, columns: contacts.columns });
   const yErr = msg => { $("y-error").textContent = msg || ""; $("y-error").hidden = !msg; };
   const yDescribe = e => e.status === undefined ? "บันทึกไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่" : e.status === 401 || e.status === 403 ? "ไม่มีสิทธิ์ทำรายการนี้ ลองเข้าสู่ระบบใหม่" : "บันทึกไม่สำเร็จ: " + (e.status || "");
   const SVGNS = "http://www.w3.org/2000/svg";
@@ -5138,50 +5003,49 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function ySeedPlaces() {
     let seeded = new Set(lsGet(Y_SEEDN, []));
     if (localStorage.getItem(Y_SEED)) Y_DEFAULT_PLACES.slice(0, 3).forEach(d => seeded.add(d.name));
-    const have = new Set(Y.notes.map(p => p.name));
+    const have = new Set(contacts.notes.map(p => p.name));
     let added = false;
     for (const d of Y_DEFAULT_PLACES) {
       if (seeded.has(d.name)) continue;
-      if (!have.has(d.name)) { Y.notes.push({ id: yUuid(), name: d.name, googleMap: d.googleMap, note: d.note || null, createdAt: Date.now() }); added = true; }
+      if (!have.has(d.name)) { contacts.notes.push({ id: yUuid(), name: d.name, googleMap: d.googleMap, note: d.note || null, createdAt: Date.now() }); added = true; }
       seeded.add(d.name);
     }
-    if (added) lsSet(Y_NOTES, Y.notes);
+    if (added) lsSet(Y_NOTES, contacts.notes);
     lsSet(Y_SEEDN, [...seeded]);
   }
   const yUuid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(36).slice(2));
 
-  // Load the contact book (and show the offline copy first / when the network is down)
   async function loadYmd(force) {
-    if (!memAuthed() || Y.loading) return;
-    if (ACCESS.known && !can("maps")) {
-      Y.people = []; Y.columns = [];
+    if (!memAuthed() || contacts.loading) return;
+    if (ACCESS.known && !canUse("maps")) {
+      contacts.people = []; contacts.columns = [];
       try { localStorage.removeItem(Y_CACHE); } catch (e) {}
       yRender();
       return yErr("บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้ฐานข้อมูล YMD กรุณาติดต่อผู้ดูแลระบบ");
     }
-    if (!force && Y.loaded && Date.now() - Y.loaded < 60000) return;
-    Y.loading = true;
+    if (!force && contacts.loaded && Date.now() - contacts.loaded < 60000) return;
+    contacts.loading = true;
     try {
       const [rows, cols] = await Promise.all([
-        memGet("/rest/v1/bkk11_contacts?select=*,tokan(sh_nt)&order=nickname"),
+        memGet("/rest/v1/bkk11_contacts?select=*,tokan(khet_name)&order=nickname"),
         memGet("/rest/v1/bkk11_contact_columns?select=*&order=sort,id")
       ]);
-      Y.people = (rows || []).map(yMap);
-      Y.columns = cols || [];
-      Y.loaded = Date.now();
+      contacts.people = (rows || []).map(yMap);
+      contacts.columns = cols || [];
+      contacts.loaded = Date.now();
       ySort();
-      for (const p of Y.people) {   // favourites saved by the old app as "nickname|map|note" become id based
-        const old = `${p.nickname}|${p.googleMap || ""}|${p.note || ""}`;
-        if (Y.favs.has(old)) { Y.favs.delete(old); Y.favs.add(yId(p)); lsSet(Y_FAV, [...Y.favs]); }
+      for (const p of contacts.people) {
+        const previousKey = `${p.nickname}|${p.googleMap || ""}|${p.note || ""}`;
+        if (contacts.favs.has(previousKey)) { contacts.favs.delete(previousKey); contacts.favs.add(favKey(p)); lsSet(Y_FAV, [...contacts.favs]); }
       }
       yCache();
       yErr("");
     } catch (e) {
-      if (e.status === 401) { /* signed out: the login screen is up */ }
-      else if (e.status === undefined) yErr(Y.people.length ? "ออฟไลน์ แสดงข้อมูลที่เก็บไว้ในเครื่อง" : "เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง");
+      if (e.status === 401) {  }
+      else if (e.status === undefined) yErr(contacts.people.length ? "ออฟไลน์ แสดงข้อมูลที่เก็บไว้ในเครื่อง" : "เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง");
       else yErr("โหลดข้อมูลไม่สำเร็จ");
     } finally {
-      Y.loading = false;
+      contacts.loading = false;
       yRender();
     }
   }
@@ -5189,7 +5053,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   function yParts(p) {
     const parts = [];
     if (yVisible("note") && p.note) parts.push(p.note);
-    for (const c of Y.columns) {
+    for (const c of contacts.columns) {
       if (!yVisible(c.key)) continue;
       const v = (p.extra || {})[c.key];
       if (c.type === "checkbox") { if (v === true) parts.push(c.label); }
@@ -5198,18 +5062,18 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return parts;
   }
   function yRender() {
-    const q = Y.q.toLowerCase().trim();
-    const hay = p => (p.nickname + " " + (p.note || "") + " " + (p.khet || "") + " " + Object.values(p.extra || {}).filter(v => typeof v === "string").join(" ")).toLowerCase();
-    const list = [...Y.people].sort((a, b) => yByName(a.nickname, b.nickname)).filter(p => (Y.status === "all" || p.status === Y.status) && (!q || hay(p).includes(q)));
-    const favs = list.filter(p => Y.favs.has(yId(p))), rest = list.filter(p => !Y.favs.has(yId(p)));
+    const q = contacts.q.toLowerCase().trim();
+    const searchText = p => (p.nickname + " " + (p.note || "") + " " + (p.khet || "") + " " + Object.values(p.extra || {}).filter(v => typeof v === "string").join(" ")).toLowerCase();
+    const list = [...contacts.people].sort((a, b) => yByName(a.nickname, b.nickname)).filter(p => (contacts.status === "all" || p.status === contacts.status) && (!q || searchText(p).includes(q)));
+    const favs = list.filter(p => contacts.favs.has(favKey(p))), rest = list.filter(p => !contacts.favs.has(favKey(p)));
     $("y-fav-wrap").hidden = !favs.length;
     $("y-fav").replaceChildren(...favs.map(yCard));
     $("y-list").replaceChildren(...rest.map(yCard));
-    $("y-empty").textContent = Y.people.length ? "ไม่พบชื่อที่ค้นหา" : "ยังไม่มีรายชื่อ";
+    $("y-empty").textContent = contacts.people.length ? "ไม่พบชื่อที่ค้นหา" : "ยังไม่มีรายชื่อ";
     $("y-empty").hidden = list.length > 0;
   }
   function yCard(p) {
-    const fav = Y.favs.has(yId(p));
+    const isFavorite = contacts.favs.has(favKey(p));
     const known = !!p.status && yVisible("status") && Y_STATUSES.includes(p.status);
     const li = el("li", "card ycard" + (known ? " st-" + p.status : ""));
     const top = el("div", "ctop");
@@ -5230,14 +5094,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (phone) call.href = "tel:" + phone;
     call.append(svgIcon(IC_PHONE));
     const url = safeUrl(p.googleMap);
-    const pin = el(url ? "a" : "span", "yb pin" + (url ? "" : " off"));
-    pin.setAttribute("aria-label", url ? "เปิด Google Maps ของ " + p.nickname : "ไม่มีลิงก์ Google Maps");
-    if (url) { pin.href = url; pin.target = "_blank"; pin.rel = "noopener noreferrer"; }
-    pin.append(svgIcon(...IC_PIN));
-    act.append(call, pin);
+    const pinEl = el(url ? "a" : "span", "yb pin" + (url ? "" : " off"));
+    pinEl.setAttribute("aria-label", url ? "เปิด Google Maps ของ " + p.nickname : "ไม่มีลิงก์ Google Maps");
+    if (url) { pinEl.href = url; pinEl.target = "_blank"; pinEl.rel = "noopener noreferrer"; }
+    pinEl.append(svgIcon(...IC_PIN));
+    act.append(call, pinEl);
     top.append(main, act);
     const acts = [
-      { label: fav ? "เลิกโปรด" : "โปรด", cls: "sw-fav", fn: () => yToggleFav(p) },
+      { label: isFavorite ? "เลิกโปรด" : "โปรด", cls: "sw-fav", fn: () => yToggleFav(p) },
       { label: "แก้ไข", cls: "sw-edit", fn: () => yOpen(p) }
     ];
     if (p.mtCo) acts.push({ label: "โทกัง", cls: "sw-tok", fn: () => window.open(TOKAN_URL + "?m=" + encodeURIComponent(p.mtCo), "_blank", "noopener") });
@@ -5245,50 +5109,49 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     return li;
   }
   function yToggleFav(p) {
-    const id = yId(p);
-    if (Y.favs.has(id)) Y.favs.delete(id); else Y.favs.add(id);
-    lsSet(Y_FAV, [...Y.favs]);
+    const id = favKey(p);
+    if (contacts.favs.has(id)) contacts.favs.delete(id); else contacts.favs.add(id);
+    lsSet(Y_FAV, [...contacts.favs]);
     yRender();
   }
 
-  // ---- add / edit a contact
   function yLinkCur() {
     const box = $("yf-linkcur");
     box.replaceChildren();
-    if (Y.link.mtCo) {
+    if (contacts.link.mtCo) {
       const b = el("button", "btn xs ghost", "ยกเลิกการผูก");
       b.type = "button";
-      b.onclick = () => { Y.link = { mtCo: null, name: "" }; yLinkCur(); };
-      box.append(el("span", null, "ผูกกับ " + (Y.link.name || "รหัส " + Y.link.mtCo)), b);
+      b.onclick = () => { contacts.link = { mtCo: null, name: "" }; yLinkCur(); };
+      box.append(el("span", null, "ผูกกับ " + (contacts.link.name || "รหัส " + contacts.link.mtCo)), b);
     } else box.textContent = "ยังไม่ผูกกับสมาชิก";
   }
-  const yMember = m => ((m.name_t || "") + " " + (m.saku_t || "")).trim();
+  const yMember = m => ((m.given_name || "") + " " + (m.family_name || "")).trim();
   async function yLinkSearch(q) {
-    const seq = ++Y.linkSeq, list = $("yf-linklist");
+    const seq = ++contacts.linkSeq, list = $("yf-linklist");
     list.replaceChildren(el("li", "meta", "กำลังค้นหา..."));
     try {
       const toks = likeTokens(q);
-      const params = new URLSearchParams({ select: "mt_co,name_t,saku_t,sh_nt,ch_nt,fa_nt", order: "name_t", limit: "20" });
+      const params = new URLSearchParams({ select: "mt_co,given_name,family_name,khet_name,tambon_name,division_name", order: "given_name", limit: "20" });
       params.set("and", nameFilter(toks));
       const rows = await memGet("/rest/v1/tokan?" + params);
-      if (seq !== Y.linkSeq) return;
+      if (seq !== contacts.linkSeq) return;
       if (!rows.length) return list.replaceChildren(el("li", "meta", "ไม่พบสมาชิกที่ตรงกัน (หรืออยู่นอกขอบเขตสิทธิ์ของคุณ)"));
       list.replaceChildren(...rows.map(m => {
-        const taken = Y.people.find(x => x.mtCo === m.mt_co && x.id !== Y.editId);
+        const taken = contacts.people.find(x => x.mtCo === m.mt_co && x.id !== contacts.editId);
         const li = el("li"), b = el("button");
         b.type = "button";
-        b.append(el("span", null, yMember(m)), el("small", null, [m.sh_nt, m.ch_nt, m.fa_nt].filter(Boolean).join(" · ") + (taken ? " · ผูกกับ “" + taken.nickname + "” แล้ว" : "")));
-        b.onclick = () => { Y.link = { mtCo: Number(m.mt_co), name: yMember(m) }; list.replaceChildren(); $("yf-linkq").value = ""; yLinkCur(); };
+        b.append(el("span", null, yMember(m)), el("small", null, [m.khet_name, m.tambon_name, m.division_name].filter(Boolean).join(" · ") + (taken ? " · ผูกกับ “" + taken.nickname + "” แล้ว" : "")));
+        b.onclick = () => { contacts.link = { mtCo: Number(m.mt_co), name: yMember(m) }; list.replaceChildren(); $("yf-linkq").value = ""; yLinkCur(); };
         li.append(b);
         return li;
       }));
     } catch (e) {
-      if (seq === Y.linkSeq && e.status !== 401) list.replaceChildren(el("li", "meta", e.status === undefined ? "ค้นหาไม่ได้ ตรวจสอบอินเทอร์เน็ต" : "ค้นหาไม่สำเร็จ ลองเข้าสู่ระบบใหม่"));
+      if (seq === contacts.linkSeq && e.status !== 401) list.replaceChildren(el("li", "meta", e.status === undefined ? "ค้นหาไม่ได้ ตรวจสอบอินเทอร์เน็ต" : "ค้นหาไม่สำเร็จ ลองเข้าสู่ระบบใหม่"));
     }
   }
   function yOpen(p) {
     const d = p || { nickname: "", googleMap: "", status: "", phone: "", note: "", extra: {} };
-    Y.editId = p ? p.id : null;
+    contacts.editId = p ? p.id : null;
     $("yform-title").textContent = p ? "แก้ไขรายชื่อ" : "เพิ่มรายชื่อ";
     $("yf-nick").value = d.nickname;
     $("yf-map").value = d.googleMap || "";
@@ -5300,7 +5163,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("yf-del").hidden = !p;
     const box = $("yf-extra");
     box.replaceChildren();
-    for (const c of Y.columns) {
+    for (const c of contacts.columns) {
       const v = (d.extra || {})[c.key];
       const lab = el("label", c.type === "checkbox" ? "fck" : null), inp = el("input");
       inp.dataset.key = c.key;
@@ -5313,26 +5176,26 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       }
       box.append(lab);
     }
-    Y.link = { mtCo: p ? p.mtCo : null, name: "" };
-    Y.linkOrig = p ? p.mtCo : null;
-    Y.linkSeq++;
+    contacts.link = { mtCo: p ? p.mtCo : null, name: "" };
+    contacts.linkOrig = p ? p.mtCo : null;
+    contacts.linkSeq++;
     $("yf-linkq").value = "";
     $("yf-linklist").replaceChildren();
     yLinkCur();
     if (p && p.mtCo) {
       const code = p.mtCo;
-      memGet("/rest/v1/tokan?select=name_t,saku_t&mt_co=eq." + encodeURIComponent(code)).then(([m]) => { if (m && Y.link.mtCo === code) { Y.link.name = yMember(m); yLinkCur(); } }).catch(() => {});
+      memGet("/rest/v1/tokan?select=given_name,family_name&mt_co=eq." + encodeURIComponent(code)).then(([m]) => { if (m && contacts.link.mtCo === code) { contacts.link.name = yMember(m); yLinkCur(); } }).catch(() => {});
     }
     $("yform").showModal();
   }
-  function yLocate(pre = "yf") {
-    const hint = $(pre + "-lochint"), input = $(pre + "-map"), btn = $(pre + "-loc");
+  function yLocate(idPrefix = "yf") {
+    const hint = $(idPrefix + "-lochint"), input = $(idPrefix + "-map"), btn = $(idPrefix + "-loc");
     if (!navigator.geolocation) { hint.textContent = "เครื่องหรือเบราว์เซอร์นี้ไม่รองรับการระบุตำแหน่ง"; return; }
     if (input.value.trim() && !confirm("แทนที่ลิงก์เดิมด้วยตำแหน่งปัจจุบัน?")) return;
     btn.disabled = true;
     hint.textContent = "กำลังหาตำแหน่ง... (กดอนุญาตถ้าเบราว์เซอร์ถาม)";
-    navigator.geolocation.getCurrentPosition(pos => {
-      const { latitude, longitude, accuracy } = pos.coords, m = Math.round(accuracy);
+    navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude, accuracy } = position.coords, m = Math.round(accuracy);
       input.value = "https://www.google.com/maps?q=" + latitude.toFixed(6) + "," + longitude.toFixed(6);
       hint.textContent = m > 100 ? `ได้ตำแหน่งแล้ว แต่แม่นยำต่ำ (ประมาณ ${m} ม.) ลองไปที่โล่งแล้วกดอีกครั้ง หรือกด “บันทึก” เพื่อเก็บ` : `ได้ตำแหน่งแล้ว (แม่นยำประมาณ ${m} ม.) กด “บันทึก” เพื่อเก็บ`;
       btn.disabled = false;
@@ -5348,30 +5211,30 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     if (!body.nickname) return bad("กรุณาใส่ชื่อเล่น");
     if (body.google_map && !/^https?:\/\//i.test(body.google_map)) return bad("ลิงก์ต้องขึ้นต้นด้วย http:// หรือ https://");
     if (body.phone && !Y_PHONE.test(body.phone)) return bad("เบอร์โทรใส่ได้เฉพาะตัวเลขและ + ( ) -");
-    const existing = Y.editId === null ? null : Y.people.find(x => x.id === Y.editId);
+    const existing = contacts.editId === null ? null : contacts.people.find(x => x.id === contacts.editId);
     const extra = { ...((existing && existing.extra) || {}) };
     for (const inp of $("yf-extra").querySelectorAll("input[data-key]")) {
-      const k = inp.dataset.key, c = Y.columns.find(x => x.key === k);
+      const k = inp.dataset.key, c = contacts.columns.find(x => x.key === k);
       if (!c) continue;
       if (c.type === "checkbox") { if (inp.checked) extra[k] = true; else delete extra[k]; continue; }
       const t = inp.value.trim();
       if (t === "") delete extra[k]; else extra[k] = c.type === "number" ? Number(t) : t;
     }
     body.extra = extra;
-    const linkChanged = (Y.link.mtCo ?? null) !== (Y.linkOrig ?? null);
-    if (linkChanged) body.mt_co = Y.link.mtCo ?? null;
+    const linkChanged = (contacts.link.mtCo ?? null) !== (contacts.linkOrig ?? null);
+    if (linkChanged) body.mt_co = contacts.link.mtCo ?? null;
     $("yf-save").disabled = true;
     try {
-      const rep = { Prefer: "return=representation" };
-      if (Y.editId === null) {
-        const [row] = await memReq("POST", "/rest/v1/bkk11_contacts?select=*,tokan(sh_nt)", body, rep);
+      const preferHeader = { Prefer: "return=representation" };
+      if (contacts.editId === null) {
+        const [row] = await memReq("POST", "/rest/v1/bkk11_contacts?select=*,tokan(khet_name)", body, preferHeader);
         if (!row) throw Object.assign(new Error("denied"), { status: 403 });
-        Y.people.push(yMap(row));
+        contacts.people.push(yMap(row));
       } else {
-        const [row] = await memReq("PATCH", "/rest/v1/bkk11_contacts?id=eq." + encodeURIComponent(Y.editId) + "&select=*,tokan(sh_nt)", body, rep);
+        const [row] = await memReq("PATCH", "/rest/v1/bkk11_contacts?id=eq." + encodeURIComponent(contacts.editId) + "&select=*,tokan(khet_name)", body, preferHeader);
         if (!row) throw Object.assign(new Error("denied"), { status: 403 });
-        const i = Y.people.findIndex(x => x.id === Y.editId);
-        if (i >= 0) Y.people[i] = yMap(row);
+        const i = contacts.people.findIndex(x => x.id === contacts.editId);
+        if (i >= 0) contacts.people[i] = yMap(row);
       }
       ySort(); yCache(); yRender();
       $("yform").close();
@@ -5382,14 +5245,14 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
   }
   async function yDelete() {
-    const p = Y.people.find(x => x.id === Y.editId);
+    const p = contacts.people.find(x => x.id === contacts.editId);
     if (!p || !confirm("ลบ “" + p.nickname + "” ออกจากฐานข้อมูล? ย้อนกลับไม่ได้")) return;
     $("yf-del").disabled = true;
     try {
-      const rows = await memReq("DELETE", "/rest/v1/bkk11_contacts?id=eq." + encodeURIComponent(Y.editId), undefined, { Prefer: "return=representation" });
+      const rows = await memReq("DELETE", "/rest/v1/bkk11_contacts?id=eq." + encodeURIComponent(contacts.editId), undefined, { Prefer: "return=representation" });
       if (!rows || !rows.length) throw Object.assign(new Error("denied"), { status: 403 });
-      Y.people = Y.people.filter(x => x.id !== Y.editId);
-      Y.favs.delete(yId(p)); lsSet(Y_FAV, [...Y.favs]);
+      contacts.people = contacts.people.filter(x => x.id !== contacts.editId);
+      contacts.favs.delete(favKey(p)); lsSet(Y_FAV, [...contacts.favs]);
       yCache(); yRender();
       $("yform").close();
     } catch (e) {
@@ -5399,13 +5262,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }
   }
 
-  // ---- columns
   function yColsRender() {
     const row = (key, label, tag, del) => {
-      const li = el("li"), lab = el("label"), cb = el("input");
-      cb.type = "checkbox"; cb.checked = yVisible(key);
-      cb.onchange = () => { Y.vis[key] = cb.checked; lsSet(Y_VIS, Y.vis); yRender(); };
-      lab.append(cb, label);
+      const li = el("li"), lab = el("label"), checkboxEl = el("input");
+      checkboxEl.type = "checkbox"; checkboxEl.checked = yVisible(key);
+      checkboxEl.onchange = () => { contacts.vis[key] = checkboxEl.checked; lsSet(Y_VIS, contacts.vis); yRender(); };
+      lab.append(checkboxEl, label);
       li.append(lab, el("span", "stag", tag));
       if (del) li.append(del);
       return li;
@@ -5413,7 +5275,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const TYPES = { text: "ข้อความ", number: "ตัวเลข", checkbox: "ติ๊กถูก" };
     $("ycols-list").replaceChildren(
       ...Y_BUILTIN.map(c => row(c.key, c.label, "มีอยู่แล้ว")),
-      ...Y.columns.map(c => {
+      ...contacts.columns.map(c => {
         const d = el("button", "btn xs danger", "ลบ");
         d.type = "button";
         d.setAttribute("aria-label", "ลบคอลัมน์ " + c.label);
@@ -5425,12 +5287,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   async function yColAdd() {
     const label = $("yc-label").value.trim(), bad = m => { $("yc-err").textContent = m; $("yc-err").hidden = !m; };
     if (!label) return;
-    if (Y.columns.some(c => c.label === label) || Y_BUILTIN.some(c => c.label === label)) return bad("มีคอลัมน์ชื่อนี้แล้ว");
+    if (contacts.columns.some(c => c.label === label) || Y_BUILTIN.some(c => c.label === label)) return bad("มีคอลัมน์ชื่อนี้แล้ว");
     const key = "c_" + (Math.random().toString(36).slice(2) + "00000000").slice(0, 8);
     try {
-      const [row] = await memReq("POST", "/rest/v1/bkk11_contact_columns", { key, label, type: $("yc-type").value, sort: Y.columns.length }, { Prefer: "return=representation" });
+      const [row] = await memReq("POST", "/rest/v1/bkk11_contact_columns", { key, label, type: $("yc-type").value, sort: contacts.columns.length }, { Prefer: "return=representation" });
       if (!row) throw Object.assign(new Error("denied"), { status: 403 });
-      Y.columns.push(row);
+      contacts.columns.push(row);
       $("yc-label").value = "";
       bad("");
       yCache(); yColsRender(); yRender();
@@ -5441,30 +5303,29 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     try {
       const rows = await memReq("DELETE", "/rest/v1/bkk11_contact_columns?id=eq." + encodeURIComponent(c.id), undefined, { Prefer: "return=representation" });
       if (!rows || !rows.length) throw Object.assign(new Error("denied"), { status: 403 });
-      Y.columns = Y.columns.filter(x => x.id !== c.id);
-      delete Y.vis[c.key]; lsSet(Y_VIS, Y.vis);
+      contacts.columns = contacts.columns.filter(x => x.id !== c.id);
+      delete contacts.vis[c.key]; lsSet(Y_VIS, contacts.vis);
       yCache(); yColsRender(); yRender();
     } catch (e) { if (e.status !== 401) { $("yc-err").textContent = yDescribe(e); $("yc-err").hidden = false; } }
   }
 
-  // ---- saved places (kept on this device only)
   function yNotesRender() {
-    const nq = Y.nq.toLowerCase().trim(), shown = Y.notes.filter(n => !nq || (n.name + " " + (n.note || "")).toLowerCase().includes(nq)).sort((a, b) => yByName(a.name, b.name));
+    const noteQuery = contacts.nq.toLowerCase().trim(), shown = contacts.notes.filter(n => !noteQuery || (n.name + " " + (n.note || "")).toLowerCase().includes(noteQuery)).sort((a, b) => yByName(a.name, b.name));
     $("yn-list").replaceChildren(...shown.map(n => {
       const li = el("li", "card ycard"), top = el("div", "ctop"), main = el("div", "cmain");
       main.append(el("div", "ctitle", n.name));
       if (n.note) main.append(el("div", "meta", n.note));
       const act = el("div", "yact"), url = safeUrl(n.googleMap);
-      const pin = el(url ? "a" : "span", "yb pin" + (url ? "" : " off"));
-      pin.setAttribute("aria-label", "เปิด Google Maps ของ " + n.name);
-      if (url) { pin.href = url; pin.target = "_blank"; pin.rel = "noopener noreferrer"; }
-      pin.append(svgIcon(...IC_PIN));
-      act.append(pin);
+      const pinEl = el(url ? "a" : "span", "yb pin" + (url ? "" : " off"));
+      pinEl.setAttribute("aria-label", "เปิด Google Maps ของ " + n.name);
+      if (url) { pinEl.href = url; pinEl.target = "_blank"; pinEl.rel = "noopener noreferrer"; }
+      pinEl.append(svgIcon(...IC_PIN));
+      act.append(pinEl);
       top.append(main, act);
-      makeSwipe(li, top, [{ label: "ลบ", cls: "sw-del", fn: () => { Y.notes = Y.notes.filter(x => x.id !== n.id); lsSet(Y_NOTES, Y.notes); yNotesRender(); } }]);
+      makeSwipe(li, top, [{ label: "ลบ", cls: "sw-del", fn: () => { contacts.notes = contacts.notes.filter(x => x.id !== n.id); lsSet(Y_NOTES, contacts.notes); yNotesRender(); } }]);
       return li;
     }));
-    $("yn-empty").textContent = Y.notes.length ? "ไม่พบสถานที่ที่ค้นหา" : "ยังไม่มีสถานที่ที่บันทึกไว้ ลองเพิ่มด้านบนได้เลย";
+    $("yn-empty").textContent = contacts.notes.length ? "ไม่พบสถานที่ที่ค้นหา" : "ยังไม่มีสถานที่ที่บันทึกไว้ ลองเพิ่มด้านบนได้เลย";
     $("yn-empty").hidden = shown.length > 0;
   }
   function ySub(id) {
@@ -5474,19 +5335,19 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       t.tabIndex = on ? 0 : -1;
       $("ysub-" + k + "-p").hidden = !on;
     }
-    Y.sub = id;
-    $("y-q").value = id === "notes" ? Y.nq : Y.q;
+    contacts.sub = id;
+    $("y-q").value = id === "notes" ? contacts.nq : contacts.q;
     $("y-q").placeholder = id === "notes" ? "ค้นหาสถานที่" : "ค้นหาชื่อเล่น โน้ต เขต";
     if (id === "notes") yNotesRender();
   }
   function yInit() {
     ySeedPlaces();
     const cached = lsGet(Y_CACHE, null);
-    if (memAuthed() && cached && Array.isArray(cached.people) && cached.people.length && cached.people[0].id !== undefined) { Y.people = cached.people; Y.columns = cached.columns || []; }
+    if (memAuthed() && cached && Array.isArray(cached.people) && cached.people.length && cached.people[0].id !== undefined) { contacts.people = cached.people; contacts.columns = cached.columns || []; }
     for (const k of ["people", "notes"]) $("ysub-" + k).onclick = () => ySub(k);
-    $("y-q").oninput = e => { if (Y.sub === "notes") { Y.nq = e.target.value; yNotesRender(); } else { Y.q = e.target.value; yRender(); } };
+    $("y-q").oninput = e => { if (contacts.sub === "notes") { contacts.nq = e.target.value; yNotesRender(); } else { contacts.q = e.target.value; yRender(); } };
     for (const b of $("y-stat").querySelectorAll("button")) b.onclick = () => {
-      Y.status = b.dataset.status;
+      contacts.status = b.dataset.status;
       for (const x of $("y-stat").querySelectorAll("button")) x.setAttribute("aria-pressed", String(x === b));
       yRender();
     };
@@ -5500,22 +5361,22 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     $("yf-loc").onclick = () => yLocate("yf");
     $("yn-loc").onclick = () => yLocate("yn");
     $("yf-linkq").oninput = e => {
-      clearTimeout(Y.linkTimer);
+      clearTimeout(contacts.linkTimer);
       const q = e.target.value.trim();
-      if (!q) { Y.linkSeq++; $("yf-linklist").replaceChildren(); return; }
-      Y.linkTimer = setTimeout(() => yLinkSearch(q), 300);
+      if (!q) { contacts.linkSeq++; $("yf-linklist").replaceChildren(); return; }
+      contacts.linkTimer = setTimeout(() => yLinkSearch(q), 300);
     };
     for (const id of ["yform", "ycols", "ynform"]) $(id).addEventListener("click", e => { if (e.target === $(id)) $(id).close(); });
     $("yn-open").onclick = () => { $("yn-name").value = ""; $("yn-map").value = ""; $("yn-text").value = ""; $("yn-err").hidden = true; $("yn-lochint").textContent = "ยืนอยู่ที่สถานที่นั้น แล้วกดปุ่มนี้เพื่อใส่ลิงก์ Google Maps ให้อัตโนมัติ"; $("ynform").showModal(); };
     $("yn-cancel").onclick = () => $("ynform").close();
     $("yn-add").onclick = () => {
-      const name = $("yn-name").value.trim(), map = $("yn-map").value.trim(), note = $("yn-text").value.trim();
+      const name = $("yn-name").value.trim(), mapLink = $("yn-map").value.trim(), note = $("yn-text").value.trim();
       const bad = m => { $("yn-err").textContent = m; $("yn-err").hidden = !m; };
-      if (!name || !map) return bad("กรุณาใส่ชื่อสถานที่และลิงก์ Google Maps");
-      if (!safeUrl(map)) return bad("ลิงก์ต้องขึ้นต้นด้วย http:// หรือ https://");
+      if (!name || !mapLink) return bad("กรุณาใส่ชื่อสถานที่และลิงก์ Google Maps");
+      if (!safeUrl(mapLink)) return bad("ลิงก์ต้องขึ้นต้นด้วย http:// หรือ https://");
       bad("");
-      Y.notes.unshift({ id: yUuid(), name, googleMap: map, note: note || null, createdAt: Date.now() });
-      lsSet(Y_NOTES, Y.notes);
+      contacts.notes.unshift({ id: yUuid(), name, googleMap: mapLink, note: note || null, createdAt: Date.now() });
+      lsSet(Y_NOTES, contacts.notes);
       $("ynform").close();
       yNotesRender();
     };
@@ -5530,7 +5391,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   $("settings-close").onclick = () => $("settings").close();
   $("settings").addEventListener("click", e => { if (e.target === $("settings")) $("settings").close(); });
   loadAccessCache();
-  applyAccess();   // tabs the cached verdict says are closed never show
+  applyAccess();
   const initial = location.hash.slice(1);
   if (initial === "visits" || initial === "schedule" || (initial === "ymd" && uiOpen("maps"))) showTab(initial);
   else if (!uiOpen("items")) showTab("visits");
@@ -5562,10 +5423,9 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     };
     $("mpush").addEventListener("toggle", () => { if ($("mpush").open) refreshPush(); });
   }
-  // ภาค list from the area tree (public read); everything that shows a ภาค is repainted when it arrives
   function paintPhaks() {
-    const lg = $("v-legend");
-    lg.replaceChildren(...PHAKS.map(p => { const sp = el("span"); sp.append(el("i", "vdot " + phakCls(p)), "ภาค" + p); return sp; }));
+    const legendEl = $("v-legend");
+    legendEl.replaceChildren(...PHAKS.map(p => { const chip = el("span"); chip.append(el("i", "vdot " + phakCls(p)), "ภาค" + p); return chip; }));
     const sel = $("vf-phak"), cur = sel.value;
     sel.replaceChildren(...PHAKS.map(p => { const o = el("option", null, `ภาค${p} (สี${VCOLOR[phakIdx(p)]})`); o.value = p; return o; }));
     if (PHAKS.includes(cur)) sel.value = cur;
@@ -5582,21 +5442,20 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         refreshAll();
         if (!$("panel-visits").hidden) { renderVisits(); loadCoverage(); }
       }
-    } catch (e) { /* keep the cached list */ }
+    } catch (e) {  }
   }
   function afterLogin() {
     loadPhaks();
     if (!$("panel-visits").hidden) loadVisits();
     else loadCoverage();
-    loadManual();   // the morning popup needs the events even while the รายการ tab is closed
-    loadAccess().finally(() => {   // sync / push only after we know whether this account may use ต้องส่ง
+    loadManual();
+    loadAccess().finally(() => {
       syncNow();
       if (getPref(PUSH_KEY) === "1") refreshPush();
     });
   }
 
   initBadgeAsk();
-  // ---------- who may use what: show/hide by the permission list; the owner gets a page to edit it ----------
   function loadAccessCache() {
     try {
       const c = JSON.parse(localStorage.getItem(ACCESS_KEY) || "null"), s = memSession();
@@ -5607,12 +5466,12 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     const items = uiOpen("items");
     $("tab-items").hidden = !items;
     $("tab-ymd").hidden = !uiOpen("maps");
-    if (!uiOpen("maps") && (Y.people.length || Y.columns.length)) {   // no permission (any more): no copy of the contact book stays on the screen or the device
-      Y.people = []; Y.columns = []; Y.loaded = 0;
+    if (!uiOpen("maps") && (contacts.people.length || contacts.columns.length)) {
+      contacts.people = []; contacts.columns = []; contacts.loaded = 0;
       try { localStorage.removeItem(Y_CACHE); } catch (e) {}
       yRender();
     }
-    $("open-access").hidden = !can("access");
+    $("open-access").hidden = !canUse("access");
     const cur = tabs.find(t => t.getAttribute("aria-selected") === "true");
     if ((!items && (!cur || cur.dataset.tab === "items")) || (!uiOpen("maps") && cur && cur.dataset.tab === "ymd")) showTab("visits");
     refreshBadges();
@@ -5625,7 +5484,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       try { localStorage.setItem(ACCESS_KEY, JSON.stringify({ sub: jwtClaims(memSession().access_token).sub, owner: ACCESS.owner, features: ACCESS.features })); } catch (e) {}
     } catch (e) {
       if (e.status === 401) return;
-      if (!ACCESS.known) ACCESS = { known: true, owner: false, features: [] };   // cannot be read (and nothing cached): closed, like the server
+      if (!ACCESS.known) ACCESS = { known: true, owner: false, features: [] };
     }
     applyAccess();
   }
@@ -5639,7 +5498,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   let lastPoll = Date.now();
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") return setBadge(badgeCount);
-    if (memAuthed()) loadAccess();   // a grant or a revoke by the owner shows as soon as the app comes back, not after the 20 s poll gap
+    if (memAuthed()) loadAccess();
     if (Date.now() - lastPoll > 20000) {
       lastPoll = Date.now();
       loadBoard();
@@ -5650,10 +5509,8 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     shownDay = today().getTime();
     refreshAll();
   });
-  setInterval(() => { if (document.visibilityState === "visible" && memAuthed()) loadAccess(); }, 120000);   // and every 2 minutes while it stays open
+  setInterval(() => { if (document.visibilityState === "visible" && memAuthed()) loadAccess(); }, 120000);
   addEventListener("pagehide", () => setBadge(badgeCount));
-  // iOS can drop the pinned bars (menu, sub-tabs, calendar) after the in-app browser, another app or the screen lock was
-  // shown on top of this page. Poke WebKit to lay them out and repaint again whenever the page comes back.
   let repaintTimer = 0, wasAway = false;
   function repaintBars(force) {
     if (!wasAway && !force) return;
@@ -5669,36 +5526,32 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") wasAway = true; else repaintBars(); });
   addEventListener("pagehide", () => { wasAway = true; });
   addEventListener("blur", () => { wasAway = true; });
-  for (const ev of ["pageshow", "focus"]) addEventListener(ev, () => repaintBars());
+  for (const eventName of ["pageshow", "focus"]) addEventListener(eventName, () => repaintBars());
   addEventListener("orientationchange", () => repaintBars(true));
   addEventListener("load", () => repaintBars(true));
   if (window.visualViewport) visualViewport.addEventListener("resize", () => repaintBars(true));
-  // iOS keeps a stale (too short) layout viewport for position:fixed until the first scroll, so the bottom menu floated too
-  // high on a freshly opened short page. Place it from the real screen height instead of trusting `bottom`.
   const menu = document.querySelector("nav.tabs");
-  const hdr = document.querySelector("header");
-  const setHdr = () => document.documentElement.style.setProperty("--hdr-h", hdr.offsetHeight + "px");
+  const headerEl = document.querySelector("header");
+  const setHdr = () => document.documentElement.style.setProperty("--hdr-h", headerEl.offsetHeight + "px");
   setHdr(); addEventListener("resize", setHdr); addEventListener("load", setHdr); addEventListener("orientationchange", setHdr);
-  if (window.ResizeObserver) new ResizeObserver(setHdr).observe(hdr);
+  if (window.ResizeObserver) new ResizeObserver(setHdr).observe(headerEl);
   let menuRaf = 0;
   function placeMenu() {
     menuRaf = 0;
-    const vv = window.visualViewport, land = innerWidth > innerHeight;
-    let h = Math.max(innerHeight, vv ? vv.height : 0, document.documentElement.clientHeight);
-    const sw = Math.min(screen.width, screen.height), sl = Math.max(screen.width, screen.height);
-    if (navigator.standalone && innerWidth === (land ? sl : sw)) h = Math.max(h, land ? sw : sl);   // whole-screen app window only (not a windowed iPad)
-    // the home-indicator inset is applied in CSS (translate: env()), which iOS keeps current by itself; measuring it here read 0 while the page was still starting
+    const viewport = window.visualViewport, isLandscape = innerWidth > innerHeight;
+    let h = Math.max(innerHeight, viewport ? viewport.height : 0, document.documentElement.clientHeight);
+    const shortEdge = Math.min(screen.width, screen.height), longEdge = Math.max(screen.width, screen.height);
+    if (navigator.standalone && innerWidth === (isLandscape ? longEdge : shortEdge)) h = Math.max(h, isLandscape ? shortEdge : longEdge);
     menu.style.bottom = "auto";
     menu.style.top = Math.round(h - menu.offsetHeight - 12) + "px";
   }
-  // the real visible height (iOS shrinks the visual viewport, not the layout one, when the keyboard opens): popups size themselves to it
   const setVvh = () => document.documentElement.style.setProperty("--vvh", (window.visualViewport ? visualViewport.height : innerHeight) + "px");
   setVvh();
   addEventListener("resize", setVvh);
   if (window.visualViewport) visualViewport.addEventListener("resize", setVvh);
   const queueMenu = () => { if (!menuRaf) menuRaf = requestAnimationFrame(placeMenu); };
-  for (const ev of ["load", "pageshow", "resize", "orientationchange", "scroll", "focus"]) addEventListener(ev, queueMenu, { passive: true });
-  if (window.visualViewport) for (const ev of ["resize", "scroll"]) visualViewport.addEventListener(ev, queueMenu);
+  for (const eventName of ["load", "pageshow", "resize", "orientationchange", "scroll", "focus"]) addEventListener(eventName, queueMenu, { passive: true });
+  if (window.visualViewport) for (const eventName of ["resize", "scroll"]) visualViewport.addEventListener(eventName, queueMenu);
   placeMenu();
   setTimeout(placeMenu, 300);
   setTimeout(placeMenu, 1200);
