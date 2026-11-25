@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-pPHvVAoVmOCnWioIkjX1ci08pIul3PZ9Lp738hUP6N8='; style-src 'self' https://fonts.googleapis.com 'sha256-Cgrut5hPjkF8dIwbaL64Xnb1uteld+RlV6YXEHfgD1E='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mT9odnDzJzfBz4e263fY+2BQwwF2Q+GT6mLduDfjAtA=' 'sha256-Hk8VQSekG6UN3Jz0m8PnPAb4PW6BmAmcJpfe3RMShoQ=' 'sha256-3/I5zQvjftM6T3mhzCCkG/edodsR2/EjyzxXc/xjlHM='; style-src 'self' https://fonts.googleapis.com 'sha256-dfxMlxZMNao6EADzJ5AJO8oSgZP/5pRs1OlxxEfnCQI='; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://cqdzfsucpivsgznfpjxl.supabase.co https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151d2e" media="(prefers-color-scheme: dark)">
@@ -664,10 +664,25 @@ a.btn { display: flex; align-items: center; justify-content: center; text-decora
 .pinfo .bell { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .vh { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .toprow .pinfo { margin-left: auto; }
+.toprow .btn { white-space: nowrap; }
+.toprow .btn.ghost { padding: 0 12px; }
 .mside { flex: none; display: flex; align-items: center; gap: 4px; margin-left: 4px; }
 .ibtn { display: grid; place-items: center; flex: none; width: 40px; height: 40px; padding: 0; color: var(--brand); background: transparent; border: 0; border-radius: 50%; cursor: pointer; }
 .ibtn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .ctopcp { align-self: center; margin-right: 6px; }
+#mdata { background: var(--bg); }
+.mdbody { display: grid; gap: 16px; padding: 16px 16px calc(32px + var(--sab)); }
+.mdbody .chips button { min-height: 40px; padding: 0 16px; }
+.mdbody .chips .newk { border-style: dashed; }
+.mdkey { display: flex; gap: 8px; align-items: center; }
+.mdkey input { flex: 1; min-width: 0; }
+.mdnew { display: flex; gap: 8px; }
+.mdnew input { flex: 1; min-width: 0; }
+.mdrows { display: grid; gap: 10px; }
+.mdrow { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: center; }
+.mdrow label { font-size: .875rem; color: var(--mute); }
+.mdbody input { min-height: 46px; padding: 0 12px; font: inherit; font-size: 16px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+.mdhint { margin: 0; font-size: .8125rem; line-height: 1.5; color: var(--mute); }
 .ibtn:active, .ibtn.ok { background: color-mix(in srgb, var(--brand) 14%, transparent); }
 .lnk { display: inline-flex; align-items: center; min-height: 36px; margin-top: 2px; font-size: .8125rem; color: var(--brand); text-decoration: none; }
 .mbody .meta.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -1104,7 +1119,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
           <button type="button" class="btn addbtn" id="m-add">+ เพิ่มรายการ</button>
           <p class="pinfo"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9zM10 20a2 2 0 0 0 4 0"/></svg><span id="info-monthly"></span></p>
 
-          <button type="button" class="btn ghost sm" id="mjson-copy" aria-label="คัดลอก JSON ของรายการทั้งหมด">JSON</button>
+          <button type="button" class="btn ghost sm" id="mdata-open">ข้อมูลรายเดือน</button>
         </div>
         <ul class="list" id="monthly"></ul>
         <details id="monthly-done-wrap" hidden>
@@ -1281,6 +1296,16 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <button type="button" class="btn" id="ph-save">บันทึก</button>
     </div>
   </div>
+</dialog>
+
+<dialog id="mdata" class="full" aria-labelledby="mdata-title">
+  <div class="sdlg-head">
+    <h3 id="mdata-title">ข้อมูลรายเดือน</h3>
+    <button type="button" class="sclose" id="mdata-close" aria-label="เสร็จ (บันทึกให้อัตโนมัติ)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="mdbody" id="mdata-body"></div>
 </dialog>
 
 <dialog id="msgform" aria-labelledby="msg-title">
@@ -1586,7 +1611,7 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
       <ul class="meta" id="push-devices"></ul>
     </details>
     <details class="mjson" id="mjson">
-      <summary>ข้อมูลแทนที่รายเดือน (JSON)</summary>
+      <summary>ข้อมูลแทนที่รายเดือน (JSON ขั้นสูง)</summary>
       <div class="mreader" id="mreader"></div>
       <label class="mlabel" for="mjson-text">แก้ไข JSON (บันทึกให้อัตโนมัติ)</label>
       <textarea id="mjson-text" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off"
@@ -3710,7 +3735,109 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
     }));
   }
 
+  // Friendly editor for the monthly replacement data: pick a field ({link}, {month}...), fill one value per month.
+  // Each edit is written back as strict JSON into monthly.json (the same text the advanced box in settings shows).
+  const mdata = { keys: [], sel: "", adding: false };
+  function mdSave(rows) {
+    const obj = {};
+    rows.forEach((m, i) => { const o = {}; for (const k of mdata.keys) if (m[k] !== undefined && m[k] !== "") o[k] = m[k]; if (Object.keys(o).length) obj[EN_MON[i]] = o; });
+    monthly.json = Object.keys(obj).length ? JSON.stringify(obj, null, 1) : "";
+    saveMonthly();
+    renderMonthly();
+    refreshJsonBox();
+  }
+  function renderMdata(keepFocus) {
+    const box = $("mdata-body");
+    const r = parseMonthJson(monthly.json);
+    if (r.error) {
+      box.replaceChildren(el("p", "warnline", "อ่านข้อมูลเดิมไม่ได้ ไปแก้ที่ ตั้งค่า > ข้อมูลแทนที่รายเดือน (JSON ขั้นสูง) ก่อน"));
+      return;
+    }
+    const rows = r.data;
+    for (const m of rows) for (const k of Object.keys(m)) if (!mdata.keys.includes(k)) mdata.keys.push(k);
+    if (!mdata.keys.includes(mdata.sel)) mdata.sel = mdata.keys[0] || "";
+    const parts = [];
+    const chips = el("div", "chips");
+    for (const k of mdata.keys) {
+      const b = el("button", "", "{" + k + "}");
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(k === mdata.sel));
+      b.onclick = () => { mdata.sel = k; mdata.adding = false; renderMdata(); };
+      chips.append(b);
+    }
+    const nb = el("button", "newk", "+ ช่อง");
+    nb.type = "button";
+    nb.onclick = () => { mdata.adding = true; renderMdata(); };
+    chips.append(nb);
+    parts.push(chips);
+    if (mdata.adding) {
+      const row = el("div", "mdnew");
+      const inp = el("input");
+      inp.placeholder = "ชื่อช่อง เช่น link";
+      inp.autocapitalize = "off"; inp.autocomplete = "off"; inp.spellcheck = false; inp.setAttribute("aria-label", "ชื่อช่อง");
+      const ok = el("button", "btn", "เพิ่ม");
+      ok.type = "button";
+      const add = () => {
+        const k = inp.value.trim().toLowerCase().replace(/[{}\s]/g, "");
+        if (!k) return;
+        if (!mdata.keys.includes(k)) mdata.keys.push(k);
+        mdata.sel = k; mdata.adding = false;
+        renderMdata();
+      };
+      ok.onclick = add;
+      inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); add(); } };
+      row.append(inp, ok);
+      parts.push(row);
+      setTimeout(() => inp.focus(), 0);
+    }
+    if (mdata.sel) {
+      const kr = el("div", "mdkey");
+      const name = el("input");
+      name.value = mdata.sel; name.autocapitalize = "off"; name.autocomplete = "off"; name.spellcheck = false; name.setAttribute("aria-label", "ชื่อช่อง");
+      name.onchange = () => {
+        const nk = name.value.trim().toLowerCase().replace(/[{}\s]/g, "");
+        if (!nk || nk === mdata.sel || mdata.keys.includes(nk)) { name.value = mdata.sel; return; }
+        rows.forEach(m => { if (m[mdata.sel] !== undefined) { m[nk] = m[mdata.sel]; delete m[mdata.sel]; } });
+        mdata.keys = mdata.keys.map(k => (k === mdata.sel ? nk : k));
+        mdata.sel = nk;
+        mdSave(rows); renderMdata();
+      };
+      const del = el("button", "btn danger", "ลบช่อง");
+      del.type = "button";
+      del.onclick = () => {
+        if (!confirm("ลบช่อง {" + mdata.sel + "} ทุกเดือน ?")) return;
+        rows.forEach(m => { delete m[mdata.sel]; });
+        mdata.keys = mdata.keys.filter(k => k !== mdata.sel);
+        mdSave(rows); renderMdata();
+      };
+      kr.append(name, del);
+      parts.push(kr);
+      const list = el("div", "mdrows");
+      let timer = 0;
+      rows.forEach((m, i) => {
+        const row = el("div", "mdrow");
+        const lab = el("label", "", MONTH_FULL[i]);
+        const inp = el("input");
+        inp.id = "mdv" + i;
+        lab.htmlFor = inp.id;
+        inp.value = m[mdata.sel] || "";
+        inp.autocapitalize = "off"; inp.autocomplete = "off"; inp.spellcheck = false;
+        inp.oninput = () => { m[mdata.sel] = inp.value; clearTimeout(timer); timer = setTimeout(() => mdSave(rows), 300); };
+        inp.onblur = () => { clearTimeout(timer); if (m[mdata.sel] !== undefined) mdSave(rows); };
+        row.append(lab, inp);
+        list.append(row);
+      });
+      parts.push(list);
+    } else if (!mdata.adding) {
+      parts.push(el("p", "mdhint", "ยังไม่มีข้อมูล กด “+ ช่อง” แล้วตั้งชื่อ เช่น link หรือ month จากนั้นใส่ค่าของแต่ละเดือน"));
+    }
+    parts.push(el("p", "mdhint", "ใช้ในข้อความโปรโมทด้วยชื่อช่องในวงเล็บปีกกา เช่น {link} ระบบจะแทนด้วยค่าของเดือนที่จัด บันทึกให้อัตโนมัติ"));
+    box.replaceChildren(...parts);
+  }
+
   function initMonthly() {
+    $("mdata-open").onclick = () => { mdata.keys = []; mdata.sel = ""; mdata.adding = false; renderMdata(); $("mdata").showModal(); };
+    $("mdata-close").onclick = () => $("mdata").close();
     const d = n => "ก่อน " + n + " วัน";
     const chip = (id, text, full) => { $(id).textContent = text; $(id).parentNode.title = full; $(id).parentNode.setAttribute("aria-label", "แจ้งเตือน" + full); };
     chip("info-items", d(NOTIFY_DAYS), "ก่อนครบกำหนด " + NOTIFY_DAYS + " วัน และเตือนต่อหลังเลยกำหนดจนกว่าจะติ๊ก (สูงสุด " + PAST_NOTIFY_DAYS + " วัน)");
@@ -3838,7 +3965,6 @@ summary { cursor: pointer; min-height: 44px; padding: 6px 0; display: flex; alig
         if ((e.ctrlKey || e.metaKey) && e.key === "Enter") dialogSave[id]();
       });
     }
-    $("mjson-copy").onclick = e => copyText(monthly.json || JSON_SKELETON, e.currentTarget);
     check();
     renderMonthly();
   }
